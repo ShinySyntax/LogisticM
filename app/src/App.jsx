@@ -3,6 +3,7 @@ import { DrizzleContext } from "@drizzle/react-plugin";
 import { Drizzle } from "@drizzle/store";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "bootstrap/dist/css/bootstrap.css";
 
 import drizzleOptions from "./drizzleOptions";
 import drizzleStore from "./store";
@@ -29,6 +30,7 @@ const App = () => {
       <DrizzleContext.Consumer>
         {drizzleContext => {
           const { drizzle, drizzleState, initialized } = drizzleContext;
+          console.log(drizzle, drizzleState);
 
           if (!initialized) {
             return "Loading..."

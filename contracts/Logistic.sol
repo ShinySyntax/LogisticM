@@ -43,10 +43,12 @@ contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
     }
 
     function addMaker(address account) public onlyOwner {
+        require(!isMerchant(account), "Account is merchant")
         _addMaker(account);
     }
 
     function addMerchant(address account) public onlyOwner {
+        require(!isMaker(account), "Account is maker")
         _addMerchant(account);
     }
 

@@ -28,11 +28,11 @@ class TokensOwned extends React.Component {
 		}
 	}
 
-	renderRow = (tokenDataKey, idx) => {
+	renderRow = (dataKey, idx) => {
 		let tokenId = this.props.drizzleState.contracts.Logistic
-			.tokenOfOwnerByIndex[tokenDataKey]
+			.tokenOfOwnerByIndex[dataKey]
 			&& this.props.drizzleState.contracts.Logistic
-				.tokenOfOwnerByIndex[tokenDataKey].value
+				.tokenOfOwnerByIndex[dataKey].value
 
 		if (!tokenId) return null
 
@@ -43,7 +43,6 @@ class TokensOwned extends React.Component {
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
 					tokenId={tokenId}
-					filterFunction={this.props.filterFunction}
 				/>
 			)
 		}
@@ -60,8 +59,8 @@ class TokensOwned extends React.Component {
 		return (
 			<ListGroup>
 				{
-					this.state.dataKeyTokenIds.map((tokenDataKey, idx) => {
-						return this.renderRow(tokenDataKey, idx)
+					this.state.dataKeyTokenIds.map((dataKey, idx) => {
+						return this.renderRow(dataKey, idx)
 					})
 				}
 			</ListGroup>

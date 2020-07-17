@@ -1,5 +1,4 @@
 import React from 'react';
-import { newContextComponents } from "@drizzle/react-components";
 import { Card } from 'react-bootstrap';
 
 import TokensOwned from '../token/TokensOwned';
@@ -7,8 +6,6 @@ import Events from '../token/Events';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
-
-const { ContractForm } = newContextComponents;
 
 class MakerPanel extends React.Component {
 	state = { dataKey: null };
@@ -27,10 +24,6 @@ class MakerPanel extends React.Component {
 		this.setState({ dataKey });
 	}
 
-	renderBalance = (balance) => {
-		return balance
-	}
-
 	render () {
 		const { drizzle, drizzleState } = this.props
 
@@ -41,6 +34,7 @@ class MakerPanel extends React.Component {
 		if (!balanceObject) return null
 
 		const balance = Number(balanceObject.value)
+		console.log('Balance: ', balance);
 
 		return (
 			<div>
@@ -55,14 +49,13 @@ class MakerPanel extends React.Component {
 							balance={balance}
 							tokenItemComponent={OwnedTokenItem}
 						/>
-					</Card>
-
-					<Card className="m-2 p-2">
-						<p>Create a product</p>
-						<NewProduct
-							drizzle={drizzle}
-							drizzleState={drizzleState}
-						/>
+						<div className="m-2">
+							<p>Add a product</p>
+							<NewProduct
+								drizzle={drizzle}
+								drizzleState={drizzleState}
+							/>
+						</div>
 					</Card>
 
 					<Card className="m-2 p-2">

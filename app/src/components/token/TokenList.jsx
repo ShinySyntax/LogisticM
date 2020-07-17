@@ -4,34 +4,48 @@ import PropTypes from 'prop-types';
 
 class TokenList extends React.Component {
 	state = {
-		dataKeyToken: null
+		dataKeyTokens: null
 	};
 
 	componentDidMount() {
-		let dataKeyToken = []
+		let dataKeyTokens = []
 		for (var i = 0; i < this.props.n; i++) {
-			dataKeyToken.push(
+			dataKeyTokens.push(
 				this.props.drizzle.contracts.Logistic.methods.tokenByIndex
 				 .cacheCall(i)
 			)
 		}
 
-		this.setState({ dataKeyToken })
+		this.setState({ dataKeyTokens })
 	}
 
 	render () {
-		if (!this.state.dataKeyToken) return null
+		if (!this.state.dataKeyTokens) return null
 
 		return (
 			<ListGroup>
 				{
-					this.state.dataKeyToken.map((tokenDataKey, idx) => {
+					this.state.dataKeyTokens.map((dataKey, idx) => {
+						let tokenId = this.props.drizzleState.contracts.Logistic
+							.tokenByIndex[dataKey]
+							&& this.props.drizzleState.contracts.Logistic
+								.tokenByIndex[dataKey].value
+
+						if (!tokenId) return null
+
+						if (this.props.tokenItemComponent) {
+							return (
+								<this.props.tokenItemComponent
+									key={idx}
+									drizzle={this.props.drizzle}
+									drizzleState={this.props.drizzleState}
+									tokenId={tokenId}
+								/>
+							)
+						}
 						return (
 							<ListGroup.Item key={idx}>
-								{ this.props.drizzleState.contracts.Logistic
-									.tokenByIndex[tokenDataKey]
-								 	&& this.props.drizzleState.contracts.Logistic
-										.tokenByIndex[tokenDataKey].value }
+								{tokenId}
 							</ListGroup.Item>
 						)
 					})
@@ -42,7 +56,8 @@ class TokenList extends React.Component {
 }
 
 TokenList.propTypes = {
-	n: PropTypes.number.isRequired
+	n: PropTypes.number.isRequired,
+	tokenItemComponent: PropTypes.any
 };
 
 export default TokenList;

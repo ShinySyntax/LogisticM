@@ -1,5 +1,4 @@
 import { EventActions } from '@drizzle/store';
-// import * as TransactionActions from '@drizzle/store/transactions/constants';
 import { toast } from 'react-toastify';
 
 import { addEvent } from '../store/actions'
@@ -18,13 +17,8 @@ const contractNotifier = _store => next => action => {
   switch(action.type) {
     case EventActions.EVENT_FIRED:
       if (!events.includes(action.event.blockHash)) {
-        const contract = action.name
-        const contractEvent = action.event.event
-        const display = `${contract}: ${contractEvent}`
-
-        toast.success(display, { position: toast.POSITION.TOP_RIGHT })
         events.push(action.event.blockHash)
-        store.dispatch(addEvent(action.event))
+        store.dispatch(addEvent(action.event, action))
       }
       break;
 

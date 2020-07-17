@@ -2,12 +2,12 @@ import React from 'react';
 import { Container,
 	Row,
 	Col,
-	ListGroup
+	ListGroup,
+	Button
  } from 'react-bootstrap';
+import { connect } from "react-redux";
 
-import { ZERO_ADDRESS } from '../../../utils/constants';
-
-class InDeliveryTokenItem extends React.Component {
+class WillReceiveTokenItem extends React.Component {
 	state = {
 		dataKey: null,
 		show: true
@@ -21,13 +21,24 @@ class InDeliveryTokenItem extends React.Component {
 		this.setState({ dataKey });
 	}
 
+	receive = () => {
+		const event = this.props.events.find(event => {
+			return event.event === 'Approval' &&
+				event.returnValues.tokenId === this.props.tokenId;
+		})
+		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
+			event.returnValues.owner,
+			this.props.tokenId
+		)
+	}
+
 	render () {
 		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
 			.pendingDeliveries[this.state.dataKey]
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
 
-		if (tokenInDelivery === ZERO_ADDRESS) return null
+		if (tokenInDelivery !== this.props.drizzleState.accounts[0]) return null
 
 		return (
 			<ListGroup.Item>
@@ -38,10 +49,13 @@ class InDeliveryTokenItem extends React.Component {
 								{ this.props.tokenId }
 							</span>
 						</Col>
-						<Col>
-							<span className="m-2">
-								to: { tokenInDelivery }
-							</span>
+						<Col md={1}>
+							<Button
+								onClick={this.receive}
+								aria-controls="receive-product"
+							>
+								<span>Receive</span>
+							</Button>
 						</Col>
 				  </Row>
 				</Container>
@@ -51,4 +65,8 @@ class InDeliveryTokenItem extends React.Component {
 	}
 }
 
-export default InDeliveryTokenItem;
+const mapStateToProps = state => {
+	return { events: state.eventsReducer.events }
+};
+
+export default connect(mapStateToProps)(WillReceiveTokenItem)

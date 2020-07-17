@@ -16,18 +16,10 @@ class Events extends React.Component {
 			drizzle.contracts.Logistic.address
 		)
 
-		let eventNames = this.props.eventNames
-
-		if (!Array.isArray(eventNames)) {
-			eventNames = [eventNames]
-		}
-
-		let filters = this.props.filters || []
-
-		eventNames.forEach((eventName, i) => {
+		this.props.eventNames.forEach((eventName, i) => {
 			contract.getPastEvents(eventName, {
 				fromBlock: 0,
-				filter: filters[eventName]
+				filter: this.props.filters[eventName]
 			}).then(events => {
 				this.props.addAllEvents(events)
 			})
@@ -39,12 +31,20 @@ class Events extends React.Component {
 	}
 
 	render () {
-		if (!this.props.events) return null
-
 		let events = this.props.events
+		if (!events) return null
 
-		if (this.props.filterFunction) {
-			events = events.filter(this.props.filterFunction)
+		if (!this.props.showAll) {
+			events = events.filter(event => {
+				let show = false
+				for (let key in event.returnValues) {
+					if (event.returnValues.hasOwnProperty(key) &&
+						event.returnValues[key] === this.props.drizzleState.accounts[0]) {
+						show = true
+					}
+				}
+				return show
+			})
 		}
 
 		return (
@@ -66,15 +66,6 @@ class Events extends React.Component {
 		}
 
 		let eventName = event.event
-
-		if (eventName === 'Transfer') {
-			if (event.returnValues.from === ZERO_ADDRESS) {
-				eventName = "Item created"
-			}
-			else if (event.returnValues.to === ZERO_ADDRESS) {
-				eventName = "Item send to buyer"
-			}
-		}
 
 		return (
 			<Card key={idx}>
@@ -119,13 +110,15 @@ class Events extends React.Component {
 }
 
 Events.defaultProps = {
-	eventNames: 'allEvents'
+	eventNames: ['allEvents'],
+	filters: {},
+	showAll: false
 }
 
 Events.propTypes = {
-	eventNames: PropTypes.any,
-	filters: PropTypes.any,
-	filterFunction: PropTypes.any
+	eventNames: PropTypes.array.isRequired,
+	filters: PropTypes.object,
+	showAll: PropTypes.bool
 };
 
 const mapStateToProps = state => {

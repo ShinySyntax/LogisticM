@@ -48,7 +48,7 @@ class OwnerPanel extends React.Component {
 
 				<TokenList drizzle={drizzle} drizzleState={drizzleState} n={totalSupply} />
 				<strong>Events:</strong>
-				<Events drizzle={drizzle} drizzleState={drizzleState} />
+				<Events drizzle={drizzle} drizzleState={drizzleState} showAll={true} />
 
 					<div>
 						<h3>Administrative tasks</h3>

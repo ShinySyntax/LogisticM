@@ -28,7 +28,7 @@ class TokensOwned extends React.Component {
 		}
 	}
 
-	renderRow(tokenDataKey, idx) {
+	renderRow = (tokenDataKey, idx) => {
 		let tokenId = this.props.drizzleState.contracts.Logistic
 			.tokenOfOwnerByIndex[tokenDataKey]
 			&& this.props.drizzleState.contracts.Logistic
@@ -39,11 +39,12 @@ class TokensOwned extends React.Component {
 		if (this.props.tokenItemComponent) {
 			return (
 				<this.props.tokenItemComponent
+					key={idx}
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
 					tokenId={tokenId}
-					key={idx}
-					/>
+					filterFunction={this.props.filterFunction}
+				/>
 			)
 		}
 		return (

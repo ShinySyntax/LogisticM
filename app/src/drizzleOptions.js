@@ -13,7 +13,7 @@ const options = {
       "MerchantRemoved",
       "OwnershipTransferred",
       "Transfer",
-      "Transfer"
+      "Approval"
     ]
   },
   web3: {

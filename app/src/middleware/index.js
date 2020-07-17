@@ -2,13 +2,16 @@ import { EventActions } from '@drizzle/store';
 // import * as TransactionActions from '@drizzle/store/transactions/constants';
 import { toast } from 'react-toastify';
 
+import { addEvent } from '../store/actions'
+import store from '../store/store'
+
 const TX_ERROR = "TX_ERROR";
 const ERROR_CONTRACT_VAR = "ERROR_CONTRACT_VAR";
 const TransactionActions = { TX_ERROR, ERROR_CONTRACT_VAR };
 
 let events = [];
 
-const contractNotifier = store => next => action => {
+const contractNotifier = _store => next => action => {
   // console.log("event", action.type, action);
   // console.log("event", action.type);
 
@@ -21,6 +24,7 @@ const contractNotifier = store => next => action => {
 
         toast.success(display, { position: toast.POSITION.TOP_RIGHT })
         events.push(action.event.blockHash)
+        store.dispatch(addEvent(action.event))
       }
       break;
 

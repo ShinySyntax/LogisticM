@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types'
 import { Container,
 	Row,
 	Col,
@@ -10,12 +9,30 @@ import { Container,
 	FormControl
  } from 'react-bootstrap';
 
-class TokenItem extends React.Component {
+import { ZERO_ADDRESS } from '../../../utils/constants';
+
+class OwnedTokenItem extends React.Component {
 	state = {
+		show: true,
 		open: false,
-		address: null,
-		stackId: null
-	 }
+		address: null
+	}
+
+	componentDidMount() {
+		this.tokenOwnedFilter(this.props.tokenId)
+			.then(show => this.setState({ show }))
+	}
+
+	tokenIsInDelivery = (tokenId) => {
+		return this.props.drizzle.contracts.Logistic.methods
+			.pendingDeliveries(tokenId).call()
+				.then(receiverAccount => receiverAccount !== ZERO_ADDRESS );
+	}
+
+	tokenOwnedFilter = (tokenId) => {
+		return this.tokenIsInDelivery(tokenId)
+			.then(inDelivery => !inDelivery)
+	}
 
 	handleChange = (event) => {
 		this.setState({ address: event.target.value })
@@ -26,14 +43,15 @@ class TokenItem extends React.Component {
 		const { drizzle } = this.props;
     const contract = drizzle.contracts.Logistic;
 
-		const stackId = contract.methods.send.cacheSend(
+		contract.methods.send.cacheSend(
 			this.state.address,
 			this.props.tokenId
 		)
-    this.setState({ stackId });
 	}
 
 	render () {
+		if (!this.state.show) return null
+
 		return (
 			<ListGroup.Item>
 				<Container fluid>
@@ -67,7 +85,12 @@ class TokenItem extends React.Component {
 											onChange={this.handleChange}
 								    />
 								    <InputGroup.Append>
-								      <Button onClick={this.handleSubmit} variant="outline-primary">Validate</Button>
+								      <Button
+												onClick={this.handleSubmit}
+												variant="outline-primary"
+											>
+												Validate
+											</Button>
 								    </InputGroup.Append>
 								  </InputGroup>
 								</div>
@@ -81,7 +104,4 @@ class TokenItem extends React.Component {
 	}
 }
 
-TokenItem.propTypes = {
-};
-
-export default TokenItem;
+export default OwnedTokenItem;

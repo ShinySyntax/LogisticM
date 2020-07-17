@@ -1,17 +1,12 @@
 import React from 'react';
 import { newContextComponents } from "@drizzle/react-components";
-import { ListGroup,
-	Popover,
-	OverlayTrigger,
-	Button,
-	Collapse
-} from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 import TokensOwned from '../token/TokensOwned';
 import Events from '../token/Events';
-import TokenItem from './TokenItem';
-
-// import { ZERO_ADDRESS } from '../../utils/constants';
+import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
+import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
+import NewProduct from './NewProduct';
 
 const { ContractForm } = newContextComponents;
 
@@ -31,13 +26,6 @@ class MakerPanel extends React.Component {
 		// save the `dataKey` to local component state for later reference
 		this.setState({ dataKey });
 	}
-
-	// eventFilterFunction = (event) => {
-	// 	if (event.event === "Transfer") {
-	// 		return event.returnValues.from !== ZERO_ADDRESS
-	// 	}
-	// 	return true
-	// }
 
 	renderBalance = (balance) => {
 		return balance
@@ -59,46 +47,49 @@ class MakerPanel extends React.Component {
 				<div className="section">
 					<h2>Logistic - Maker Panel</h2>
 
-					<p>you have <em>{balance}</em> item(s).</p>
+					<Card className="m-2 p-2">
+						<p>You have <em>{balance}</em> product(s).</p>
+						<TokensOwned
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							balance={balance}
+							tokenItemComponent={OwnedTokenItem}
+						/>
+					</Card>
 
-					<br/>
-					<TokensOwned
-						drizzle={drizzle}
-						drizzleState={drizzleState}
-						balance={balance}
-						tokenItemComponent={TokenItem}
-					>
-					</TokensOwned>
-					<br/>
+					<Card className="m-2 p-2">
+						<p>Create a product</p>
+						<NewProduct
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+						/>
+					</Card>
 
-					<em>Create a new item</em>
-					<ContractForm
-						drizzle={drizzle}
-						contract="Logistic"
-						method="newItem"
-					/>
+					<Card className="m-2 p-2">
+						<p>Product(s) in delivery</p>
+						<TokensOwned
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							balance={balance}
+							tokenItemComponent={InDeliveryTokenItem}
+							/>
+					</Card>
 
-					<br/>
-					<Events
-						drizzle={drizzle}
-						drizzleState={drizzleState}
-						eventNames={['MakerAdded', 'Transfer']}
-						filters={
-							{
-								MakerAdded: {
-									account: drizzleState.accounts[0]
+					<Card className="m-2 p-2">
+						<p><em>Activity</em></p>
+						<Events
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							eventNames={['MakerAdded', 'Approval', 'Transfer']}
+							filters={
+								{
+									MakerAdded: {
+										account: drizzleState.accounts[0]
+									}
 								}
 							}
-						}
-					/>
-					<br/>
-
-					<em>Send an item</em>
-					<ContractForm
-						drizzle={drizzle}
-						contract="Logistic"
-						method="send"
-					/>
+						/>
+					</Card>
 				</div>
 			</div>
 		)

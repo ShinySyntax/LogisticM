@@ -1,15 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Accordion, Card, Table } from 'react-bootstrap';
+import { connect } from "react-redux";
 
 import { ZERO_ADDRESS } from '../../utils/constants';
+import { addAllEvents } from '../../store/actions'
 
 class Events extends React.Component {
-	state = {
-		events: null,
-		currentBlock: null
-	}
-
 	getEvents () {
 		const { drizzle } = this.props;
 		const web3 = drizzle.web3;
@@ -18,8 +15,6 @@ class Events extends React.Component {
 			drizzle.contracts.Logistic.abi,
 			drizzle.contracts.Logistic.address
 		)
-
-		let oldEvents = []
 
 		let eventNames = this.props.eventNames
 
@@ -34,8 +29,7 @@ class Events extends React.Component {
 				fromBlock: 0,
 				filter: filters[eventName]
 			}).then(events => {
-				oldEvents.push(...events)
-				this.setState({ events: oldEvents })
+				this.props.addAllEvents(events)
 			})
 		});
 	}
@@ -44,18 +38,10 @@ class Events extends React.Component {
 		this.getEvents()
 	}
 
-	static getDerivedStateFromProps (props, state) {
-		if (this.state.currentBlock !== props.drizzleState.currentBlock) {
-			this.getEvents()
-			return { currentBlock: props.drizzleState.currentBlock }
-		}
-		return null;
-	}
-
 	render () {
-		if (!this.state.events) return null
+		if (!this.props.events) return null
 
-		let events = this.state.events
+		let events = this.props.events
 
 		if (this.props.filterFunction) {
 			events = events.filter(this.props.filterFunction)
@@ -142,4 +128,8 @@ Events.propTypes = {
 	filterFunction: PropTypes.any
 };
 
-export default Events;
+const mapStateToProps = state => {
+	return { events: state.eventsReducer.events }
+};
+
+export default connect(mapStateToProps, { addAllEvents })(Events)

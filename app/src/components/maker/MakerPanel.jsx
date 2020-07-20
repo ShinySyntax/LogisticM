@@ -34,7 +34,6 @@ class MakerPanel extends React.Component {
 		if (!balanceObject) return null
 
 		const balance = Number(balanceObject.value)
-		console.log('Balance: ', balance);
 
 		return (
 			<div>

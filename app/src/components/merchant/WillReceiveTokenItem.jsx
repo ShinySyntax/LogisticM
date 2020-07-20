@@ -44,7 +44,7 @@ class WillReceiveTokenItem extends React.Component {
 			<ListGroup.Item>
 				<Container fluid>
 				  <Row>
-				    <Col md={1}>
+				    <Col md={10}>
 							<span className="m-2">
 								{ this.props.tokenId }
 							</span>

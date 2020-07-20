@@ -2,9 +2,11 @@ import React from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 class NewProduct extends React.Component {
-	state = {
+	initialState = {
 		tokenId: null
 	}
+
+	state = this.initialState;
 
 	handleChange = (event) => {
 		this.setState({

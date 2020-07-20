@@ -3,29 +3,38 @@ import { ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 class TokenList extends React.Component {
-	state = {
-		dataKeyTokens: null
-	};
+	initialState = {
+		tokenIds: []
+	}
+
+	state = this.initialState;
+
+	getTokens(totalSupply) {
+		this.setState(this.initialState)
+		for (var i = 0; i < totalSupply; i++) {
+			this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
+				.call()
+				.then(tokenId => {
+					this.setState({ tokenIds: [tokenId, ...this.state.tokenIds]})
+				})
+		}
+	}
 
 	componentDidMount() {
-		let dataKeyTokens = []
-		for (var i = 0; i < this.props.n; i++) {
-			dataKeyTokens.push(
-				this.props.drizzle.contracts.Logistic.methods.tokenByIndex
-				 .cacheCall(i)
-			)
-		}
+		this.getTokens(this.props.totalSupply)
+	}
 
-		this.setState({ dataKeyTokens })
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.totalSupply !== prevProps.totalSupply) {
+			this.getTokens(this.props.totalSupply)
+		}
 	}
 
 	render () {
-		if (!this.state.dataKeyTokens) return null
-
 		return (
 			<ListGroup>
 				{
-					this.state.dataKeyTokens.map((dataKey, idx) => {
+					this.state.tokenIds.map((dataKey, idx) => {
 						let tokenId = this.props.drizzleState.contracts.Logistic
 							.tokenByIndex[dataKey]
 							&& this.props.drizzleState.contracts.Logistic
@@ -40,6 +49,7 @@ class TokenList extends React.Component {
 									drizzle={this.props.drizzle}
 									drizzleState={this.props.drizzleState}
 									tokenId={tokenId}
+									idx={idx}
 								/>
 							)
 						}
@@ -56,7 +66,7 @@ class TokenList extends React.Component {
 }
 
 TokenList.propTypes = {
-	n: PropTypes.number.isRequired,
+	totalSupply: PropTypes.number.isRequired,
 	tokenItemComponent: PropTypes.any
 };
 

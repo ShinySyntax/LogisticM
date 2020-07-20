@@ -3,7 +3,6 @@ import { Form, Button } from 'react-bootstrap';
 
 class GrantAccess extends React.Component {
 	state = {
-		stackId: null,
 		address: null
 	};
 
@@ -16,10 +15,9 @@ class GrantAccess extends React.Component {
 		const { drizzle } = this.props;
     const contract = drizzle.contracts.Logistic;
 
-		const stackId = contract.methods[this.props.grandAccessMethod].cacheSend(
+		contract.methods[this.props.grandAccessMethod].cacheSend(
 			this.state.address
 		)
-    this.setState({ stackId });
 	}
 
 	render () {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 class TokensOwned extends React.Component {
@@ -39,6 +39,7 @@ class TokensOwned extends React.Component {
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
 					tokenId={tokenId}
+					idx={idx}
 				/>
 			)
 		}
@@ -50,15 +51,14 @@ class TokensOwned extends React.Component {
 	}
 
 	render () {
-		console.log('render');
 		return (
-			<ListGroup>
+			<Accordion>
 				{
 					this.state.tokenIds.map((tokenId, idx) => {
 						return this.renderRow(tokenId, idx)
 					})
 				}
-			</ListGroup>
+			</Accordion>
 		)
 	}
 }

@@ -2,30 +2,38 @@ import React from 'react';
 import { Container,
 	Row,
 	Col,
-	ListGroup,
 	Button,
-	Collapse,
 	InputGroup,
-	FormControl
+	FormControl,
+	Accordion,
+	Card
  } from 'react-bootstrap';
-import { BsChevronDoubleRight } from "react-icons/bs";
+import { BsChevronDoubleDown } from "react-icons/bs";
 
 import { ZERO_ADDRESS } from '../../../utils/constants';
 
 class OwnedTokenItem extends React.Component {
 	state = {
 		dataKey: null,
-		show: true,
-		open: false,
 		address: null
 	}
 
-	componentDidMount() {
+	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
-			.pendingDeliveries.cacheCall(
+		.pendingDeliveries.cacheCall(
 			this.props.tokenId
 		);
 		this.setState({ dataKey });
+	}
+
+	componentDidMount() {
+		this.getPendingDelivery()
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.tokenId !== prevProps.tokenId) {
+			this.getPendingDelivery()
+		}
 	}
 
 	handleChange = (event) => {
@@ -58,63 +66,51 @@ class OwnedTokenItem extends React.Component {
 		if (tokenInDelivery !== ZERO_ADDRESS) return null
 
 		return (
-			<ListGroup.Item>
-				<Container fluid>
-					<Row>
-						<Col md={1}>
-							<span className="m-2">
-								{ this.props.tokenId }
-							</span>
-						</Col>
-						<Col md={1}>
-							<Button
-								onClick={() => this.setState({ open: !this.state.open })}
-								aria-controls="send-product"
-								aria-expanded={this.state.open}
-							>
-								<BsChevronDoubleRight />
-							</Button>
-						</Col>
-						<Col md={10}>
-							<Collapse
-								in={this.state.open}
-								timeout={0}
-								className="ml-5"
-							>
-								<div id="send-product">
-									<Container fluid>
-										<Row>
-											<Col md={1}>
-												<Button onClick={this.sendToBuyer}>
-													<span>Send to buyer</span>
-												</Button>
-											</Col>
-											<Col>
-												<InputGroup>
-													<FormControl
-														placeholder="Recipient's address"
-														aria-label="Recipient's address"
-														aria-describedby="basic-addon2"
-														onChange={this.handleChange}
-														/>
-													<InputGroup.Append>
-														<Button
-															onClick={this.handleSubmit}
-															variant="outline-primary"
-															>
-															<span>Send</span>
-														</Button>
-													</InputGroup.Append>
-												</InputGroup>
-											</Col>
-										</Row>
-									</Container>
-								</div>
-							</Collapse>
-						</Col>
-				  </Row>
-				</Container>
-			</ListGroup.Item>
+		  <Card>
+		    <Card.Header>
+		      <Accordion.Toggle
+						as={Button}
+						variant="link"
+						eventKey={this.props.idx+1}
+					>
+						<span className="mr-2">
+							{this.props.tokenId}
+						</span>
+						<BsChevronDoubleDown />
+		      </Accordion.Toggle>
+		    </Card.Header>
+		    <Accordion.Collapse eventKey={this.props.idx+1}>
+		      <Card.Body>
+						<Container fluid>
+							<Row>
+								<Col>
+									<Button onClick={this.sendToBuyer}>
+										<span>Send to buyer</span>
+									</Button>
+								</Col>
+								<Col md="auto">
+									<InputGroup>
+										<FormControl
+											placeholder="Recipient's address"
+											aria-label="Recipient's address"
+											aria-describedby="basic-addon2"
+											onChange={this.handleChange}
+										/>
+										<InputGroup.Append>
+											<Button
+												onClick={this.handleSubmit}
+												variant="outline-primary"
+											>
+												<span>Send</span>
+											</Button>
+										</InputGroup.Append>
+									</InputGroup>
+								</Col>
+							</Row>
+						</Container>
+					</Card.Body>
+		    </Accordion.Collapse>
+		  </Card>
 		)
 	}
 }

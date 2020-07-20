@@ -65,12 +65,10 @@ class Events extends React.Component {
 			}
 		}
 
-		let eventName = event.event
-
 		return (
 			<Card key={idx}>
 				<Accordion.Toggle as={Card.Header} eventKey={idx+1}>
-					{eventName}
+					{event.eventName}
 				</Accordion.Toggle>
 				<Accordion.Collapse eventKey={idx+1}>
 					<Card.Body>

@@ -9,16 +9,25 @@ import { ZERO_ADDRESS } from '../../../utils/constants';
 
 class InDeliveryTokenItem extends React.Component {
 	state = {
-		dataKey: null,
-		show: true
+		dataKey: null
 	}
 
-	componentDidMount() {
+	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
-			.pendingDeliveries.cacheCall(
+		.pendingDeliveries.cacheCall(
 			this.props.tokenId
 		);
 		this.setState({ dataKey });
+	}
+
+	componentDidMount() {
+		this.getPendingDelivery()
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.tokenId !== prevProps.tokenId) {
+			this.getPendingDelivery()
+		}
 	}
 
 	render () {

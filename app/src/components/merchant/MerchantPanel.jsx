@@ -34,7 +34,6 @@ class MerchantPanel extends React.Component {
 		]
 		if (!balanceObject) return null
 		const balance = Number(balanceObject.value)
-		console.log("balance:", balance);
 
 		let totalSupply = drizzleState.contracts.Logistic.totalSupply[
 			this.state.dataKeyTotalSupply
@@ -52,7 +51,7 @@ class MerchantPanel extends React.Component {
 						<TokenList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							n={totalSupply}
+							totalSupply={totalSupply}
 							tokenItemComponent={WillReceiveTokenItem}
 						/>
 					</Card>

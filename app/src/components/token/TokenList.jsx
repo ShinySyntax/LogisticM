@@ -34,14 +34,7 @@ class TokenList extends React.Component {
 		return (
 			<ListGroup>
 				{
-					this.state.tokenIds.map((dataKey, idx) => {
-						let tokenId = this.props.drizzleState.contracts.Logistic
-							.tokenByIndex[dataKey]
-							&& this.props.drizzleState.contracts.Logistic
-								.tokenByIndex[dataKey].value
-
-						if (!tokenId) return null
-
+					this.state.tokenIds.map((tokenId, idx) => {
 						if (this.props.tokenItemComponent) {
 							return (
 								<this.props.tokenItemComponent

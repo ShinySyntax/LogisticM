@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import drizzleOptions from "./drizzleOptions";
 import drizzleStore from "./store";
 import Home from "./components/Home";
+import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
 
 const drizzle = new Drizzle(drizzleOptions, drizzleStore);
@@ -25,19 +26,19 @@ const App = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        />
-      <ToastContainer />
+      />
       <DrizzleContext.Consumer>
         {drizzleContext => {
           const { drizzle, drizzleState, initialized } = drizzleContext;
           console.log(drizzle, drizzleState);
 
-          if (!initialized) {
-            return "Loading..."
-          }
-
           return (
-            <Home drizzle={drizzle} drizzleState={drizzleState} />
+            <LoadingContainer
+              drizzleState={drizzleState}
+              initialized={initialized}
+            >
+              <Home drizzle={drizzle} drizzleState={drizzleState} />
+            </LoadingContainer>
           )
         }}
       </DrizzleContext.Consumer>

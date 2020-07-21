@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 class GrantAccess extends React.Component {
 	state = {
@@ -22,18 +22,21 @@ class GrantAccess extends React.Component {
 
 	render () {
 		return (
-			<Form onSubmit={this.handleSubmit}>
-			  <Form.Group controlId="account">
-			    <Form.Label>Account address</Form.Label>
-			    <Form.Control placeholder="0x" onChange={this.handleChange} />
-			    <Form.Text className="text-muted">
-			      Enter the Ethereum Address of the account to be granted.
-			    </Form.Text>
-			  </Form.Group>
-			  <Button variant="primary" type="submit">
-			    Submit
-			  </Button>
-			</Form>
+			<InputGroup>
+				<FormControl
+					placeholder="Account address"
+					aria-label="Account address"
+					onChange={this.handleChange}
+				/>
+				<InputGroup.Append>
+					<Button
+						onClick={this.handleSubmit}
+						variant="outline-primary"
+					>
+						<span>Grant access</span>
+					</Button>
+				</InputGroup.Append>
+			</InputGroup>
 		)
 	}
 }

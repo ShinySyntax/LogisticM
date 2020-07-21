@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert } from 'react-bootstrap';
+import { Alert, Card } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
@@ -36,37 +36,57 @@ class OwnerPanel extends React.Component {
 			<div>
 				<div className="section">
 					<h2>Logistic - SuperUser Panel</h2>
-					<AccountData
-						drizzle={drizzle}
-						drizzleState={drizzleState}
-						accountIndex={0}
-						units="ether"
-						precision={5}
-					/>
 
-				<em>Total item(s): </em>{totalSupply}
+					<Card className="m-2 p-2">
+						<AccountData
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							accountIndex={0}
+							units="ether"
+							precision={5}
+						/>
+					</Card>
 
-				<TokenList drizzle={drizzle} drizzleState={drizzleState} n={totalSupply} />
-				<strong>Events:</strong>
-				<Events drizzle={drizzle} drizzleState={drizzleState} showAll={true} />
+					<Card className="m-2 p-2">
+						<p>Total item(s): {totalSupply}</p>
+						<TokenList
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							totalSupply={totalSupply}
+						/>
+					</Card>
 
-					<div>
-						<h3>Administrative tasks</h3>
-						<em>Add a maker</em>
-						<GrantAccess drizzle={drizzle} grandAccessMethod="addMaker" />
-						<br/>
-						<em>Add a merchant</em>
-						<GrantAccess drizzle={drizzle} grandAccessMethod="addMerchant" />
+					<Card className="m-2 p-2">
+						<strong>Events:</strong>
+						<Events
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+							showAll={true}
+						/>
+					</Card>
+
+					<div className="section">
+						<div>
+							<h3>Administrative tasks</h3>
+							<Card className="m-2 p-2">
+								<em>Add a maker</em>
+								<GrantAccess drizzle={drizzle} grandAccessMethod="addMaker" />
+							</Card>
+							<Card className="m-2 p-2">
+								<em>Add a merchant</em>
+								<GrantAccess drizzle={drizzle} grandAccessMethod="addMerchant" />
+							</Card>
+						</div>
+						<Alert variant="danger" className="m-2">
+							<h3>Danger zone</h3>
+
+							<em>Transfer ownership</em>
+							<ContractForm drizzle={drizzle} contract="Logistic" method="transferOwnership" />
+							<br/>
+							<em>Renounce ownership</em>
+							<ContractForm drizzle={drizzle} contract="Logistic" method="renounceOwnership" />
+						</Alert>
 					</div>
-					<Alert variant="danger" className="m-2">
-						<h3>Danger zone</h3>
-
-						<em>Transfer ownership</em>
-						<ContractForm drizzle={drizzle} contract="Logistic" method="transferOwnership" />
-						<br/>
-						<em>Renounce ownership</em>
-						<ContractForm drizzle={drizzle} contract="Logistic" method="renounceOwnership" />
-					</Alert>
 				</div>
 			</div>
 		)

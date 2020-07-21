@@ -1,9 +1,16 @@
 import React from 'react'
+import { Card } from 'react-bootstrap';
 
-class NoUserPanel extends React.Component {
-	render () {
-		return "You are not a user of the dApp."
-	}
+function NoUserPanel() {
+	return (
+		<div className="section">
+			<h2>Logistic</h2>
+
+			<Card className="m-2 p-2">
+				<p>You are not a user of the dApp</p>
+			</Card>
+		</div>
+	)
 }
 
 export default NoUserPanel;

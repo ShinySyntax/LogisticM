@@ -4,6 +4,7 @@ import OwnerPanel from './owner/OwnerPanel';
 import MakerPanel from './maker/MakerPanel';
 import MerchantPanel from './merchant/MerchantPanel';
 import NoUserPanel from './NoUserPanel';
+import Loading from './Loading';
 
 class Home extends React.Component {
   state = {
@@ -34,6 +35,10 @@ class Home extends React.Component {
     const owner = Logistic.owner[this.state.dataKeyOwner];
     const isMaker = Logistic.isMaker[this.state.dataKeyMaker];
     const isMerchant = Logistic.isMerchant[this.state.dataKeyMerchant];
+
+    if (!owner || !isMaker || !isMerchant) {
+      return <Loading/>
+    }
 
     if (owner && owner.value === drizzleState.accounts[0]) {
       return (

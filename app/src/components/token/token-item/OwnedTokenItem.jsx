@@ -93,7 +93,6 @@ class OwnedTokenItem extends React.Component {
 										<FormControl
 											placeholder="Recipient's address"
 											aria-label="Recipient's address"
-											aria-describedby="basic-addon2"
 											onChange={this.handleChange}
 										/>
 										<InputGroup.Append>

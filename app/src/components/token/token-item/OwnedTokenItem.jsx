@@ -51,8 +51,8 @@ class OwnedTokenItem extends React.Component {
 		)
 	}
 
-	sendToBuyer = () => {
-		this.props.drizzle.contracts.Logistic.methods.sendToBuyer.cacheSend(
+	sendToPurchaser = () => {
+		this.props.drizzle.contracts.Logistic.methods.sendToPurchaser.cacheSend(
 			this.props.tokenId
 		)
 	}
@@ -84,8 +84,8 @@ class OwnedTokenItem extends React.Component {
 						<Container fluid>
 							<Row>
 								<Col md={3}>
-									<Button onClick={this.sendToBuyer}>
-										<span>Send to buyer</span>
+									<Button onClick={this.sendToPurchaser}>
+										<span>Send to purchaser</span>
 									</Button>
 								</Col>
 								<Col md={9}>

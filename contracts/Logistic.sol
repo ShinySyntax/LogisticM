@@ -80,9 +80,9 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         _pendingDeliveries[tokenId] = address(0);
     }
 
-    function sendToBuyer(uint256 tokenId) public makerOrDeliveryMan {
+    function sendToPurchaser(uint256 tokenId) public makerOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
-            "Logistic: Can't send to buyer an item in pending delivery");
+            "Logistic: Can't send to purchaser an item in pending delivery");
         _burn(msg.sender, tokenId);
     }
 

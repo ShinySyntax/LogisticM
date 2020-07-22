@@ -139,8 +139,8 @@ contract("Logistic test", async accounts => {
         )
 
         await truffleAssert.reverts(
-            instance.sendToBuyer(item1, { from: deliveryMan1 }),
-            "Logistic: Can't send to buyer an item in pending delivery"
+            instance.sendToPurchaser(item1, { from: deliveryMan1 }),
+            "Logistic: Can't send to purchaser an item in pending delivery"
         )
     })
 
@@ -166,15 +166,15 @@ contract("Logistic test", async accounts => {
         )
     })
 
-    it("Final delivery man (2) send to buyer", async () => {
+    it("Final delivery man (2) send to purchaser", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.sendToBuyer(item1, { from: owner }),
+            instance.sendToPurchaser(item1, { from: owner }),
             "Logistic: caller does not have the Maker role nor the DeliveryMan role"
         )
 
-        await instance.sendToBuyer(item1, { from: deliveryMan2 })
+        await instance.sendToPurchaser(item1, { from: deliveryMan2 })
         await truffleAssert.reverts(
             instance.ownerOf(item1),
             "ERC721: owner query for nonexistent token"

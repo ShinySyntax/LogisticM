@@ -18,7 +18,7 @@ const getEventName = (event, account) => {
 			eventName = "Product created"
 		}
 		else if (event.returnValues.to === ZERO_ADDRESS) {
-			eventName = "Product sent to buyer"
+			eventName = "Product sent to purchaser"
 		}
 		else {
 			eventName = "Product received"

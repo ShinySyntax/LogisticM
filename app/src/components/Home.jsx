@@ -2,7 +2,7 @@ import React from "react";
 
 import OwnerPanel from './owner/OwnerPanel';
 import MakerPanel from './maker/MakerPanel';
-import MerchantPanel from './merchant/MerchantPanel';
+import DeliveryManPanel from './delivery-man/DeliveryManPanel';
 import NoUserPanel from './NoUserPanel';
 import Loading from './Loading';
 
@@ -10,7 +10,7 @@ class Home extends React.Component {
   state = {
     dataKeyOwner: null,
     dataKeyMaker: null,
-		dataKeyMerchant: null
+		dataKeyDeliveryMan: null
   };
 
   componentDidMount() {
@@ -23,9 +23,9 @@ class Home extends React.Component {
       .cacheCall(drizzleState.accounts[0]);
 		this.setState({ dataKeyMaker });
 
-		const dataKeyMerchant = drizzle.contracts.Logistic.methods.isMerchant
+		const dataKeyDeliveryMan = drizzle.contracts.Logistic.methods.isDeliveryMan
       .cacheCall(drizzleState.accounts[0]);
-		this.setState({ dataKeyMerchant });
+		this.setState({ dataKeyDeliveryMan });
   }
 
   render () {
@@ -34,9 +34,9 @@ class Home extends React.Component {
 
     const owner = Logistic.owner[this.state.dataKeyOwner];
     const isMaker = Logistic.isMaker[this.state.dataKeyMaker];
-    const isMerchant = Logistic.isMerchant[this.state.dataKeyMerchant];
+    const isDeliveryMan = Logistic.isDeliveryMan[this.state.dataKeyDeliveryMan];
 
-    if (!owner || !isMaker || !isMerchant) {
+    if (!owner || !isMaker || !isDeliveryMan) {
       return <Loading/>
     }
 
@@ -58,9 +58,9 @@ class Home extends React.Component {
       )
     }
 
-    if (isMerchant && isMerchant.value) {
+    if (isDeliveryMan && isDeliveryMan.value) {
       return (
-        <MerchantPanel
+        <DeliveryManPanel
           drizzle={drizzle}
           drizzleState={drizzleState}
         />

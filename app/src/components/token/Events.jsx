@@ -48,7 +48,7 @@ class Events extends React.Component {
 		}
 
 		return (
-			<Accordion defaultActiveKey="0">
+			<Accordion defaultActiveKey={1}>
 				{ events.map((event, idx) => {
 					return this.renderEvent(event, idx)
 				}) }

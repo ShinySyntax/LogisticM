@@ -83,12 +83,12 @@ class OwnedTokenItem extends React.Component {
 		      <Card.Body>
 						<Container fluid>
 							<Row>
-								<Col>
+								<Col md={3}>
 									<Button onClick={this.sendToBuyer}>
 										<span>Send to buyer</span>
 									</Button>
 								</Col>
-								<Col md="auto">
+								<Col md={9}>
 									<InputGroup>
 										<FormControl
 											placeholder="Recipient's address"

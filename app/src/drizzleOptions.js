@@ -9,8 +9,8 @@ const options = {
     Logistic: [
       "MakerAdded",
       "MakerRemoved",
-      "MerchantAdded",
-      "MerchantRemoved",
+      "DeliveryManAdded",
+      "DeliveryManRemoved",
       "OwnershipTransferred",
       "Transfer",
       "Approval"

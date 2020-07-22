@@ -3,17 +3,17 @@ pragma solidity ^0.5.0;
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 
 import "./roles/MakerRole.sol";
-import "./roles/MerchantRole.sol";
+import "./roles/DeliveryManRole.sol";
 import "./roles/OwnerRole.sol";
 
 
-contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
+contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     mapping (uint256 => address) private _pendingDeliveries;
     bool private restrictedMode;
 
-    modifier makerOrMerchant() {
-        require(_isMakerOrMerchant(msg.sender),
-            "Logistic: caller does not have the Maker role nor the Merchant role");
+    modifier makerOrDeliveryMan() {
+        require(_isMakerOrDeliveryMan(msg.sender),
+            "Logistic: caller does not have the Maker role nor the DeliveryMan role");
         _;
     }
 
@@ -26,7 +26,7 @@ contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
 
     constructor() public ERC721Full("Logistic", "LM") {
         restrictedMode = true;
-        renounceMerchant();
+        renounceDeliveryMan();
         renounceMaker();
     }
 
@@ -43,25 +43,25 @@ contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
     }
 
     function addMaker(address account) public onlyOwner {
-        require(!isMerchant(account), "Account is merchant");
+        require(!isDeliveryMan(account), "Account is delivery man");
         require(owner() != account, "Owner can't be maker");
         _addMaker(account);
     }
 
-    function addMerchant(address account) public onlyOwner {
+    function addDeliveryMan(address account) public onlyOwner {
         require(!isMaker(account), "Account is maker");
-        require(owner() != account, "Owner can't be merchant");
-        _addMerchant(account);
+        require(owner() != account, "Owner can't be delivery man");
+        _addDeliveryMan(account);
     }
 
     function newItem(uint256 tokenId) public onlyMaker {
         _mint(msg.sender, tokenId);
     }
 
-    function send(address receiver, uint256 tokenId) public makerOrMerchant {
+    function send(address receiver, uint256 tokenId) public makerOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send an item in pending delivery");
-        require(isMerchant(receiver), "Logistic: receiver is not a merchant");
+        require(isDeliveryMan(receiver), "Logistic: receiver is not a delivery man");
         // assert(ownerOf(tokenId) == msg.sender);
         restrictedMode = false;
         approve(receiver, tokenId);
@@ -69,18 +69,18 @@ contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
         _pendingDeliveries[tokenId] = receiver;
     }
 
-    function receive(address sender, uint256 tokenId) public onlyMerchant {
+    function receive(address sender, uint256 tokenId) public onlyDeliveryMan {
         require(_pendingDeliveries[tokenId] == msg.sender,
             "Logistic: Can't receive an item not delivered");
-        // require(_isMakerOrMerchant(sender),
-        //     "Logistic: sender is not merchant nor maker");
+        // require(_isMakerOrDeliveryMan(sender),
+        //     "Logistic: sender is not delivery man nor maker");
         restrictedMode = false;
         transferFrom(sender, msg.sender, tokenId);
         restrictedMode = true;
         _pendingDeliveries[tokenId] = address(0);
     }
 
-    function sendToBuyer(uint256 tokenId) public makerOrMerchant {
+    function sendToBuyer(uint256 tokenId) public makerOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send to buyer an item in pending delivery");
         _burn(msg.sender, tokenId);
@@ -91,7 +91,7 @@ contract Logistic is ERC721Full, OwnerRole, MerchantRole, MakerRole {
         super._transferFrom(from, to, tokenId);
     }
 
-    function _isMakerOrMerchant(address account) private view returns (bool) {
-        return isMaker(account) || isMerchant(account);
+    function _isMakerOrDeliveryMan(address account) private view returns (bool) {
+        return isMaker(account) || isDeliveryMan(account);
     }
 }

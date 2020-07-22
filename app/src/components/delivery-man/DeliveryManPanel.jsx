@@ -9,7 +9,7 @@ import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 
 
-class MerchantPanel extends React.Component {
+class DeliveryManPanel extends React.Component {
 	state = {
 		dataKeyBalanceOf: null,
 		dataKeyTotalSupply: null
@@ -44,7 +44,7 @@ class MerchantPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - Merchant Panel</h2>
+					<h2>Logistic - DeliveryMan Panel</h2>
 
 					<Card className="m-2 p-2">
 						<p>Product(s) that you will receive</p>
@@ -81,10 +81,10 @@ class MerchantPanel extends React.Component {
 						<Events
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={['MerchantAdded', 'Approval', 'Transfer']}
+							eventNames={['DeliveryManAdded', 'Approval', 'Transfer']}
 							filters={
 								{
-									MerchantAdded: {
+									DeliveryManAdded: {
 										account: drizzleState.accounts[0]
 									}
 								}
@@ -97,4 +97,4 @@ class MerchantPanel extends React.Component {
 	}
 }
 
-export default MerchantPanel;
+export default DeliveryManPanel;

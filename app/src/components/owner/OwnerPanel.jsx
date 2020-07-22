@@ -73,8 +73,8 @@ class OwnerPanel extends React.Component {
 								<GrantAccess drizzle={drizzle} grandAccessMethod="addMaker" />
 							</Card>
 							<Card className="m-2 p-2">
-								<em>Add a merchant</em>
-								<GrantAccess drizzle={drizzle} grandAccessMethod="addMerchant" />
+								<em>Add a delivery man</em>
+								<GrantAccess drizzle={drizzle} grandAccessMethod="addDeliveryMan" />
 							</Card>
 						</div>
 						<Alert variant="danger" className="m-2">

@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 
-
 import {
   ADD_EVENT,
   ADD_ALL_EVENTS

@@ -2,7 +2,7 @@
 // import Web3 from "web3";
 
 import Logistic from "./contracts/Logistic.json";
-import { EVENT_NAMES } from "./utils/events-helpers";
+import { EVENT_NAMES } from "./utils/constants";
 
 const options = {
   contracts: [Logistic],

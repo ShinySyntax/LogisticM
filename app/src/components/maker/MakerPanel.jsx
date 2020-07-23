@@ -6,6 +6,7 @@ import EventList from '../token/event/EventList';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
+import { MAKER_EVENT_NAMES } from "../../utils/constants"
 
 class MakerPanel extends React.Component {
 	state = { dataKey: null };
@@ -72,7 +73,7 @@ class MakerPanel extends React.Component {
 						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={['MakerAdded', 'Approval', 'Transfer']}
+							eventNames={MAKER_EVENT_NAMES}
 							filters={
 								{
 									MakerAdded: {

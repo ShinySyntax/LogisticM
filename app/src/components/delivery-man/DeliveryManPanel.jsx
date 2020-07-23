@@ -7,7 +7,7 @@ import TokenList from '../token/TokenList'
 import WillReceiveTokenItem from './WillReceiveTokenItem';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
-
+import { DELIVERY_MAN_EVENT_NAMES } from "../../utils/constants"
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -81,7 +81,7 @@ class DeliveryManPanel extends React.Component {
 						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={['DeliveryManAdded', 'Approval', 'Transfer']}
+							eventNames={DELIVERY_MAN_EVENT_NAMES}
 							filters={
 								{
 									DeliveryManAdded: {

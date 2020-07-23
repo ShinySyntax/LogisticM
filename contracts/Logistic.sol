@@ -11,6 +11,9 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     mapping (uint256 => address) private _pendingDeliveries;
     bool private restrictedMode;
 
+    event ProductShipped(address indexed from, address indexed to, uint256 indexed tokenId);
+    event ProductReceived(address indexed from, address indexed by, uint256 indexed tokenId);
+
     modifier makerOrDeliveryMan() {
         require(_isMakerOrDeliveryMan(msg.sender),
             "Logistic: caller does not have the Maker role nor the DeliveryMan role");
@@ -67,6 +70,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         approve(receiver, tokenId);
         restrictedMode = true;
         _pendingDeliveries[tokenId] = receiver;
+        emit ProductShipped(msg.sender, receiver, tokenId);
     }
 
     function receive(address sender, uint256 tokenId) public onlyDeliveryMan {
@@ -78,6 +82,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         transferFrom(sender, msg.sender, tokenId);
         restrictedMode = true;
         _pendingDeliveries[tokenId] = address(0);
+        emit ProductReceived(sender, msg.sender, tokenId);
     }
 
     function sendToPurchaser(uint256 tokenId) public makerOrDeliveryMan {

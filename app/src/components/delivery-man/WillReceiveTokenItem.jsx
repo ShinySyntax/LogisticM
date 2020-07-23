@@ -6,6 +6,7 @@ import { Container,
 	Button
  } from 'react-bootstrap';
 import { connect } from "react-redux";
+import { PRODUCT_SHIPPED } from "../../utils/constants"
 
 class WillReceiveTokenItem extends React.Component {
 	state = {
@@ -32,7 +33,7 @@ class WillReceiveTokenItem extends React.Component {
 
 	receive = () => {
 		const event = this.props.events.find(event => {
-			return event.event === 'Approval' &&
+			return event.event === PRODUCT_SHIPPED &&
 				event.returnValues.tokenId === this.props.tokenId;
 		})
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(

@@ -18,7 +18,7 @@ const contractNotifier = _store => next => action => {
     case EventActions.EVENT_FIRED:
       if (!events.includes(action.event.blockHash)) {
         events.push(action.event.blockHash)
-        store.dispatch(addEvent(action.event, action))
+        store.dispatch(addEvent(action.event, action)) // TODO: pass the account
       }
       break;
 

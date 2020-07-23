@@ -69,6 +69,11 @@ contract("Logistic test", async accounts => {
             ev.approved === deliveryMan1 &&
             ev.tokenId.toNumber() === item1
         );
+        truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
+            ev.from === maker &&
+            ev.to === deliveryMan1 &&
+            ev.tokenId.toNumber() === item1
+        );
         assert.equal(await instance.pendingDeliveries(item1), deliveryMan1)
         assert.equal(await instance.getApproved(item1), deliveryMan1)
     })
@@ -94,7 +99,13 @@ contract("Logistic test", async accounts => {
     it("Delivery man 1 receive the item", async () => {
         let instance = await Logistic.deployed()
 
-        await instance.receive(maker, item1, { from: deliveryMan1 })
+        let result = await instance.receive(
+          maker, item1, { from: deliveryMan1 })
+        truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
+            ev.from === maker &&
+            ev.by === deliveryMan1 &&
+            ev.tokenId.toNumber() === item1
+        );
         assert.equal((await instance.ownerOf(item1)), deliveryMan1)
         assert.equal((await instance.pendingDeliveries(item1)), 0)
     })
@@ -124,6 +135,11 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'Approval', ev =>
             ev.owner === deliveryMan1 &&
             ev.approved === deliveryMan2 &&
+            ev.tokenId.toNumber() === item1
+        );
+        truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
+            ev.from === deliveryMan1 &&
+            ev.to === deliveryMan2 &&
             ev.tokenId.toNumber() === item1
         );
         assert.equal(await instance.pendingDeliveries(item1), deliveryMan2)

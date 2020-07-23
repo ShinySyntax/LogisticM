@@ -8,7 +8,7 @@ import { getEvents } from '../../../utils/events-helpers'
 
 class EventList extends React.Component {
 	getEvents () {
-		const { drizzle } = this.props;
+		const { drizzle, drizzleState } = this.props;
 		const web3 = drizzle.web3;
 
 		const contract = new web3.eth.Contract(
@@ -16,7 +16,12 @@ class EventList extends React.Component {
 			drizzle.contracts.Logistic.address
 		)
 
-		getEvents(contract, this.props.eventNames, this.props.filters)
+		getEvents(
+			contract,
+			this.props.eventNames,
+			this.props.filters,
+			drizzleState.accounts[0]
+		)
 	}
 
 	componentDidMount () {

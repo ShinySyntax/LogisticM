@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 
-import Events from '../token/Events';
+import EventList from '../token/event/EventList';
 import TokensOwned from '../token/TokensOwned';
 import TokenList from '../token/TokenList'
 import WillReceiveTokenItem from './WillReceiveTokenItem';
@@ -78,7 +78,7 @@ class DeliveryManPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p><em>Activity</em></p>
-						<Events
+						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							eventNames={['DeliveryManAdded', 'Approval', 'Transfer']}

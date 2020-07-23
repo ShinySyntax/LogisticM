@@ -4,7 +4,7 @@ import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
 import TokenList from '../token/TokenList'
-import Events from '../token/Events';
+import EventList from '../token/event/EventList';
 
 const { AccountData, ContractForm } = newContextComponents;
 
@@ -58,7 +58,7 @@ class OwnerPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<strong>Events:</strong>
-						<Events
+						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							showAll={true}

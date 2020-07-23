@@ -2,19 +2,12 @@
 // import Web3 from "web3";
 
 import Logistic from "./contracts/Logistic.json";
+import { EVENT_NAMES } from "./utils/events-helpers";
 
 const options = {
   contracts: [Logistic],
   events: {
-    Logistic: [
-      "MakerAdded",
-      "MakerRemoved",
-      "DeliveryManAdded",
-      "DeliveryManRemoved",
-      "OwnershipTransferred",
-      "Transfer",
-      "Approval"
-    ]
+    Logistic: EVENT_NAMES
   },
   web3: {
     fallback: {

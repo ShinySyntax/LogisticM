@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 
 import TokensOwned from '../token/TokensOwned';
-import Events from '../token/Events';
+import EventList from '../token/event/EventList';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
@@ -69,7 +69,7 @@ class MakerPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p><em>Activity</em></p>
-						<Events
+						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							eventNames={['MakerAdded', 'Approval', 'Transfer']}

@@ -9,6 +9,7 @@ import { Container,
 	Card
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 import { ZERO_ADDRESS } from '../../../utils/constants';
 
@@ -65,6 +66,8 @@ class OwnedTokenItem extends React.Component {
 
 		if (tokenInDelivery !== ZERO_ADDRESS) return null
 
+		const path = `/${this.props.tokenId}`
+
 		return (
 		  <Card>
 		    <Card.Header>
@@ -87,6 +90,13 @@ class OwnedTokenItem extends React.Component {
 									<Button onClick={this.sendToPurchaser}>
 										<span>Send to purchaser</span>
 									</Button>
+								</Col>
+								<Col md={3}>
+									<Link to={path}>
+										<Button>
+											<span>Details</span>
+										</Button>
+									</Link>
 								</Col>
 								<Col md={9}>
 									<InputGroup>

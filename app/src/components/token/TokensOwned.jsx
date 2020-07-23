@@ -1,7 +1,6 @@
 import React from 'react'
 import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-
 class TokensOwned extends React.Component {
 	initialState = {
 		tokenIds: []

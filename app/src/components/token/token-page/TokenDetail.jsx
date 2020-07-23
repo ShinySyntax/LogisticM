@@ -17,8 +17,7 @@ class TokenDetail extends React.Component {
 		getEvents(
 			contract,
 			PRODUCT_EVENT_NAMES,
-			this.props.filters,
-			drizzleState.accounts[0]
+			this.props.filters
 		)
 	}
 

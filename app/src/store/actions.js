@@ -4,15 +4,16 @@ import { toast } from 'react-toastify';
 export const ADD_EVENT = 'ADD_EVENT'
 export const ADD_ALL_EVENTS = 'ADD_ALL_EVENTS'
 
-export function addEvent(event, action, account) {
-  event.eventName = getEventName(event, account)
-  toast.success(`${action.name}: ${action.event.eventName}`)
+export function addEvent(event, action) {
+  event.eventName = getEventName(event)
+  // toast.success(`${action.name}: ${action.event.eventName}`)
+  toast.success(`${action.event.eventName}`)
   return { type: ADD_EVENT, event }
 }
 
-export function addAllEvents(events, account) {
+export function addAllEvents(events) {
   events = events.map(event => {
-    event.eventName = getEventName(event, account)
+    event.eventName = getEventName(event)
     return event
   })
   return { type: ADD_ALL_EVENTS, events }

@@ -82,13 +82,6 @@ class DeliveryManPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							eventNames={DELIVERY_MAN_EVENT_NAMES}
-							filters={
-								{
-									DeliveryManAdded: {
-										account: drizzleState.accounts[0]
-									}
-								}
-							}
 						/>
 					</Card>
 				</div>

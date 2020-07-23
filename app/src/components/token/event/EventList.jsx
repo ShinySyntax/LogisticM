@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import EventItem from './EventItem'
 import { getEvents } from '../../../utils/events-helpers'
+import { getEventsAboutUser } from "../../../store/selectors"
 
 class EventList extends React.Component {
 	getEvents () {
@@ -19,8 +20,7 @@ class EventList extends React.Component {
 		getEvents(
 			contract,
 			this.props.eventNames,
-			this.props.filters,
-			drizzleState.accounts[0]
+			this.props.filters
 		)
 	}
 
@@ -33,16 +33,11 @@ class EventList extends React.Component {
 		if (!events) return null
 
 		if (!this.props.showAll) {
-			events = events.filter(event => {
-				let show = false
-				for (let key in event.returnValues) {
-					if (event.returnValues.hasOwnProperty(key) &&
-						event.returnValues[key] === this.props.drizzleState.accounts[0]) {
-						show = true
-					}
-				}
-				return show
-			})
+			events = getEventsAboutUser(
+				events,
+				this.props.eventNames,
+				this.props.drizzleState.accounts[0]
+			)
 		}
 
 		return (
@@ -71,7 +66,7 @@ EventList.defaultProps = {
 
 EventList.propTypes = {
 	eventNames: PropTypes.array.isRequired,
-	filters: PropTypes.object,
+	// filters: PropTypes.object,
 	showAll: PropTypes.bool
 };
 

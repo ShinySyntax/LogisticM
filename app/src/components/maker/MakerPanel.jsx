@@ -74,13 +74,6 @@ class MakerPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							eventNames={MAKER_EVENT_NAMES}
-							filters={
-								{
-									MakerAdded: {
-										account: drizzleState.accounts[0]
-									}
-								}
-							}
 						/>
 					</Card>
 				</div>

@@ -37,7 +37,7 @@ class WillReceiveTokenItem extends React.Component {
 				event.returnValues.tokenId === this.props.tokenId;
 		})
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-			event.returnValues.owner,
+			event.returnValues.from,
 			this.props.tokenId
 		)
 	}

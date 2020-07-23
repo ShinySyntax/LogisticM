@@ -13,6 +13,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
 
     event ProductShipped(address indexed from, address indexed to, uint256 indexed tokenId);
     event ProductReceived(address indexed from, address indexed by, uint256 indexed tokenId);
+    event SentToPurchaser(uint256 indexed tokenId, address indexed by);
+    event NewItem(uint256 indexed tokenId, address indexed by);
 
     modifier makerOrDeliveryMan() {
         require(_isMakerOrDeliveryMan(msg.sender),
@@ -59,6 +61,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
 
     function newItem(uint256 tokenId) public onlyMaker {
         _mint(msg.sender, tokenId);
+        emit NewItem(tokenId, msg.sender);
     }
 
     function send(address receiver, uint256 tokenId) public makerOrDeliveryMan {
@@ -89,6 +92,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send to purchaser an item in pending delivery");
         _burn(msg.sender, tokenId);
+        emit SentToPurchaser(tokenId, msg.sender);
     }
 
     function _transferFrom(address from, address to, uint256 tokenId) internal

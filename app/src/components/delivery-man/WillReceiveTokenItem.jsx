@@ -34,7 +34,8 @@ class WillReceiveTokenItem extends React.Component {
 	receive = () => {
 		const event = this.props.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
-				event.returnValues.tokenId === this.props.tokenId;
+				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.to === this.props.drizzleState.accounts[0];
 		})
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
 			event.returnValues.from,

@@ -64,7 +64,10 @@ class OwnedTokenItem extends React.Component {
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
 
-		if (tokenInDelivery !== ZERO_ADDRESS) return null
+		if (tokenInDelivery !== ZERO_ADDRESS) {
+			// The token is shipped
+			return null
+		}
 
 		const path = `/product/${this.props.tokenId}`
 

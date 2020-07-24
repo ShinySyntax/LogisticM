@@ -80,6 +80,7 @@ class History extends React.Component {
 }
 
 History.propTypes = {
+	// Events about the tokenId we want to see
 	events: PropTypes.array.isRequired,
 };
 

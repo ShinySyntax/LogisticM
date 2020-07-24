@@ -8,6 +8,7 @@ import "./roles/OwnerRole.sol";
 
 
 contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
+    // the token (uint256) is shipped to the delivery man (address)
     mapping (uint256 => address) private _pendingDeliveries;
     bool private restrictedMode;
 
@@ -67,7 +68,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     function send(address receiver, uint256 tokenId) public makerOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send an item in pending delivery");
-        require(isDeliveryMan(receiver), "Logistic: receiver is not a delivery man");
+        require(isDeliveryMan(receiver),
+            "Logistic: receiver is not a delivery man");
         // assert(ownerOf(tokenId) == msg.sender);
         restrictedMode = false;
         approve(receiver, tokenId);
@@ -79,8 +81,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     function receive(address sender, uint256 tokenId) public onlyDeliveryMan {
         require(_pendingDeliveries[tokenId] == msg.sender,
             "Logistic: Can't receive an item not delivered");
-        // require(_isMakerOrDeliveryMan(sender),
-        //     "Logistic: sender is not delivery man nor maker");
+        require(_isMakerOrDeliveryMan(sender),
+            "Logistic: sender is not delivery man nor maker");
         restrictedMode = false;
         transferFrom(sender, msg.sender, tokenId);
         restrictedMode = true;

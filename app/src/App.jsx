@@ -32,7 +32,7 @@ const App = () => {
       <DrizzleContext.Consumer>
         {drizzleContext => {
           const { drizzle, drizzleState, initialized } = drizzleContext;
-          console.log(drizzle, drizzleState);
+          // console.log(drizzle, drizzleState);
 
           return (
             <LoadingContainer

@@ -38,7 +38,12 @@ export const MAKER_EVENT_NAMES = [
 	SEND_TO_PURCHASER
 ]
 
-export const PRODUCT_EVENT_NAMES = [PRODUCT_SHIPPED, PRODUCT_RECEIVED]
+export const PRODUCT_EVENT_NAMES = [
+	NEW_ITEM,
+	PRODUCT_SHIPPED,
+	PRODUCT_RECEIVED,
+	SEND_TO_PURCHASER
+]
 
 export const mapEventToString = {
 	"MakerAdded": "Maker role granted",

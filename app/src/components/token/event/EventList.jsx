@@ -4,12 +4,13 @@ import { Accordion } from 'react-bootstrap';
 import { connect } from "react-redux";
 
 import EventItem from './EventItem'
-import { getEvents } from '../../../utils/events-helpers'
+import { getPastEvents } from '../../../utils/events-helpers'
 import { getEventsAboutUser } from "../../../store/selectors"
+import { EVENT_NAMES } from '../../../utils/constants'
 
 class EventList extends React.Component {
 	getEvents () {
-		const { drizzle, drizzleState } = this.props;
+		const { drizzle } = this.props;
 		const web3 = drizzle.web3;
 
 		const contract = new web3.eth.Contract(
@@ -17,7 +18,7 @@ class EventList extends React.Component {
 			drizzle.contracts.Logistic.address
 		)
 
-		getEvents(
+		getPastEvents(
 			contract,
 			this.props.eventNames,
 			this.props.filters
@@ -32,10 +33,20 @@ class EventList extends React.Component {
 		let events = this.props.events
 		if (!events) return null
 
+		events = events.filter(event => {
+			let keepThis = true
+			for (var key in this.props.filter) {
+				if (this.props.filter.hasOwnProperty(key)) {
+					if (event.returnValues[key] !== this.props.filter[key]) {
+						keepThis = false
+					}
+				}
+			}
+			return keepThis && this.props.eventNames.includes(event.event)
+		})
 		if (!this.props.showAll) {
 			events = getEventsAboutUser(
 				events,
-				this.props.eventNames,
 				this.props.drizzleState.accounts[0]
 			)
 		}
@@ -59,14 +70,14 @@ class EventList extends React.Component {
 }
 
 EventList.defaultProps = {
-	eventNames: ['allEvents'],
+	eventNames: EVENT_NAMES,
 	filters: {},
 	showAll: false
 }
 
 EventList.propTypes = {
 	eventNames: PropTypes.array.isRequired,
-	// filters: PropTypes.object,
+	filters: PropTypes.object,
 	showAll: PropTypes.bool
 };
 

@@ -42,7 +42,7 @@ class InDeliveryTokenItem extends React.Component {
 			<ListGroup.Item>
 				<Container fluid>
 				  <Row>
-				    <Col md={1}>
+				    <Col md="auto">
 							<span className="m-2">
 								{ this.props.tokenId }
 							</span>

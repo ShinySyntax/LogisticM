@@ -17,7 +17,14 @@ function events(state = initialState, action) {
       })
     case ADD_ALL_EVENTS:
       return Object.assign({}, state, {
-        events: [...state.events, ...action.events].sort((a, b) => {
+        events: [...state.events, ...action.events]
+        .filter((event, idx, self) => {
+          return self.findIndex(ev => {
+            return ev.transactionHash === event.transactionHash &&
+            ev.event === event.event
+          }) === idx
+        })
+        .sort((a, b) => {
           return b.blockNumber - a.blockNumber
         })
       })

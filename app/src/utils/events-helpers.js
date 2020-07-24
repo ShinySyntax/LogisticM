@@ -1,8 +1,7 @@
-import { ZERO_ADDRESS } from './constants';
 import { addAllEvents } from '../store/actions'
 import store from '../store/store'
 
-export const getEvents = (web3Contract, eventNames, filters) => {
+export const getPastEvents = (web3Contract, eventNames, filters) => {
 	eventNames.forEach((eventName, i) => {
 		web3Contract.getPastEvents(eventName, {
 			fromBlock: 0,

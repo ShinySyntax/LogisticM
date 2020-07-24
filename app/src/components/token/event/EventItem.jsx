@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Accordion, Card, Table } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { getBlockTimestamp } from '../../../utils/events-helpers';
@@ -65,6 +66,16 @@ class EventItem extends React.Component {
 
 		if (this.props.drizzleState.accounts[0] === value) {
 			value += ' (you)'
+		}
+
+		if (key === 'tokenId') {
+			const path = `/product/${value}`
+			return (
+				<tr key={idx}>
+					<td>{key}</td>
+					<td><Link to={path}>{value}</Link></td>
+				</tr>
+			)
 		}
 
 		return (

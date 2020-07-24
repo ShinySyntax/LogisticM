@@ -66,7 +66,7 @@ class OwnedTokenItem extends React.Component {
 
 		if (tokenInDelivery !== ZERO_ADDRESS) return null
 
-		const path = `/${this.props.tokenId}`
+		const path = `/product/${this.props.tokenId}`
 
 		return (
 		  <Card>
@@ -86,17 +86,17 @@ class OwnedTokenItem extends React.Component {
 		      <Card.Body>
 						<Container fluid>
 							<Row>
-								<Col md={4}>
-									<Button onClick={this.sendToPurchaser}>
-										<span>Send to purchaser</span>
-									</Button>
-								</Col>
 								<Col md={2}>
 									<Link to={path}>
 										<Button>
 											<span>Details</span>
 										</Button>
 									</Link>
+								</Col>
+								<Col md={4}>
+									<Button onClick={this.sendToPurchaser}>
+										<span>Send to purchaser</span>
+									</Button>
 								</Col>
 								<Col md={6}>
 									<InputGroup>

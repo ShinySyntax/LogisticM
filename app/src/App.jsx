@@ -43,7 +43,7 @@ const App = () => {
                 <Route exact path="/">
                   <Home drizzle={drizzle} drizzleState={drizzleState} />
                 </Route>
-                <Route exact path="/:tokenId" render={(props) => {
+                <Route exact path="/product/:tokenId" render={(props) => {
                     return (
                       <TokenDetail {...props}
                         drizzle={drizzle}

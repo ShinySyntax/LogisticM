@@ -43,7 +43,7 @@ class History extends React.Component {
 	renderCreation(handOver, idx) {
 		return (
 			<p key={idx}>
-				<em>Maker</em> <Badge variant="info">{handOver.account}</Badge> created
+				<em>Supplier</em> <Badge variant="info">{handOver.account}</Badge> created
 				the product
 			</p>
 		)
@@ -59,7 +59,7 @@ class History extends React.Component {
 		}
 
 	renderSentToPurchaser(handOver, idx) {
-		// it can be a maker, instead of a delivery man
+		// it can be a supplier, instead of a delivery man
 		return (
 			<p key={idx}>
 				<em>Delivery man</em> <Badge variant="info">{handOver.account}</Badge> sent

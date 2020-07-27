@@ -2,12 +2,12 @@ pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 
-import "./roles/MakerRole.sol";
+import "./roles/SupplierRole.sol";
 import "./roles/DeliveryManRole.sol";
 import "./roles/OwnerRole.sol";
 
 
-contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
+contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     // the token (uint256) is shipped to the delivery man (address)
     mapping (uint256 => address) private _pendingDeliveries;
     bool private restrictedMode;
@@ -17,9 +17,9 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     event SentToPurchaser(uint256 indexed tokenId, address indexed by);
     event NewItem(uint256 indexed tokenId, address indexed by);
 
-    modifier makerOrDeliveryMan() {
-        require(_isMakerOrDeliveryMan(msg.sender),
-            "Logistic: caller does not have the Maker role nor the DeliveryMan role");
+    modifier supplierOrDeliveryMan() {
+        require(_isSupplierOrDeliveryMan(msg.sender),
+            "Logistic: caller does not have the Supplier role nor the DeliveryMan role");
         _;
     }
 
@@ -33,7 +33,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     constructor() public ERC721Full("Logistic", "LM") {
         restrictedMode = true;
         renounceDeliveryMan();
-        renounceMaker();
+        renounceSupplier();
     }
 
     function pendingDeliveries(uint256 tokenId) external view returns (address) {
@@ -48,24 +48,24 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         revert("Logistic: cannot approve for all");
     }
 
-    function addMaker(address account) public onlyOwner {
+    function addSupplier(address account) public onlyOwner {
         require(!isDeliveryMan(account), "Account is delivery man");
-        require(owner() != account, "Owner can't be maker");
-        _addMaker(account);
+        require(owner() != account, "Owner can't be supplier");
+        _addSupplier(account);
     }
 
     function addDeliveryMan(address account) public onlyOwner {
-        require(!isMaker(account), "Account is maker");
+        require(!isSupplier(account), "Account is supplier");
         require(owner() != account, "Owner can't be delivery man");
         _addDeliveryMan(account);
     }
 
-    function newItem(uint256 tokenId) public onlyMaker {
+    function newItem(uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
         emit NewItem(tokenId, msg.sender);
     }
 
-    function send(address receiver, uint256 tokenId) public makerOrDeliveryMan {
+    function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send an item in pending delivery");
         require(isDeliveryMan(receiver),
@@ -81,8 +81,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
     function receive(address sender, uint256 tokenId) public onlyDeliveryMan {
         require(_pendingDeliveries[tokenId] == msg.sender,
             "Logistic: Can't receive an item not delivered");
-        require(_isMakerOrDeliveryMan(sender),
-            "Logistic: sender is not delivery man nor maker");
+        require(_isSupplierOrDeliveryMan(sender),
+            "Logistic: sender is not delivery man nor supplier");
         restrictedMode = false;
         transferFrom(sender, msg.sender, tokenId);
         restrictedMode = true;
@@ -90,7 +90,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         emit ProductReceived(sender, msg.sender, tokenId);
     }
 
-    function sendToPurchaser(uint256 tokenId) public makerOrDeliveryMan {
+    function sendToPurchaser(uint256 tokenId) public supplierOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send to purchaser an item in pending delivery");
         _burn(msg.sender, tokenId);
@@ -102,7 +102,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, MakerRole {
         super._transferFrom(from, to, tokenId);
     }
 
-    function _isMakerOrDeliveryMan(address account) private view returns (bool) {
-        return isMaker(account) || isDeliveryMan(account);
+    function _isSupplierOrDeliveryMan(address account) private view returns (bool) {
+        return isSupplier(account) || isDeliveryMan(account);
     }
 }

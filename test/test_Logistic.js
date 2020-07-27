@@ -4,7 +4,7 @@ const Logistic = artifacts.require("Logistic")
 
 contract("Logistic test", async accounts => {
     const owner = accounts[0]
-    const maker = accounts[1]
+    const supplier = accounts[1]
     const deliveryMan1 = accounts[2]
     const deliveryMan2 = accounts[3]
     const deliveryMan3 = accounts[4]
@@ -13,15 +13,15 @@ contract("Logistic test", async accounts => {
     const item1 = 1;
     const item2 = 2;
 
-    it("Add a maker", async () => {
+    it("Add a supplier", async () => {
         let instance = await Logistic.deployed()
 
-        assert.isFalse((await instance.isMaker(maker)))
-        await instance.addMaker(maker, { from: owner })
-        assert.isTrue((await instance.isMaker(maker)))
+        assert.isFalse((await instance.isSupplier(supplier)))
+        await instance.addSupplier(supplier, { from: owner })
+        assert.isTrue((await instance.isSupplier(supplier)))
 
         await truffleAssert.reverts(
-            instance.addMaker(deliveryMan3, { from: maker }),
+            instance.addSupplier(deliveryMan3, { from: supplier }),
             "Ownable: caller is not the owner"
         )
     })
@@ -41,36 +41,36 @@ contract("Logistic test", async accounts => {
         )
     })
 
-    it("Maker mint", async () => {
+    it("Supplier mint", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
             instance.newItem(item1, { from: deliveryMan1 }),
-            "MakerRole: caller does not have the Maker role"
+            "SupplierRole: caller does not have the Supplier role"
         )
 
-        await instance.newItem(item1, { from: maker })
-        assert.equal((await instance.balanceOf(maker)).toNumber(), item1)
-        assert.equal((await instance.ownerOf(item1)), maker)
-        await instance.newItem(item2, { from: maker })
+        await instance.newItem(item1, { from: supplier })
+        assert.equal((await instance.balanceOf(supplier)).toNumber(), item1)
+        assert.equal((await instance.ownerOf(item1)), supplier)
+        await instance.newItem(item2, { from: supplier })
     })
 
-    it("Maker send item to delivery man", async () => {
+    it("Supplier send item to delivery man", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
             instance.send(deliveryMan3, item1, { from: owner }),
-            "Logistic: caller does not have the Maker role nor the DeliveryMan role"
+            "Logistic: caller does not have the Supplier role nor the DeliveryMan role"
         )
 
-        let result = await instance.send(deliveryMan1, item1, { from: maker })
+        let result = await instance.send(deliveryMan1, item1, { from: supplier })
         truffleAssert.eventEmitted(result, 'Approval', ev =>
-            ev.owner === maker &&
+            ev.owner === supplier &&
             ev.approved === deliveryMan1 &&
             ev.tokenId.toNumber() === item1
         );
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
-            ev.from === maker &&
+            ev.from === supplier &&
             ev.to === deliveryMan1 &&
             ev.tokenId.toNumber() === item1
         );
@@ -100,9 +100,9 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         let result = await instance.receive(
-          maker, item1, { from: deliveryMan1 })
+          supplier, item1, { from: deliveryMan1 })
         truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
-            ev.from === maker &&
+            ev.from === supplier &&
             ev.by === deliveryMan1 &&
             ev.tokenId.toNumber() === item1
         );
@@ -114,7 +114,7 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.receive(maker, item1, { from: deliveryMan1 }),
+            instance.receive(supplier, item1, { from: deliveryMan1 }),
             "Logistic: Can't receive an item not delivered"
         )
     })
@@ -168,11 +168,11 @@ contract("Logistic test", async accounts => {
         assert.equal((await instance.pendingDeliveries(item1)), 0)
     })
 
-    it("Delivery man 2 can't send to maker nor owner", async () => {
+    it("Delivery man 2 can't send to supplier nor owner", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.send(maker, item1, { from: deliveryMan2 }),
+            instance.send(supplier, item1, { from: deliveryMan2 }),
             "Logistic: receiver is not a delivery man"
         )
 
@@ -187,7 +187,7 @@ contract("Logistic test", async accounts => {
 
         await truffleAssert.reverts(
             instance.sendToPurchaser(item1, { from: owner }),
-            "Logistic: caller does not have the Maker role nor the DeliveryMan role"
+            "Logistic: caller does not have the Supplier role nor the DeliveryMan role"
         )
 
         await instance.sendToPurchaser(item1, { from: deliveryMan2 })
@@ -215,12 +215,12 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.transferFrom(deliveryMan3, user, item2, { from: maker }),
+            instance.transferFrom(deliveryMan3, user, item2, { from: supplier }),
             "Logistic: restricted mode activated"
         )
 
         await truffleAssert.reverts(
-            instance.safeTransferFrom(deliveryMan3, user, item2, { from: maker }),
+            instance.safeTransferFrom(deliveryMan3, user, item2, { from: supplier }),
             "Logistic: restricted mode activated"
         )
     })

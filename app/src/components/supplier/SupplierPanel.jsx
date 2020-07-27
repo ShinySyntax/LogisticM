@@ -8,7 +8,7 @@ import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
 import { MAKER_EVENT_NAMES } from "../../utils/constants"
 
-class MakerPanel extends React.Component {
+class SupplierPanel extends React.Component {
 	state = { dataKey: null };
 
 	componentDidMount() {
@@ -39,7 +39,7 @@ class MakerPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - Maker Panel</h2>
+					<h2>Logistic - Supplier Panel</h2>
 
 					<Card className="m-2 p-2">
 						<p>You have <em>{balance}</em> product(s).</p>
@@ -82,4 +82,4 @@ class MakerPanel extends React.Component {
 	}
 }
 
-export default MakerPanel;
+export default SupplierPanel;

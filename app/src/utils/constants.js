@@ -1,7 +1,7 @@
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-export const MAKER_ADDED = "MakerAdded"
-export const MAKER_REMOVED = "MakerRemoved"
+export const MAKER_ADDED = "SupplierAdded"
+export const MAKER_REMOVED = "SupplierRemoved"
 export const DELIVERY_MAN_ADDED = "DeliveryManAdded"
 export const DELIVERY_MAN_REMOVED = "DeliveryManRemoved"
 export const PRODUCT_SHIPPED = "ProductShipped"
@@ -46,8 +46,8 @@ export const PRODUCT_EVENT_NAMES = [
 ]
 
 export const mapEventToString = {
-	"MakerAdded": "Maker role granted",
-	"MakerRemoved": "Maker role revoked",
+	"SupplierAdded": "Supplier role granted",
+	"SupplierRemoved": "Supplier role revoked",
 	"DeliveryManAdded": "Delivery Man role granted",
 	"DeliveryManRemoved": "Delivery Man role revoked",
 	"ProductShipped": "Product shipped",

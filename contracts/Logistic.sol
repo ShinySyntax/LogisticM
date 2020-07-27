@@ -10,12 +10,15 @@ import "./roles/OwnerRole.sol";
 contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     // the token (uint256) is shipped to the delivery man (address)
     mapping (uint256 => address) private _pendingDeliveries;
+
+    // the purchaser (address) has ordered the token (uint256)
+    mapping (address => uint256) private _orders;
     bool private restrictedMode;
 
+    event NewItem(address indexed by, address indexed purchaser, uint256 indexed tokenId);
     event ProductShipped(address indexed from, address indexed to, uint256 indexed tokenId);
     event ProductReceived(address indexed from, address indexed by, uint256 indexed tokenId);
-    event SentToPurchaser(uint256 indexed tokenId, address indexed by);
-    event NewItem(uint256 indexed tokenId, address indexed by);
+    event SentToPurchaser(address indexed by, address indexed to, uint256 indexed tokenId);
 
     modifier supplierOrDeliveryMan() {
         require(_isSupplierOrDeliveryMan(msg.sender),
@@ -60,9 +63,10 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         _addDeliveryMan(account);
     }
 
-    function newItem(uint256 tokenId) public onlySupplier {
+    function newItem(address purchaser, uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
-        emit NewItem(tokenId, msg.sender);
+        _orders[purchaser] = tokenId;
+        emit NewItem(msg.sender, purchaser, tokenId);
     }
 
     function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
@@ -90,11 +94,17 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         emit ProductReceived(sender, msg.sender, tokenId);
     }
 
-    function sendToPurchaser(uint256 tokenId) public supplierOrDeliveryMan {
+    function sendToPurchaser(address purchaser, uint256 tokenId) public
+        supplierOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send to purchaser an item in pending delivery");
-        _burn(msg.sender, tokenId);
-        emit SentToPurchaser(tokenId, msg.sender);
+        require(_orders[purchaser] == tokenId,
+            "Logistic: This purchaser has not ordered this product");
+        delete _orders[purchaser];
+        restrictedMode = false;
+        transferFrom(msg.sender, purchaser, tokenId);
+        restrictedMode = true;
+        emit SentToPurchaser(msg.sender, purchaser, tokenId);
     }
 
     function _transferFrom(address from, address to, uint256 tokenId) internal

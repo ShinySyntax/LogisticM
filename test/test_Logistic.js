@@ -8,7 +8,9 @@ contract("Logistic test", async accounts => {
     const deliveryMan1 = accounts[2]
     const deliveryMan2 = accounts[3]
     const deliveryMan3 = accounts[4]
-    const user = accounts[6]
+    const purchaser1 = accounts[5]
+    const purchaser2 = accounts[6]
+    const user = accounts[7]
 
     const item1 = 1;
     const item2 = 2;
@@ -45,14 +47,19 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.newItem(item1, { from: deliveryMan1 }),
-            "SupplierRole: caller does not have the Supplier role"
+            instance.newItem(purchaser1, item1, { from: deliveryMan1 }),
+            "MakerRole: caller does not have the Maker role"
         )
 
-        await instance.newItem(item1, { from: supplier })
-        assert.equal((await instance.balanceOf(supplier)).toNumber(), item1)
+        await instance.newItem(purchaser1, item1, { from: supplier })
+        assert.equal((await instance.balanceOf(supplier)).toNumber(), 1)
         assert.equal((await instance.ownerOf(item1)), supplier)
-        await instance.newItem(item2, { from: supplier })
+        let result = await instance.newItem(purchaser2, item2, { from: supplier })
+        truffleAssert.eventEmitted(result, 'NewItem', ev =>
+            ev.by === supplier &&
+            ev.purchaser === purchaser2 &&
+            ev.tokenId.toNumber() === item2
+        );
     })
 
     it("Supplier send item to delivery man", async () => {
@@ -155,7 +162,7 @@ contract("Logistic test", async accounts => {
         )
 
         await truffleAssert.reverts(
-            instance.sendToPurchaser(item1, { from: deliveryMan1 }),
+            instance.sendToPurchaser(purchaser1, item1, { from: deliveryMan1 }),
             "Logistic: Can't send to purchaser an item in pending delivery"
         )
     })
@@ -186,15 +193,23 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.sendToPurchaser(item1, { from: owner }),
-            "Logistic: caller does not have the Supplier role nor the DeliveryMan role"
+            instance.sendToPurchaser(purchaser1, item1, { from: owner }),
+            "Logistic: caller does not have the Maker role nor the DeliveryMan role"
         )
 
-        await instance.sendToPurchaser(item1, { from: deliveryMan2 })
         await truffleAssert.reverts(
-            instance.ownerOf(item1),
-            "ERC721: owner query for nonexistent token"
+            instance.sendToPurchaser(purchaser2, item1, { from: deliveryMan2 }),
+            "Logistic: This purchaser has not ordered this product"
         )
+
+        let result = await instance.sendToPurchaser(purchaser1, item1, { from: deliveryMan2 })
+        assert.equal((await instance.balanceOf(purchaser1)).toNumber(), 1)
+        assert.equal((await instance.ownerOf(item1)), purchaser1)
+        truffleAssert.eventEmitted(result, 'SentToPurchaser', ev =>
+            ev.by === deliveryMan2 &&
+            ev.to === purchaser1 &&
+            ev.tokenId.toNumber() === item1
+        );
     })
 
     it("User can't approve", async () => {

@@ -3,21 +3,28 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 class NewProduct extends React.Component {
 	initialState = {
-		tokenId: null
+		tokenId: null,
+		purchaser: null
 	}
 
 	state = this.initialState;
 
-	handleChange = (event) => {
+	handleChangeTokenId = (event) => {
 		this.setState({
 			tokenId: event.target.value
+		})
+	}
+
+	handleChangePurchaser = (event) => {
+		this.setState({
+			purchaser: event.target.value
 		})
 	}
 
 	handleSubmit = (event) => {
 		event.preventDefault();
 		this.props.drizzle.contracts.Logistic.methods.newItem.cacheSend(
-			this.state.tokenId
+			this.state.purchaser, this.state.tokenId
 		)
 	}
 
@@ -27,7 +34,12 @@ class NewProduct extends React.Component {
 				<FormControl
 					placeholder="Product id"
 					aria-label="Product id"
-					onChange={this.handleChange}
+					onChange={this.handleChangeTokenId}
+				/>
+				<FormControl
+					placeholder="Purchaser"
+					aria-label="Purchaser"
+					onChange={this.handleChangePurchaser}
 				/>
 				<InputGroup.Append>
 					<Button

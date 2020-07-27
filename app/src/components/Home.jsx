@@ -3,7 +3,7 @@ import React from "react";
 import OwnerPanel from './owner/OwnerPanel';
 import SupplierPanel from './supplier/SupplierPanel';
 import DeliveryManPanel from './delivery-man/DeliveryManPanel';
-import NoUserPanel from './NoUserPanel';
+import CustomerPanel from './customer/CustomerPanel';
 import Loading from './Loading';
 
 class Home extends React.Component {
@@ -67,7 +67,12 @@ class Home extends React.Component {
       )
     }
 
-    return <NoUserPanel/>
+    return (
+      <CustomerPanel
+        drizzle={drizzle}
+        drizzleState={drizzleState}
+      />
+    )
   }
 }
 

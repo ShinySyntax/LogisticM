@@ -9,9 +9,11 @@ import { Container,
 	Card
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
+import PropTypes from 'prop-types'
+import { connect } from "react-redux";
 
 import TokenLink from "../token-page/TokenLink";
-import { ZERO_ADDRESS } from '../../../utils/constants';
+import { ZERO_ADDRESS, NEW_ITEM } from '../../../utils/constants';
 
 class OwnedTokenItem extends React.Component {
 	state = {
@@ -53,8 +55,12 @@ class OwnedTokenItem extends React.Component {
 	}
 
 	sendToPurchaser = () => {
+		const event = this.props.events.find(event => {
+			return event.event === NEW_ITEM &&
+				event.returnValues.tokenId === this.props.tokenId;
+		})
 		this.props.drizzle.contracts.Logistic.methods.sendToPurchaser.cacheSend(
-			this.props.tokenId
+			event.returnValues.purchaser, this.props.tokenId
 		)
 	}
 
@@ -124,4 +130,13 @@ class OwnedTokenItem extends React.Component {
 	}
 }
 
-export default OwnedTokenItem;
+OwnedTokenItem.propTypes = {
+	tokenId: PropTypes.string.isRequired,
+	events: PropTypes.array.isRequired
+};
+
+const mapStateToProps = state => {
+	return { events: state.eventsReducer.events }
+};
+
+export default connect(mapStateToProps)(OwnedTokenItem)

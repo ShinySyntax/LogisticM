@@ -23,7 +23,7 @@ class NewProduct extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		this.props.drizzle.contracts.Logistic.methods.newItem.cacheSend(
+		this.props.drizzle.contracts.Logistic.methods.newProduct.cacheSend(
 			this.state.purchaser, this.state.tokenId
 		)
 	}

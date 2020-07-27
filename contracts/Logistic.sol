@@ -62,7 +62,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         _addDeliveryMan(account);
     }
 
-    function newItem(address purchaser, uint256 tokenId) public onlySupplier {
+    function newProduct(address purchaser, uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
         _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);
@@ -70,7 +70,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
 
     function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
-            "Logistic: Can't send an item in pending delivery");
+            "Logistic: Can't send an product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
         // assert(ownerOf(tokenId) == msg.sender);
@@ -87,7 +87,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
 
     function receive(address sender, uint256 tokenId) public {
         require(_pendingDeliveries[tokenId] == msg.sender,
-            "Logistic: Can't receive an item not delivered");
+            "Logistic: Can't receive an product not delivered");
         require(_isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
         restrictedMode = false;

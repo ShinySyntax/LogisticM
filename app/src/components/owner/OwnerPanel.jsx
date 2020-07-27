@@ -48,7 +48,7 @@ class OwnerPanel extends React.Component {
 					</Card>
 
 					<Card className="m-2 p-2">
-						<p>Total item(s): {totalSupply}</p>
+						<p>Total product(s): {totalSupply}</p>
 						<TokenList
 							drizzle={drizzle}
 							drizzleState={drizzleState}

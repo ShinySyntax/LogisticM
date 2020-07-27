@@ -5,6 +5,7 @@ import { Accordion, Card, Table } from 'react-bootstrap';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { getBlockTimestamp } from '../../../utils/events-helpers';
 import TokenLink from "../token-page/TokenLink";
+import Address from "../Address"
 
 class EventItem extends React.Component {
 	state = {
@@ -64,10 +65,6 @@ class EventItem extends React.Component {
 	renderReturnValue(key, value, idx) {
 		if (value === ZERO_ADDRESS) return null
 
-		if (this.props.drizzleState.accounts[0] === value) {
-			value += ' (you)'
-		}
-
 		if (key === 'tokenId') {
 			return (
 				<tr key={idx}>
@@ -77,6 +74,15 @@ class EventItem extends React.Component {
 							tokenId={value}
 						/>
 					</td>
+				</tr>
+			)
+		}
+
+		if (value.startsWith('0x') && value.length === 42) {
+			return (
+				<tr key={idx}>
+					<td>{key}</td>
+					<td><Address address={value} /></td>
 				</tr>
 			)
 		}

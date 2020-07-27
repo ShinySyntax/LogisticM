@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Badge } from 'react-bootstrap';
 
 import { NEW_ITEM,
 	PRODUCT_RECEIVED,
 	SEND_TO_PURCHASER } from '../../../utils/constants'
+import Address from "../Address"
 
 class History extends React.Component {
 	state = {
@@ -43,7 +43,7 @@ class History extends React.Component {
 	renderCreation(handOver, idx) {
 		return (
 			<p key={idx}>
-				<em>Supplier</em> <Badge variant="info">{handOver.account}</Badge> created
+				<em>Supplier</em> <Address address={handOver.account} /> created
 				the product
 			</p>
 		)
@@ -52,7 +52,7 @@ class History extends React.Component {
 	renderTransfer(handOver, idx) {
 		return (
 			<p key={idx}>
-				<em>Delivery man</em> <Badge variant="info">{handOver.account}</Badge> received
+				<em>Delivery man</em> <Address address={handOver.account} /> received
 					the product
 				</p>
 			)
@@ -62,7 +62,7 @@ class History extends React.Component {
 		// it can be a supplier, instead of a delivery man
 		return (
 			<p key={idx}>
-				<em>Delivery man (or supplier)</em> <Badge variant="info">{handOver.account}</Badge> sent
+				<em>Delivery man (or supplier)</em> <Address address={handOver.account} /> sent
 				the product to the purchaser
 			</p>
 		)

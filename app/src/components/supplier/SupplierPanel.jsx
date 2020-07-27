@@ -6,7 +6,9 @@ import EventList from '../token/event/EventList';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
-import { MAKER_EVENT_NAMES } from "../../utils/constants"
+import { SUPPLIER_EVENT_NAMES,
+	SUPPLIER_ADDED,
+	SUPPLIER_REMOVED } from "../../utils/constants"
 
 class SupplierPanel extends React.Component {
 	state = { dataKey: null };
@@ -35,6 +37,12 @@ class SupplierPanel extends React.Component {
 		if (!balanceObject) return null
 
 		const balance = Number(balanceObject.value)
+
+		const filters = {
+			[SUPPLIER_ADDED]: { account: drizzleState.accounts[0] },
+			[SUPPLIER_REMOVED]: { account: drizzleState.accounts[0] }
+			// TODO: try to filter owned tokens
+		}
 
 		return (
 			<div>
@@ -73,7 +81,8 @@ class SupplierPanel extends React.Component {
 						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={MAKER_EVENT_NAMES}
+							eventNames={SUPPLIER_EVENT_NAMES}
+							filters={filters}
 						/>
 					</Card>
 				</div>

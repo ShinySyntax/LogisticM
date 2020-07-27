@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { PRODUCT_EVENT_NAMES } from '../../../utils/constants'
 import EventList from '../event/EventList';
 import History from './History'
-import { getPastEvents } from '../../../utils/events-helpers'
+import { getPastEvents, getEventFilterToken } from '../../../utils/events-helpers'
 import { getEventsAboutToken } from "../../../store/selectors"
 import Loading from '../../Loading';
 
@@ -22,11 +22,12 @@ class TokenDetail extends React.Component {
 		getPastEvents(
 			contract,
 			PRODUCT_EVENT_NAMES,
-			{}
+			this.filters
 		)
 	}
 
 	componentDidMount () {
+		this.filters = getEventFilterToken(this.props.match.params.tokenId)
 		this.getEvents()
 	}
 
@@ -34,7 +35,6 @@ class TokenDetail extends React.Component {
 		if (!this.props.events) return <Loading/>
 
 		let tokenId = this.props.match.params.tokenId
-		const filter = { tokenId }
 		let events = getEventsAboutToken(this.props.events, tokenId)
 
 		if (!events.length) {
@@ -69,7 +69,8 @@ class TokenDetail extends React.Component {
 							drizzleState={this.props.drizzleState}
 							eventNames={PRODUCT_EVENT_NAMES}
 							showAll={true}
-							filter={filter}
+							filters={this.filters}
+							filter={{ tokenId }}
 						/>
 				</Card>
 			</div>

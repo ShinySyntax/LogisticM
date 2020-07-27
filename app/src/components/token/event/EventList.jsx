@@ -71,7 +71,8 @@ class EventList extends React.Component {
 
 EventList.defaultProps = {
 	eventNames: EVENT_NAMES,
-	filters: {},
+	filters: {}, // passed to the web3 methods
+	filter: {}, // 
 	showAll: false
 }
 

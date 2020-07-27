@@ -21,7 +21,6 @@ class PurchaserPanel extends React.Component {
 				let eventsToken = getEventsAboutToken(this.props.events, tokenId)
 				state[tokenId] = eventsToken
 			});
-			console.log(state);
 			this.setState(state);
 		}
 	}

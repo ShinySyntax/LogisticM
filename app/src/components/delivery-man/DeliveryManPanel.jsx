@@ -7,7 +7,9 @@ import TokenList from '../token/TokenList'
 import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
-import { DELIVERY_MAN_EVENT_NAMES } from "../../utils/constants"
+import { DELIVERY_MAN_EVENT_NAMES,
+	DELIVERY_MAN_ADDED,
+	DELIVERY_MAN_REMOVED } from "../../utils/constants"
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -40,6 +42,11 @@ class DeliveryManPanel extends React.Component {
 		]
 		if (!totalSupply) return null
 		totalSupply = Number(totalSupply.value)
+
+		const filters = {
+			[DELIVERY_MAN_ADDED]: { account: drizzleState.accounts[0] },
+			[DELIVERY_MAN_REMOVED]: { account: drizzleState.accounts[0] }
+		}
 
 		return (
 			<div>
@@ -82,6 +89,7 @@ class DeliveryManPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							eventNames={DELIVERY_MAN_EVENT_NAMES}
+							filters={filters}
 						/>
 					</Card>
 				</div>

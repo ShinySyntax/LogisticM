@@ -1,7 +1,7 @@
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-export const MAKER_ADDED = "SupplierAdded"
-export const MAKER_REMOVED = "SupplierRemoved"
+export const SUPPLIER_ADDED = "SupplierAdded"
+export const SUPPLIER_REMOVED = "SupplierRemoved"
 export const DELIVERY_MAN_ADDED = "DeliveryManAdded"
 export const DELIVERY_MAN_REMOVED = "DeliveryManRemoved"
 export const PRODUCT_SHIPPED = "ProductShipped"
@@ -9,8 +9,8 @@ export const PRODUCT_RECEIVED = "ProductReceived"
 export const NEW_ITEM = "NewProduct"
 
 export const EVENT_NAMES = [
-	MAKER_ADDED,
-	MAKER_REMOVED,
+	SUPPLIER_ADDED,
+	SUPPLIER_REMOVED,
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
 	// "OwnershipTransferred",
@@ -26,9 +26,9 @@ export const DELIVERY_MAN_EVENT_NAMES = [
 	PRODUCT_RECEIVED
 ]
 
-export const MAKER_EVENT_NAMES = [
-	MAKER_ADDED,
-	MAKER_REMOVED,
+export const SUPPLIER_EVENT_NAMES = [
+	SUPPLIER_ADDED,
+	SUPPLIER_REMOVED,
 	NEW_ITEM,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED

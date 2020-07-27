@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 
 import TokenLink from "../token-page/TokenLink";
 import { ZERO_ADDRESS, NEW_ITEM } from '../../../utils/constants';
-import { getPastEvents } from '../../../utils/events-helpers'
+import { getPastEvents, getEventFilterToken } from '../../../utils/events-helpers'
 import { PRODUCT_EVENT_NAMES } from '../../../utils/constants'
 
 class OwnedTokenItem extends React.Component {
@@ -35,7 +35,7 @@ class OwnedTokenItem extends React.Component {
 		getPastEvents(
 			contract,
 			PRODUCT_EVENT_NAMES,
-			{ tokenId: this.props.tokenId }
+			this.filters
 		)
 	}
 
@@ -48,6 +48,7 @@ class OwnedTokenItem extends React.Component {
 	}
 
 	componentDidMount() {
+		this.filters = getEventFilterToken(this.props.tokenId)
 		this.getEvents()
 		this.getPendingDelivery()
 	}

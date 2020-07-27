@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Container,
 	Row,
 	Col,
@@ -6,8 +7,8 @@ import { Container,
 	Button
  } from 'react-bootstrap';
 import { connect } from "react-redux";
-import { PRODUCT_SHIPPED } from "../../utils/constants"
-import TokenLink from "../token/token-page/TokenLink";
+import { PRODUCT_SHIPPED } from "../../../utils/constants"
+import TokenLink from "../token-page/TokenLink";
 
 class WillReceiveTokenItem extends React.Component {
 	state = {
@@ -78,6 +79,11 @@ class WillReceiveTokenItem extends React.Component {
 		)
 	}
 }
+
+WillReceiveTokenItem.propTypes = {
+	tokenId: PropTypes.string.isRequired,
+	events: PropTypes.array.isRequired
+};
 
 const mapStateToProps = state => {
 	return { events: state.eventsReducer.events }

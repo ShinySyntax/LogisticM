@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Container,
 	Row,
 	Col,
@@ -62,5 +63,9 @@ class InDeliveryTokenItem extends React.Component {
 		)
 	}
 }
+
+InDeliveryTokenItem.propTypes = {
+	tokenId: PropTypes.string.isRequired
+};
 
 export default InDeliveryTokenItem;

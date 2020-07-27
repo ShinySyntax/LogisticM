@@ -4,7 +4,7 @@ import { Card } from 'react-bootstrap';
 import EventList from '../token/event/EventList';
 import TokensOwned from '../token/TokensOwned';
 import TokenList from '../token/TokenList'
-import WillReceiveTokenItem from './WillReceiveTokenItem';
+import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import { DELIVERY_MAN_EVENT_NAMES } from "../../utils/constants"

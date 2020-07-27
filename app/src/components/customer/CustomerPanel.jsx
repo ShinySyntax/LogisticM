@@ -6,7 +6,8 @@ import { getEventsAboutUser } from "../../store/selectors"
 import { getPastEvents } from '../../utils/events-helpers'
 import Loading from '../Loading';
 import { PRODUCT_EVENT_NAMES } from '../../utils/constants'
-import PurchaserPanel from "./PurchaserPanel"
+import PurchaserPanel from "../purchaser/PurchaserPanel"
+import NoUserPanel from "./NoUserPanel"
 
 class CustomerPanel extends React.Component {
 	getEvents () {
@@ -43,15 +44,7 @@ class CustomerPanel extends React.Component {
 		});
 
 		if (!eventsUser.length) {
-			return (
-				<div className="section">
-					<h2>Logistic</h2>
-
-					<Card className="m-2 p-2">
-						<p>You are not a user of the dApp</p>
-					</Card>
-				</div>
-			)
+			return <NoUserPanel/>
 		}
 
 		return (
@@ -62,8 +55,6 @@ class CustomerPanel extends React.Component {
 				tokenIds={tokenIds}
 			/>
 		)
-
-
 	}
 }
 

@@ -6,7 +6,7 @@ import { newContextComponents } from "@drizzle/react-components";
 import { getEventsAboutToken } from "../../store/selectors"
 import History from '../token/token-page/History'
 
-const { AccountData, ContractForm } = newContextComponents;
+const { AccountData } = newContextComponents;
 
 class PurchaserPanel extends React.Component {
 	// { '1561561111': [event1, event2...]}

@@ -14,11 +14,29 @@ import { connect } from "react-redux";
 
 import TokenLink from "../token-page/TokenLink";
 import { ZERO_ADDRESS, NEW_ITEM } from '../../../utils/constants';
+import { getPastEvents } from '../../../utils/events-helpers'
+import { PRODUCT_EVENT_NAMES } from '../../../utils/constants'
 
 class OwnedTokenItem extends React.Component {
 	state = {
 		dataKey: null,
 		address: null
+	}
+
+	getEvents () {
+		const { drizzle } = this.props;
+		const web3 = drizzle.web3;
+
+		const contract = new web3.eth.Contract(
+			drizzle.contracts.Logistic.abi,
+			drizzle.contracts.Logistic.address
+		)
+
+		getPastEvents(
+			contract,
+			PRODUCT_EVENT_NAMES,
+			{ tokenId: this.props.tokenId }
+		)
 	}
 
 	getPendingDelivery() {
@@ -30,6 +48,7 @@ class OwnedTokenItem extends React.Component {
 	}
 
 	componentDidMount() {
+		this.getEvents()
 		this.getPendingDelivery()
 	}
 

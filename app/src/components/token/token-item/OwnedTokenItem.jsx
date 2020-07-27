@@ -9,8 +9,10 @@ import { Container,
 	Card
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import PropTypes from 'prop-types'
+import { connect } from "react-redux";
 
+import TokenLink from "../token-page/TokenLink";
 import { ZERO_ADDRESS, NEW_ITEM } from '../../../utils/constants';
 
 class OwnedTokenItem extends React.Component {
@@ -73,8 +75,6 @@ class OwnedTokenItem extends React.Component {
 			return null
 		}
 
-		const path = `/product/${this.props.tokenId}`
-
 		return (
 		  <Card>
 		    <Card.Header>
@@ -94,11 +94,10 @@ class OwnedTokenItem extends React.Component {
 						<Container fluid>
 							<Row>
 								<Col md={2}>
-									<Link to={path}>
-										<Button>
-											<span>Details</span>
-										</Button>
-									</Link>
+									<TokenLink
+										tokenId={this.props.tokenId}
+										as={Button}
+									/>
 								</Col>
 								<Col md={4}>
 									<Button onClick={this.sendToPurchaser}>
@@ -131,4 +130,13 @@ class OwnedTokenItem extends React.Component {
 	}
 }
 
-export default OwnedTokenItem;
+OwnedTokenItem.propTypes = {
+	tokenId: PropTypes.string.isRequired,
+	events: PropTypes.array.isRequired
+};
+
+const mapStateToProps = state => {
+	return { events: state.eventsReducer.events }
+};
+
+export default connect(mapStateToProps)(OwnedTokenItem)

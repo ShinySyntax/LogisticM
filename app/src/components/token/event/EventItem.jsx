@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Accordion, Card, Table } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { getBlockTimestamp } from '../../../utils/events-helpers';
+import TokenLink from "../token-page/TokenLink";
 
 class EventItem extends React.Component {
 	state = {
@@ -69,11 +69,14 @@ class EventItem extends React.Component {
 		}
 
 		if (key === 'tokenId') {
-			const path = `/product/${value}`
 			return (
 				<tr key={idx}>
 					<td>{key}</td>
-					<td><Link to={path}>{value}</Link></td>
+					<td>
+						<TokenLink
+							tokenId={value}
+						/>
+					</td>
 				</tr>
 			)
 		}

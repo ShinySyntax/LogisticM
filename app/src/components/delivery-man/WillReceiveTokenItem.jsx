@@ -7,6 +7,7 @@ import { Container,
  } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { PRODUCT_SHIPPED } from "../../utils/constants"
+import TokenLink from "../token/token-page/TokenLink";
 
 class WillReceiveTokenItem extends React.Component {
 	state = {
@@ -57,7 +58,9 @@ class WillReceiveTokenItem extends React.Component {
 				  <Row>
 				    <Col md={10}>
 							<span className="m-2">
-								{ this.props.tokenId }
+								<TokenLink
+									tokenId={this.props.tokenId}
+								/>
 							</span>
 						</Col>
 						<Col md={1}>

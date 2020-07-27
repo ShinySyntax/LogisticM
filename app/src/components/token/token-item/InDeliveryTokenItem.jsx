@@ -5,6 +5,7 @@ import { Container,
 	ListGroup
  } from 'react-bootstrap';
 
+import TokenLink from "../token-page/TokenLink";
 import { ZERO_ADDRESS } from '../../../utils/constants';
 
 class InDeliveryTokenItem extends React.Component {
@@ -44,7 +45,9 @@ class InDeliveryTokenItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								{ this.props.tokenId }
+								<TokenLink
+									tokenId={this.props.tokenId}
+								/>
 							</span>
 						</Col>
 						<Col>

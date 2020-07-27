@@ -23,22 +23,6 @@ class OwnedTokenItem extends React.Component {
 		address: null
 	}
 
-	getEvents () {
-		const { drizzle } = this.props;
-		const web3 = drizzle.web3;
-
-		const contract = new web3.eth.Contract(
-			drizzle.contracts.Logistic.abi,
-			drizzle.contracts.Logistic.address
-		)
-
-		getPastEvents(
-			contract,
-			PRODUCT_EVENT_NAMES,
-			this.filters
-		)
-	}
-
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.pendingDeliveries.cacheCall(
@@ -48,8 +32,11 @@ class OwnedTokenItem extends React.Component {
 	}
 
 	componentDidMount() {
-		this.filters = getEventFilterToken(this.props.tokenId)
-		this.getEvents()
+		getPastEvents(
+			this.props.drizzle,
+			PRODUCT_EVENT_NAMES,
+			getEventFilterToken(this.props.tokenId)
+		)
 		this.getPendingDelivery()
 	}
 

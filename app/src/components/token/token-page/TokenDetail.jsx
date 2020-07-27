@@ -10,25 +10,13 @@ import { getEventsAboutToken } from "../../../store/selectors"
 import Loading from '../../Loading';
 
 class TokenDetail extends React.Component {
-	getEvents () {
-		const { drizzle } = this.props;
-		const web3 = drizzle.web3;
-
-		const contract = new web3.eth.Contract(
-			drizzle.contracts.Logistic.abi,
-			drizzle.contracts.Logistic.address
-		)
-
+	componentDidMount () {
+		this.filters = getEventFilterToken(this.props.match.params.tokenId)
 		getPastEvents(
-			contract,
+			this.props.drizzle,
 			PRODUCT_EVENT_NAMES,
 			this.filters
 		)
-	}
-
-	componentDidMount () {
-		this.filters = getEventFilterToken(this.props.match.params.tokenId)
-		this.getEvents()
 	}
 
 	render () {

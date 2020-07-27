@@ -9,26 +9,14 @@ import PurchaserPanel from "../purchaser/PurchaserPanel"
 import NoUserPanel from "./NoUserPanel"
 
 class CustomerPanel extends React.Component {
-	getEvents () {
-		const { drizzle, drizzleState } = this.props;
-		const web3 = drizzle.web3;
-		// TODO: refactor this
-		const contract = new web3.eth.Contract(
-			drizzle.contracts.Logistic.abi,
-			drizzle.contracts.Logistic.address
-		)
-
+	componentDidMount () {
 		getPastEvents(
-			contract,
+			this.props.drizzle,
 			PRODUCT_EVENT_NAMES,
 			{
-				[NEW_ITEM]: { purchaser: drizzleState.accounts[0] }
+				[NEW_ITEM]: { purchaser: this.props.drizzleState.accounts[0] }
 			}
 		)
-	}
-
-	componentDidMount () {
-		this.getEvents()
 	}
 
 	render () {

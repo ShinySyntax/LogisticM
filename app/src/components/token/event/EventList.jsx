@@ -9,24 +9,12 @@ import { getEventsAboutUser } from "../../../store/selectors"
 import { EVENT_NAMES } from '../../../utils/constants'
 
 class EventList extends React.Component {
-	getEvents () {
-		const { drizzle } = this.props;
-		const web3 = drizzle.web3;
-
-		const contract = new web3.eth.Contract(
-			drizzle.contracts.Logistic.abi,
-			drizzle.contracts.Logistic.address
-		)
-
+	componentDidMount () {
 		getPastEvents(
-			contract,
+			this.props.drizzle,
 			this.props.eventNames,
 			this.props.filters
 		)
-	}
-
-	componentDidMount () {
-		this.getEvents()
 	}
 
 	render () {
@@ -72,7 +60,7 @@ class EventList extends React.Component {
 EventList.defaultProps = {
 	eventNames: EVENT_NAMES,
 	filters: {}, // passed to the web3 methods
-	filter: {}, // 
+	filter: {}, // used to filter on rendering
 	showAll: false
 }
 

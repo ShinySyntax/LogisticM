@@ -5,9 +5,16 @@ import { NEW_ITEM,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED } from './constants'
 
-export const getPastEvents = (web3Contract, eventNames, filters) => {
+export const getPastEvents = (drizzle, eventNames, filters) => {
+	const web3 = drizzle.web3;
+
+	const contract = new web3.eth.Contract(
+		drizzle.contracts.Logistic.abi,
+		drizzle.contracts.Logistic.address
+	)
+
 	eventNames.forEach((eventName, i) => {
-		web3Contract.getPastEvents(eventName, {
+		contract.getPastEvents(eventName, {
 			fromBlock: 0,
 			filter: filters[eventName]
 		}).then(events => {

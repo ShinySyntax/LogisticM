@@ -78,7 +78,7 @@ class OwnedTokenItem extends React.Component {
 			return event.event === NEW_ITEM &&
 				event.returnValues.tokenId === this.props.tokenId;
 		})
-		this.props.drizzle.contracts.Logistic.methods.sendToPurchaser.cacheSend(
+		this.props.drizzle.contracts.Logistic.methods.send.cacheSend(
 			event.returnValues.purchaser, this.props.tokenId
 		)
 	}

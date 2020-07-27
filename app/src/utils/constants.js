@@ -6,8 +6,7 @@ export const DELIVERY_MAN_ADDED = "DeliveryManAdded"
 export const DELIVERY_MAN_REMOVED = "DeliveryManRemoved"
 export const PRODUCT_SHIPPED = "ProductShipped"
 export const PRODUCT_RECEIVED = "ProductReceived"
-export const SEND_TO_PURCHASER = "SentToPurchaser"
-export const NEW_ITEM = "NewItem"
+export const NEW_ITEM = "NewProduct"
 
 export const EVENT_NAMES = [
 	MAKER_ADDED,
@@ -17,7 +16,6 @@ export const EVENT_NAMES = [
 	// "OwnershipTransferred",
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED,
-	SEND_TO_PURCHASER,
 	NEW_ITEM
 ]
 
@@ -25,8 +23,7 @@ export const DELIVERY_MAN_EVENT_NAMES = [
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
 	PRODUCT_SHIPPED,
-	PRODUCT_RECEIVED,
-	SEND_TO_PURCHASER
+	PRODUCT_RECEIVED
 ]
 
 export const MAKER_EVENT_NAMES = [
@@ -34,15 +31,13 @@ export const MAKER_EVENT_NAMES = [
 	MAKER_REMOVED,
 	NEW_ITEM,
 	PRODUCT_SHIPPED,
-	PRODUCT_RECEIVED,
-	SEND_TO_PURCHASER
+	PRODUCT_RECEIVED
 ]
 
 export const PRODUCT_EVENT_NAMES = [
 	NEW_ITEM,
 	PRODUCT_SHIPPED,
-	PRODUCT_RECEIVED,
-	SEND_TO_PURCHASER
+	PRODUCT_RECEIVED
 ]
 
 export const mapEventToString = {
@@ -53,5 +48,5 @@ export const mapEventToString = {
 	"ProductShipped": "Product shipped",
 	"ProductReceived": "Product received",
 	"SentToPurchaser": "Product sent to purchaser",
-	"NewItem": "New product"
+	"NewProduct": "New product"
 }

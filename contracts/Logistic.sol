@@ -15,10 +15,9 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     mapping (address => uint256) private _orders;
     bool private restrictedMode;
 
-    event NewItem(address indexed by, address indexed purchaser, uint256 indexed tokenId);
+    event NewProduct(address indexed by, address indexed purchaser, uint256 indexed tokenId);
     event ProductShipped(address indexed from, address indexed to, uint256 indexed tokenId);
     event ProductReceived(address indexed from, address indexed by, uint256 indexed tokenId);
-    event SentToPurchaser(address indexed by, address indexed to, uint256 indexed tokenId);
 
     modifier supplierOrDeliveryMan() {
         require(_isSupplierOrDeliveryMan(msg.sender),
@@ -66,15 +65,19 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     function newItem(address purchaser, uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
         _orders[purchaser] = tokenId;
-        emit NewItem(msg.sender, purchaser, tokenId);
+        emit NewProduct(msg.sender, purchaser, tokenId);
     }
 
     function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
         require(_pendingDeliveries[tokenId] == address(0),
             "Logistic: Can't send an item in pending delivery");
-        require(isDeliveryMan(receiver),
-            "Logistic: receiver is not a delivery man");
+        require(owner() != receiver && !isSupplier(receiver),
+            "Logistic: Can't send to supplier nor owner");
         // assert(ownerOf(tokenId) == msg.sender);
+        if (!isDeliveryMan(receiver)) {
+            require(_orders[receiver] == tokenId,
+                "Logistic: This purchaser has not ordered this product");
+        }
         restrictedMode = false;
         approve(receiver, tokenId);
         restrictedMode = true;
@@ -82,7 +85,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         emit ProductShipped(msg.sender, receiver, tokenId);
     }
 
-    function receive(address sender, uint256 tokenId) public onlyDeliveryMan {
+    function receive(address sender, uint256 tokenId) public {
         require(_pendingDeliveries[tokenId] == msg.sender,
             "Logistic: Can't receive an item not delivered");
         require(_isSupplierOrDeliveryMan(sender),
@@ -92,19 +95,6 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         restrictedMode = true;
         _pendingDeliveries[tokenId] = address(0);
         emit ProductReceived(sender, msg.sender, tokenId);
-    }
-
-    function sendToPurchaser(address purchaser, uint256 tokenId) public
-        supplierOrDeliveryMan {
-        require(_pendingDeliveries[tokenId] == address(0),
-            "Logistic: Can't send to purchaser an item in pending delivery");
-        require(_orders[purchaser] == tokenId,
-            "Logistic: This purchaser has not ordered this product");
-        delete _orders[purchaser];
-        restrictedMode = false;
-        transferFrom(msg.sender, purchaser, tokenId);
-        restrictedMode = true;
-        emit SentToPurchaser(msg.sender, purchaser, tokenId);
     }
 
     function _transferFrom(address from, address to, uint256 tokenId) internal

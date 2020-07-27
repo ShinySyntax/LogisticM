@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from "react-redux";
-import { Card } from 'react-bootstrap';
 
 import { getEventsAboutUser } from "../../store/selectors"
 import { getPastEvents } from '../../utils/events-helpers'

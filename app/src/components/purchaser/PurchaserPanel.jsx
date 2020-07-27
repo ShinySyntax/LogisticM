@@ -5,6 +5,8 @@ import { newContextComponents } from "@drizzle/react-components";
 
 import { getEventsAboutToken } from "../../store/selectors"
 import History from '../token/token-page/History'
+import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
+import TokenLink from "../token/token-page/TokenLink";
 
 const { AccountData } = newContextComponents;
 
@@ -44,11 +46,20 @@ class PurchaserPanel extends React.Component {
 						Object.entries(this.state).map(([tokenId, events], idx) => {
 							return (
 								<Card className="m-2 p-2" key={idx}>
-									<Card.Title>Product id: {tokenId}</Card.Title>
+									<Card.Title><span>Product id: </span>
+										<TokenLink
+											tokenId={tokenId}
+										/>
+									</Card.Title>
 									<History
 										drizzle={this.props.drizzle}
 										drizzleState={this.props.drizzleState}
 										events={events}
+									/>
+									<WillReceiveTokenItem
+										drizzle={this.props.drizzle}
+										drizzleState={this.props.drizzleState}
+										tokenId={tokenId}
 									/>
 								</Card>
 							)

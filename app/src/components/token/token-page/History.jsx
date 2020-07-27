@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { NEW_ITEM,
-	PRODUCT_RECEIVED,
-	SEND_TO_PURCHASER } from '../../../utils/constants'
+import { NEW_ITEM, PRODUCT_RECEIVED } from '../../../utils/constants'
 import Address from "../Address"
 
 class History extends React.Component {
@@ -28,12 +26,6 @@ class History extends React.Component {
 						account: event.returnValues.by
 					});
 					break;
-				case SEND_TO_PURCHASER:
-					handOvers.push({
-						method: this.renderSentToPurchaser,
-						account: event.returnValues.by
-					});
-					break;
 				default: break;
 			}
 		});
@@ -50,23 +42,14 @@ class History extends React.Component {
 	}
 
 	renderTransfer(handOver, idx) {
+		// fix this: (or purchaser)
 		return (
 			<p key={idx}>
-				<em>Delivery man</em> <Address address={handOver.account} /> received
+				<em>Delivery man (or purchaser)</em> <Address address={handOver.account} /> received
 					the product
 				</p>
 			)
 		}
-
-	renderSentToPurchaser(handOver, idx) {
-		// it can be a supplier, instead of a delivery man
-		return (
-			<p key={idx}>
-				<em>Delivery man (or supplier)</em> <Address address={handOver.account} /> sent
-				the product to the purchaser
-			</p>
-		)
-	}
 
 	render () {
 		return (

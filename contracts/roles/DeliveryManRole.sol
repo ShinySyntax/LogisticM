@@ -15,12 +15,6 @@ contract DeliveryManRole {
         _addDeliveryMan(msg.sender);
     }
 
-    modifier onlyDeliveryMan() {
-        require(isDeliveryMan(msg.sender),
-            "DeliveryManRole: caller does not have the DeliveryMan role");
-        _;
-    }
-
     function isDeliveryMan(address account) public view returns (bool) {
         return _deliveryMan.has(account);
     }

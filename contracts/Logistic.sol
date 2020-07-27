@@ -12,7 +12,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     mapping (uint256 => address) private _pendingDeliveries;
 
     // the purchaser (address) has ordered the token (uint256)
-    mapping (address => uint256) private _orders;
+    mapping (uint256 => address) private _orders;
     bool private restrictedMode;
 
     event NewProduct(address indexed by, address indexed purchaser, uint256 indexed tokenId);
@@ -64,7 +64,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
 
     function newItem(address purchaser, uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
-        _orders[purchaser] = tokenId;
+        _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);
     }
 
@@ -75,7 +75,7 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
             "Logistic: Can't send to supplier nor owner");
         // assert(ownerOf(tokenId) == msg.sender);
         if (!isDeliveryMan(receiver)) {
-            require(_orders[receiver] == tokenId,
+            require(_orders[tokenId] == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
         restrictedMode = false;

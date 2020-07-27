@@ -14,6 +14,8 @@ contract("Logistic test", async accounts => {
 
     const item1 = 1;
     const item2 = 2;
+    const item3 = 3;
+    const item4 = 4;
 
     it("Add a supplier", async () => {
         let instance = await Logistic.deployed()
@@ -254,5 +256,14 @@ contract("Logistic test", async accounts => {
             instance.safeTransferFrom(deliveryMan3, user, item2, { from: supplier }),
             "Logistic: restricted mode activated"
         )
+    })
+
+    it("One purchaser order multiple items", async () => {
+        let instance = await Logistic.deployed()
+
+        await instance.newItem(purchaser1, item3, { from: supplier })
+        await instance.newItem(purchaser1, item4, { from: supplier })
+        let result = await instance.send(purchaser1, item3, { from: supplier })
+        result = await instance.send(purchaser1, item4, { from: supplier })
     })
 })

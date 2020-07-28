@@ -17,7 +17,8 @@ class InDeliveryTokenItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.tokensSentFrom.cacheCall(
-			this.props.tokenId
+			this.props.tokenId,
+			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
 	}

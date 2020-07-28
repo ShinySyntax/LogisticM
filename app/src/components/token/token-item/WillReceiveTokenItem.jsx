@@ -6,30 +6,21 @@ import { Container,
 	ListGroup,
 	Button
  } from 'react-bootstrap';
-import { PRODUCT_SHIPPED } from "../../../store/constants"
+import { PRODUCT_EVENT_NAMES,
+	PRODUCT_SHIPPED,
+ 	PRODUCT_RECEIVED } from "../../../store/constants"
 import TokenLink from "../token-page/TokenLink";
+import { getPastEvents } from '../../../store/events-helpers'
 
 class WillReceiveTokenItem extends React.Component {
-	state = {
-		dataKey: null
-	}
-
-	getPendingDelivery() {
-		const dataKey = this.props.drizzle.contracts.Logistic.methods
-		.tokensSentFrom.cacheCall(
-			this.props.tokenId
-		);
-		this.setState({ dataKey });
-	}
-
-	componentDidMount() {
-		this.getPendingDelivery()
-	}
-
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props.tokenId !== prevProps.tokenId) {
-			this.getPendingDelivery()
-		}
+	componentDidMount () {
+		getPastEvents(
+			this.props.drizzle,
+			PRODUCT_EVENT_NAMES,
+			{
+				[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
+			}
+		)
 	}
 
 	receive = () => {
@@ -45,12 +36,18 @@ class WillReceiveTokenItem extends React.Component {
 	}
 
 	render () {
-		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
-			.tokensSentFrom[this.state.dataKey]
-		if (!tokenInDeliveryObject) return null
-		const tokenInDelivery = tokenInDeliveryObject.value
+		const eventShip = this.props.drizzleState.events.events.find(event => {
+			return event.event === PRODUCT_SHIPPED &&
+				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.to === this.props.drizzleState.accounts[0];
+		})
+		const eventReceive = this.props.drizzleState.events.events.find(event => {
+			return event.event === PRODUCT_RECEIVED &&
+				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.by === this.props.drizzleState.accounts[0];
+		})
 
-		if (tokenInDelivery !== this.props.drizzleState.accounts[0]) return null
+		if (!eventShip || eventReceive) return null
 
 		return (
 			<ListGroup.Item>

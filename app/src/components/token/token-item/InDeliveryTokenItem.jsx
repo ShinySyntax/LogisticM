@@ -7,7 +7,7 @@ import { Container,
  } from 'react-bootstrap';
 
 import TokenLink from "../token-page/TokenLink";
-import { ZERO_ADDRESS } from '../../../utils/constants';
+import { ZERO_ADDRESS } from '../../../store/constants';
 
 class InDeliveryTokenItem extends React.Component {
 	state = {

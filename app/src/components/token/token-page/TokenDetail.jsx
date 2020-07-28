@@ -1,11 +1,11 @@
 import React from 'react'
 import { Card } from 'react-bootstrap';
-import { connect } from "react-redux";
 
-import { PRODUCT_EVENT_NAMES } from '../../../utils/constants'
+import { PRODUCT_EVENT_NAMES } from '../../../store/constants'
 import EventList from '../event/EventList';
 import History from './History'
-import { getPastEvents, getEventFilterToken } from '../../../utils/events-helpers'
+import { getPastEvents,
+	getEventFilterToken } from '../../../store/events-helpers'
 import { getEventsAboutToken } from "../../../store/selectors"
 import Loading from '../../Loading';
 
@@ -20,10 +20,11 @@ class TokenDetail extends React.Component {
 	}
 
 	render () {
-		if (!this.props.events) return <Loading/>
+		if (!this.props.drizzleState.events.events) return <Loading/>
 
 		let tokenId = this.props.match.params.tokenId
-		let events = getEventsAboutToken(this.props.events, tokenId)
+		let events = getEventsAboutToken(this.props.drizzleState.events.events,
+			tokenId)
 
 		if (!events.length) {
 			return (
@@ -66,8 +67,4 @@ class TokenDetail extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
-	return { events: state.eventsReducer.events }
-};
-
-export default connect(mapStateToProps)(TokenDetail)
+export default TokenDetail

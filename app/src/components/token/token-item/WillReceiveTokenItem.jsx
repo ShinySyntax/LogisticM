@@ -6,8 +6,7 @@ import { Container,
 	ListGroup,
 	Button
  } from 'react-bootstrap';
-import { connect } from "react-redux";
-import { PRODUCT_SHIPPED } from "../../../utils/constants"
+import { PRODUCT_SHIPPED } from "../../../store/constants"
 import TokenLink from "../token-page/TokenLink";
 
 class WillReceiveTokenItem extends React.Component {
@@ -34,7 +33,7 @@ class WillReceiveTokenItem extends React.Component {
 	}
 
 	receive = () => {
-		const event = this.props.events.find(event => {
+		const event = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
 				event.returnValues.tokenId === this.props.tokenId &&
 				event.returnValues.to === this.props.drizzleState.accounts[0];
@@ -81,12 +80,7 @@ class WillReceiveTokenItem extends React.Component {
 }
 
 WillReceiveTokenItem.propTypes = {
-	tokenId: PropTypes.string.isRequired,
-	events: PropTypes.array.isRequired
+	tokenId: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => {
-	return { events: state.eventsReducer.events }
-};
-
-export default connect(mapStateToProps)(WillReceiveTokenItem)
+export default WillReceiveTokenItem

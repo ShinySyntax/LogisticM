@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Accordion } from 'react-bootstrap';
-import { connect } from "react-redux";
 
 import EventItem from './EventItem'
-import { getPastEvents } from '../../../utils/events-helpers'
+import { getPastEvents } from '../../../store/events-helpers'
 import { getEventsAboutUser } from "../../../store/selectors"
-import { EVENT_NAMES } from '../../../utils/constants'
+import { EVENT_NAMES } from '../../../store/constants'
 
 class EventList extends React.Component {
 	componentDidMount () {
@@ -18,7 +17,7 @@ class EventList extends React.Component {
 	}
 
 	render () {
-		let events = this.props.events
+		let events = this.props.drizzleState.events.events
 		if (!events) return null
 
 		events = events.filter(event => {
@@ -70,8 +69,4 @@ EventList.propTypes = {
 	showAll: PropTypes.bool
 };
 
-const mapStateToProps = state => {
-	return { events: state.eventsReducer.events }
-};
-
-export default connect(mapStateToProps)(EventList)
+export default EventList

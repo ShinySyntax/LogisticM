@@ -8,7 +8,7 @@ import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
-	SUPPLIER_REMOVED } from "../../utils/constants"
+	SUPPLIER_REMOVED } from "../../store/constants"
 
 class SupplierPanel extends React.Component {
 	state = { dataKey: null };

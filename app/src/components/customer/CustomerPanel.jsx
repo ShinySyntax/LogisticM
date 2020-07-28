@@ -1,10 +1,9 @@
 import React from 'react'
-import { connect } from "react-redux";
 
 import { getEventsAboutUser } from "../../store/selectors"
-import { getPastEvents } from '../../utils/events-helpers'
+import { getPastEvents } from '../../store/events-helpers'
 import Loading from '../Loading';
-import { PRODUCT_EVENT_NAMES, NEW_ITEM } from '../../utils/constants'
+import { PRODUCT_EVENT_NAMES, NEW_ITEM } from '../../store/constants'
 import PurchaserPanel from "../purchaser/PurchaserPanel"
 import NoUserPanel from "./NoUserPanel"
 
@@ -20,10 +19,10 @@ class CustomerPanel extends React.Component {
 	}
 
 	render () {
-		if (!this.props.events) return <Loading/>
+		if (!this.props.drizzleState.events.events) return <Loading/>
 
 		let eventsUser = getEventsAboutUser(
-			this.props.events,
+			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
 		)
 
@@ -40,15 +39,11 @@ class CustomerPanel extends React.Component {
 			<PurchaserPanel
 				drizzle={this.props.drizzle}
 				drizzleState={this.props.drizzleState}
-				events={this.props.events}
+				events={this.props.drizzleState.events.events}
 				tokenIds={tokenIds}
 			/>
 		)
 	}
 }
 
-const mapStateToProps = state => {
-	return { events: state.eventsReducer.events }
-};
-
-export default connect(mapStateToProps)(CustomerPanel)
+export default CustomerPanel

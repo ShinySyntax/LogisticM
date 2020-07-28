@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux'
-
 import {
   ADD_EVENT,
   ADD_ALL_EVENTS
@@ -9,7 +7,7 @@ const initialState = {
   events: []
 }
 
-function events(state = initialState, action) {
+export function eventsReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_EVENT:
       return Object.assign({}, state, {
@@ -32,9 +30,3 @@ function events(state = initialState, action) {
       return state
   }
 }
-
-const eventApp = combineReducers({
-	eventsReducer: events
-})
-
-export default eventApp

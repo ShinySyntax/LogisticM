@@ -1,4 +1,4 @@
-import { getEventName } from './helpers'
+import { getEventName } from './events-helpers'
 import { toast } from 'react-toastify';
 
 export const ADD_EVENT = 'ADD_EVENT'
@@ -6,7 +6,6 @@ export const ADD_ALL_EVENTS = 'ADD_ALL_EVENTS'
 
 export function addEvent(event, action) {
   event.eventName = getEventName(event)
-  // toast.success(`${action.name}: ${action.event.eventName}`)
   toast.success(`${action.event.eventName}`)
   return { type: ADD_EVENT, event }
 }

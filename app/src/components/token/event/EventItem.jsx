@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Accordion, Card, Table } from 'react-bootstrap';
 
-import { ZERO_ADDRESS } from '../../../utils/constants';
-import { getBlockTimestamp } from '../../../utils/events-helpers';
+import { ZERO_ADDRESS } from '../../../store/constants';
+import { getBlockTimestamp } from '../../../store/events-helpers';
 import TokenLink from "../token-page/TokenLink";
 import Address from "../Address"
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { NEW_ITEM, PRODUCT_RECEIVED } from '../../../utils/constants'
+import { NEW_ITEM, PRODUCT_RECEIVED } from '../../../store/constants'
 import Address from "../Address"
 
 class History extends React.Component {

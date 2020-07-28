@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import drizzleOptions from "./drizzleOptions";
-import drizzleStore from "./store";
+import drizzleOptions from "./store/drizzleOptions";
+import drizzleStore from "./store/store";
 import Home from "./components/Home";
 import TokenDetail from './components/token/token-page/TokenDetail'
 import LoadingContainer from "./components/LoadingContainer";

@@ -10,12 +10,12 @@ import { Container,
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
-import { connect } from "react-redux";
 
 import TokenLink from "../token-page/TokenLink";
-import { ZERO_ADDRESS, NEW_ITEM } from '../../../utils/constants';
-import { getPastEvents, getEventFilterToken } from '../../../utils/events-helpers'
-import { PRODUCT_EVENT_NAMES } from '../../../utils/constants'
+import { ZERO_ADDRESS, NEW_ITEM } from '../../../store/constants';
+import { getPastEvents,
+	getEventFilterToken } from '../../../store/events-helpers'
+import { PRODUCT_EVENT_NAMES } from '../../../store/constants'
 
 class OwnedTokenItem extends React.Component {
 	state = {
@@ -62,7 +62,7 @@ class OwnedTokenItem extends React.Component {
 	}
 
 	sendToPurchaser = () => {
-		const event = this.props.events.find(event => {
+		const event = this.props.drizzleState.events.events.find(event => {
 			return event.event === NEW_ITEM &&
 				event.returnValues.tokenId === this.props.tokenId;
 		})
@@ -138,12 +138,7 @@ class OwnedTokenItem extends React.Component {
 }
 
 OwnedTokenItem.propTypes = {
-	tokenId: PropTypes.string.isRequired,
-	events: PropTypes.array.isRequired
+	tokenId: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => {
-	return { events: state.eventsReducer.events }
-};
-
-export default connect(mapStateToProps)(OwnedTokenItem)
+export default OwnedTokenItem

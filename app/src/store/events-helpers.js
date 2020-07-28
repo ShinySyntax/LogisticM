@@ -1,11 +1,12 @@
-import { addAllEvents } from '../store/actions'
-import store from '../store/store'
+import { addAllEvents } from './actions'
 
 import { NEW_ITEM,
 	PRODUCT_SHIPPED,
-	PRODUCT_RECEIVED } from './constants'
+	PRODUCT_RECEIVED,
+ 	mapEventToString } from './constants'
 
 export const getPastEvents = (drizzle, eventNames, filters) => {
+	const store = drizzle.store
 	const web3 = drizzle.web3;
 
 	const contract = new web3.eth.Contract(
@@ -37,4 +38,8 @@ export const getEventFilterToken = (tokenId) => {
 		[PRODUCT_SHIPPED]: { tokenId },
 		[PRODUCT_RECEIVED]: { tokenId },
 	}
+}
+
+export const getEventName = (event) => {
+	return mapEventToString[event.event] || event.event
 }

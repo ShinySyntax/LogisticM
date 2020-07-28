@@ -1,4 +1,4 @@
-// this is not really a selector as it doesn't take a state argument
+// this is not really  selectors as it doesn't take a state argument
 export const getEventsAboutUser = (events, account) => {
 	return events.filter(event => {
 		let isAboutUser = false

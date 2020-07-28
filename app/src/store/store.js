@@ -1,6 +1,13 @@
-import { createStore } from 'redux'
-import eventApp from './reducers'
+import { generateStore } from '@drizzle/store'
 
-const store = createStore(eventApp)
+import drizzleOptions from './drizzleOptions'
+import appMiddlewares from './middleware'
+import { eventsReducer } from "./reducers"
 
-export default store
+// create the store
+export default generateStore({
+  drizzleOptions,
+  appMiddlewares,
+  appReducers: { events: eventsReducer },
+  disableReduxDevTools: false  // enable ReduxDevTools!
+})

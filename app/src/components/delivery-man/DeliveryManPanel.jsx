@@ -9,7 +9,7 @@ import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
-	DELIVERY_MAN_REMOVED } from "../../utils/constants"
+	DELIVERY_MAN_REMOVED } from "../../store/constants"
 
 class DeliveryManPanel extends React.Component {
 	state = {

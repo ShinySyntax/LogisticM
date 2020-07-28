@@ -1,8 +1,8 @@
 // let drizzle know what contracts we want and how to access our test blockchain
 // import Web3 from "web3";
 
-import Logistic from "./contracts/Logistic.json";
-import { EVENT_NAMES } from "./utils/constants";
+import Logistic from "../contracts/Logistic.json";
+import { EVENT_NAMES } from "./constants";
 
 const options = {
   contracts: [Logistic],

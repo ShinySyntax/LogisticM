@@ -1,8 +1,7 @@
 import { EventActions } from '@drizzle/store';
 import { toast } from 'react-toastify';
 
-import { addEvent } from '../store/actions'
-import store from '../store/store'
+import { addEvent } from './actions'
 
 const TX_ERROR = "TX_ERROR";
 const ERROR_CONTRACT_VAR = "ERROR_CONTRACT_VAR";
@@ -12,13 +11,12 @@ let events = [];
 
 const contractNotifier = _store => next => action => {
   // console.log("event", action.type, action);
-  // console.log("event", action.type);
 
   switch(action.type) {
     case EventActions.EVENT_FIRED:
       if (!events.includes(action.event.blockHash)) {
         events.push(action.event.blockHash)
-        store.dispatch(addEvent(action.event, action))
+        _store.dispatch(addEvent(action.event, action))
       }
       break;
 

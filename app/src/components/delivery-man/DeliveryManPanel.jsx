@@ -9,12 +9,12 @@ import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
-	DELIVERY_MAN_REMOVED } from "../../store/constants"
+	DELIVERY_MAN_REMOVED,
+ 	PRODUCT_SHIPPED } from "../../store/constants"
 
 class DeliveryManPanel extends React.Component {
 	state = {
-		dataKeyBalanceOf: null,
-		dataKeyTotalSupply: null
+		dataKey: null
 	};
 
 	componentDidMount() {
@@ -22,9 +22,8 @@ class DeliveryManPanel extends React.Component {
 		const contract = drizzle.contracts.Logistic;
 
 		this.setState({
-			dataKeyBalanceOf: contract.methods.balanceOf.cacheCall(
-				drizzleState.accounts[0]),
-			dataKeyTotalSupply: contract.methods.totalSupply.cacheCall()
+			dataKey: contract.methods.balanceOf.cacheCall(
+				drizzleState.accounts[0])
 		});
 	}
 
@@ -32,21 +31,22 @@ class DeliveryManPanel extends React.Component {
 		const { drizzle, drizzleState } = this.props
 
 		const balanceObject = drizzleState.contracts.Logistic.balanceOf[
-			this.state.dataKeyBalanceOf
+			this.state.dataKey
 		]
 		if (!balanceObject) return null
 		const balance = Number(balanceObject.value)
 
-		let totalSupply = drizzleState.contracts.Logistic.totalSupply[
-			this.state.dataKeyTotalSupply
-		]
-		if (!totalSupply) return null
-		totalSupply = Number(totalSupply.value)
-
 		const filters = {
 			[DELIVERY_MAN_ADDED]: { account: drizzleState.accounts[0] },
-			[DELIVERY_MAN_REMOVED]: { account: drizzleState.accounts[0] }
+			[DELIVERY_MAN_REMOVED]: { account: drizzleState.accounts[0] },
+			[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
 		}
+
+		const tokenIds = this.props.drizzleState.events.events
+			.filter(event => event.event === PRODUCT_SHIPPED)
+			.map(event => {
+				return event.returnValues.tokenId
+			})
 
 		return (
 			<div>
@@ -58,7 +58,7 @@ class DeliveryManPanel extends React.Component {
 						<TokenList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							totalSupply={totalSupply}
+							tokenIds={tokenIds}
 							tokenItemComponent={WillReceiveTokenItem}
 						/>
 					</Card>

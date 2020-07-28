@@ -1,6 +1,6 @@
 import { addAllEvents } from './actions'
 
-import { NEW_ITEM,
+import { NEW_PRODUCT,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED,
  	mapEventToString } from './constants'
@@ -34,7 +34,7 @@ export const getBlockTimestamp = (web3, blockNumber) => {
 
 export const getEventFilterToken = (tokenId) => {
 	return {
-		[NEW_ITEM]: { tokenId },
+		[NEW_PRODUCT]: { tokenId },
 		[PRODUCT_SHIPPED]: { tokenId },
 		[PRODUCT_RECEIVED]: { tokenId },
 	}

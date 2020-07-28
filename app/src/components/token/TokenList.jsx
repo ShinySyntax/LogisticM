@@ -2,6 +2,8 @@ import React from 'react'
 import { ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import TokenLink from "./token-page/TokenLink"
+
 class TokenList extends React.Component {
 	initialState = {
 		tokenIds: []
@@ -10,13 +12,19 @@ class TokenList extends React.Component {
 	state = this.initialState;
 
 	getTokens(totalSupply) {
-		this.setState(this.initialState)
-		for (var i = 0; i < totalSupply; i++) {
-			this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
+
+		if (!this.props.tokenIds) {
+			this.setState(this.initialState)
+			for (var i = 0; i < totalSupply; i++) {
+				this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
 				.call()
 				.then(tokenId => {
 					this.setState({ tokenIds: [tokenId, ...this.state.tokenIds]})
 				})
+			}
+		}
+		else {
+			this.setState({ tokenIds: this.props.tokenIds })
 		}
 	}
 
@@ -25,7 +33,8 @@ class TokenList extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.totalSupply !== prevProps.totalSupply) {
+		if (this.props.totalSupply !== prevProps.totalSupply ||
+			this.props.tokenIds !== prevProps.tokenIds ) {
 			this.getTokens(this.props.totalSupply)
 		}
 	}
@@ -48,7 +57,7 @@ class TokenList extends React.Component {
 						}
 						return (
 							<ListGroup.Item key={idx}>
-								{tokenId}
+								<TokenLink tokenId={tokenId} />
 							</ListGroup.Item>
 						)
 					})
@@ -59,8 +68,9 @@ class TokenList extends React.Component {
 }
 
 TokenList.propTypes = {
-	totalSupply: PropTypes.number.isRequired,
-	tokenItemComponent: PropTypes.any
+	totalSupply: PropTypes.number,
+	tokenItemComponent: PropTypes.any,
+	tokenIds: PropTypes.array
 };
 
 export default TokenList;

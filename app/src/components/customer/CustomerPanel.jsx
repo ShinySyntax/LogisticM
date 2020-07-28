@@ -3,7 +3,7 @@ import React from 'react'
 import { getEventsAboutUser } from "../../store/selectors"
 import { getPastEvents } from '../../store/events-helpers'
 import Loading from '../Loading';
-import { PRODUCT_EVENT_NAMES, NEW_ITEM } from '../../store/constants'
+import { PRODUCT_EVENT_NAMES, NEW_PRODUCT } from '../../store/constants'
 import PurchaserPanel from "../purchaser/PurchaserPanel"
 import NoUserPanel from "./NoUserPanel"
 
@@ -13,7 +13,7 @@ class CustomerPanel extends React.Component {
 			this.props.drizzle,
 			PRODUCT_EVENT_NAMES,
 			{
-				[NEW_ITEM]: { purchaser: this.props.drizzleState.accounts[0] }
+				[NEW_PRODUCT]: { purchaser: this.props.drizzleState.accounts[0] }
 			}
 		)
 	}

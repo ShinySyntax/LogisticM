@@ -12,10 +12,8 @@ import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
 
 import TokenLink from "../token-page/TokenLink";
-import { ZERO_ADDRESS, NEW_ITEM } from '../../../store/constants';
-import { getPastEvents,
-	getEventFilterToken } from '../../../store/events-helpers'
-import { PRODUCT_EVENT_NAMES } from '../../../store/constants'
+import { ZERO_ADDRESS, NEW_PRODUCT } from '../../../store/constants';
+import { getPastEvents } from '../../../store/events-helpers'
 
 class OwnedTokenItem extends React.Component {
 	state = {
@@ -35,8 +33,13 @@ class OwnedTokenItem extends React.Component {
 	componentDidMount() {
 		getPastEvents(
 			this.props.drizzle,
-			PRODUCT_EVENT_NAMES,
-			getEventFilterToken(this.props.tokenId)
+			[NEW_PRODUCT],
+			{
+				[NEW_PRODUCT]: {
+					tokenId: this.props.tokenId,
+					by: this.props.drizzleState.accounts[0]
+				}
+			}
 		)
 		this.getPendingDelivery()
 	}
@@ -64,7 +67,7 @@ class OwnedTokenItem extends React.Component {
 
 	sendToPurchaser = () => {
 		const event = this.props.drizzleState.events.events.find(event => {
-			return event.event === NEW_ITEM &&
+			return event.event === NEW_PRODUCT &&
 				event.returnValues.tokenId === this.props.tokenId;
 		})
 		this.props.drizzle.contracts.Logistic.methods.send.cacheSend(

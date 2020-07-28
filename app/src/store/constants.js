@@ -6,7 +6,7 @@ export const DELIVERY_MAN_ADDED = "DeliveryManAdded"
 export const DELIVERY_MAN_REMOVED = "DeliveryManRemoved"
 export const PRODUCT_SHIPPED = "ProductShipped"
 export const PRODUCT_RECEIVED = "ProductReceived"
-export const NEW_ITEM = "NewProduct"
+export const NEW_PRODUCT = "NewProduct"
 
 export const EVENT_NAMES = [
 	SUPPLIER_ADDED,
@@ -16,7 +16,7 @@ export const EVENT_NAMES = [
 	// "OwnershipTransferred",
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED,
-	NEW_ITEM
+	NEW_PRODUCT
 ]
 
 export const DELIVERY_MAN_EVENT_NAMES = [
@@ -29,13 +29,13 @@ export const DELIVERY_MAN_EVENT_NAMES = [
 export const SUPPLIER_EVENT_NAMES = [
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
-	NEW_ITEM,
+	NEW_PRODUCT,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED
 ]
 
 export const PRODUCT_EVENT_NAMES = [
-	NEW_ITEM,
+	NEW_PRODUCT,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED
 ]

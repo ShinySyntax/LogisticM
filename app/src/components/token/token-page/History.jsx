@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { NEW_ITEM, PRODUCT_RECEIVED } from '../../../store/constants'
+import { NEW_PRODUCT, PRODUCT_RECEIVED } from '../../../store/constants'
 import Address from "../Address"
 
 class History extends React.Component {
@@ -14,7 +14,7 @@ class History extends React.Component {
 		let handOvers = []
 		this.props.events.reverse().forEach(event => {
 			switch (event.event) {
-				case NEW_ITEM:
+				case NEW_PRODUCT:
 					handOvers.push({
 						method: this.renderCreation,
 						account: event.returnValues.by

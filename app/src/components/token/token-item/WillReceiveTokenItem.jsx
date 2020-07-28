@@ -4,10 +4,8 @@ import { Container,
 	Row,
 	Col,
 	ListGroup,
-	Button
- } from 'react-bootstrap';
-import { PRODUCT_EVENT_NAMES,
-	PRODUCT_SHIPPED,
+	Button } from 'react-bootstrap';
+import { PRODUCT_SHIPPED,
  	PRODUCT_RECEIVED } from "../../../store/constants"
 import TokenLink from "../token-page/TokenLink";
 import { getPastEvents } from '../../../store/events-helpers'
@@ -16,9 +14,16 @@ class WillReceiveTokenItem extends React.Component {
 	componentDidMount () {
 		getPastEvents(
 			this.props.drizzle,
-			PRODUCT_EVENT_NAMES,
+			[PRODUCT_SHIPPED, PRODUCT_RECEIVED],
 			{
-				[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
+				[PRODUCT_SHIPPED]: {
+					to: this.props.drizzleState.accounts[0],
+					tokenId: this.props.tokenId
+				},
+				[PRODUCT_RECEIVED]: {
+					by: this.props.drizzleState.accounts[0],
+					tokenId: this.props.tokenId
+				}
 			}
 		)
 	}

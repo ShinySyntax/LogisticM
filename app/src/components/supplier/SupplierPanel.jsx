@@ -8,7 +8,10 @@ import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
 import NewProduct from './NewProduct';
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
-	SUPPLIER_REMOVED } from "../../store/constants"
+	SUPPLIER_REMOVED,
+ 	NEW_PRODUCT,
+ 	PRODUCT_SHIPPED,
+	PRODUCT_RECEIVED } from "../../store/constants"
 
 class SupplierPanel extends React.Component {
 	state = { dataKey: null };
@@ -40,8 +43,10 @@ class SupplierPanel extends React.Component {
 
 		const filters = {
 			[SUPPLIER_ADDED]: { account: drizzleState.accounts[0] },
-			[SUPPLIER_REMOVED]: { account: drizzleState.accounts[0] }
-			// TODO: try to filter owned tokens
+			[SUPPLIER_REMOVED]: { account: drizzleState.accounts[0] },
+			[NEW_PRODUCT]: { by: drizzleState.accounts[0] },
+			[PRODUCT_SHIPPED]: { from: drizzleState.accounts[0] },
+			[PRODUCT_RECEIVED]: { from: drizzleState.accounts[0] }
 		}
 
 		return (

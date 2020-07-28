@@ -3,6 +3,7 @@ const truffleAssert = require('truffle-assertions')
 const Logistic = artifacts.require("Logistic")
 
 contract("Logistic test", async accounts => {
+    console.log(accounts);
     const owner = accounts[0]
     const supplier = accounts[1]
     const deliveryMan1 = accounts[2]
@@ -11,11 +12,13 @@ contract("Logistic test", async accounts => {
     const purchaser1 = accounts[5]
     const purchaser2 = accounts[6]
     const user = accounts[7]
+    const attacker = accounts[8]
 
     const product1 = 1;
     const product2 = 2;
     const product3 = 3;
     const product4 = 4;
+    const product5 = 5;
 
     it("Add a supplier", async () => {
         let instance = await Logistic.deployed()
@@ -71,6 +74,10 @@ contract("Logistic test", async accounts => {
             instance.send(deliveryMan3, product1, { from: owner }),
             "Logistic: caller does not have the Supplier role nor the DeliveryMan role"
         )
+        await truffleAssert.reverts(
+            instance.send(deliveryMan1, product1, { from: deliveryMan2 }),
+            "ERC721: approve caller is not owner nor approved for all"
+        )
 
         let result = await instance.send(deliveryMan1, product1, { from: supplier })
         truffleAssert.eventEmitted(result, 'Approval', ev =>
@@ -96,20 +103,24 @@ contract("Logistic test", async accounts => {
         )
     })
 
-    it("No delivery or purchaser man users can't receive", async () => {
+    it("Receive fail with bad msg.sender", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
+            instance.receive(owner, product1, { from: deliveryMan1 }),
+            "Logistic: sender is not delivery man nor supplier"
+        )
+        await truffleAssert.reverts(
             instance.receive(deliveryMan3, product1, { from: user }),
-            "Logistic: Can't receive an product not delivered"
+            "Logistic: this product has been sent to someone else"
         )
         await truffleAssert.reverts(
             instance.receive(deliveryMan3, product1, { from: owner }),
-            "Logistic: Can't receive an product not delivered"
+            "Logistic: this product has been sent to someone else"
         )
         await truffleAssert.reverts(
             instance.receive(deliveryMan3, product1, { from: supplier }),
-            "Logistic: Can't receive an product not delivered"
+            "Logistic: this product has been sent to someone else"
         )
     })
 
@@ -265,5 +276,119 @@ contract("Logistic test", async accounts => {
         await instance.newProduct(purchaser1, product4, { from: supplier })
         let result = await instance.send(purchaser1, product3, { from: supplier })
         result = await instance.send(purchaser1, product4, { from: supplier })
+        await instance.newProduct(purchaser1, product5, { from: supplier })
+    })
+
+    it("deliveryMan1 receive product before sending", async () => {
+        let instance = await Logistic.deployed()
+
+        let result = await instance.receive(
+          supplier, product5, { from: deliveryMan1 })
+        truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
+            ev.from === supplier &&
+            ev.by === deliveryMan1 &&
+            ev.tokenId.toNumber() === product5
+        );
+        assert.equal((await instance.ownerOf(product5)), supplier)
+        assert.equal((await instance.pendingDeliveries(product5)), 0)
+        assert.equal((await instance.tokensReceivedBy(product5)), deliveryMan1)
+    })
+
+    it("Supplier send product after receiving", async () => {
+        let instance = await Logistic.deployed()
+
+        let result = await instance.send(deliveryMan1, product5,
+            { from: supplier })
+        truffleAssert.eventNotEmitted(result, 'Approval');
+        truffleAssert.eventEmitted(result, 'Transfer', ev =>
+            ev.from === supplier &&
+            ev.to === deliveryMan1 &&
+            ev.tokenId.toNumber() === product5
+        );
+        truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
+            ev.from === supplier &&
+            ev.to === deliveryMan1 &&
+            ev.tokenId.toNumber() === product5
+        );
+        truffleAssert.eventEmitted(result, 'Handover', ev =>
+            ev.from === supplier &&
+            ev.to === deliveryMan1 &&
+            ev.tokenId.toNumber() === product5
+        );
+        assert.equal(await instance.pendingDeliveries(product5), 0)
+        assert.equal(await instance.getApproved(product5), 0)
+        assert.equal((await instance.tokensReceivedBy(product5)), 0)
+    })
+
+    it("deliveryMan1 send product to deliveryMan2", async () => {
+        let instance = await Logistic.deployed()
+
+        let result = await instance.send(deliveryMan2, product5,
+            { from: deliveryMan1 })
+        truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
+            ev.from === deliveryMan1 &&
+            ev.to === deliveryMan2 &&
+            ev.tokenId.toNumber() === product5
+        );
+        truffleAssert.eventEmitted(result, 'Approval', ev =>
+            ev.owner === deliveryMan1 &&
+            ev.approved === deliveryMan2 &&
+            ev.tokenId.toNumber() === product5
+        );
+        assert.equal(await instance.pendingDeliveries(product5), deliveryMan2)
+        assert.equal(await instance.getApproved(product5), deliveryMan2)
+        assert.equal((await instance.tokensReceivedBy(product5)), 0)
+        assert.equal((await instance.ownerOf(product5)), deliveryMan1)
+    })
+
+    it("deliveryMan2 received product", async () => {
+        let instance = await Logistic.deployed()
+
+        let result = await instance.receive(deliveryMan1, product5,
+            { from: deliveryMan2 })
+
+        truffleAssert.eventEmitted(result, 'Handover', ev =>
+            ev.from === deliveryMan1 &&
+            ev.to === deliveryMan2 &&
+            ev.tokenId.toNumber() === product5
+        );
+        truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
+            ev.from === deliveryMan1 &&
+            ev.by === deliveryMan2 &&
+            ev.tokenId.toNumber() === product5
+        );
+        assert.equal(await instance.pendingDeliveries(product5), 0)
+        assert.equal(await instance.getApproved(product5), 0)
+        assert.equal((await instance.tokensReceivedBy(product5)), deliveryMan2)
+        assert.equal((await instance.ownerOf(product5)), deliveryMan2)
+    })
+
+    it("Purchaser receive before intermediary received", async () => {
+        let instance = await Logistic.deployed()
+
+        const product6 = 6
+        await instance.newProduct(purchaser1, product6, { from: supplier })
+
+        let result1 = await instance.receive(
+            deliveryMan1, product6, { from: purchaser1 })
+
+        let result2 = await instance.send(deliveryMan1, product6,
+            { from: supplier })
+
+        let result3 = await instance.receive(
+            supplier, product6, { from: deliveryMan1 })
+        truffleAssert.eventEmitted(result3, 'Handover', ev =>
+            ev.from === supplier &&
+            ev.by === deliveryMan1 &&
+            ev.tokenId.toNumber() === product6
+        );
+
+        let result4 = await instance.send(purchaser1, product6,
+            { from: deliveryMan1 })
+        truffleAssert.eventEmitted(result4, 'Handover', ev =>
+            ev.from === deliveryMan1 &&
+            ev.by === purchaser1 &&
+            ev.tokenId.toNumber() === product6
+        );
     })
 })

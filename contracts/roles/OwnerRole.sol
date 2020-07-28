@@ -43,6 +43,11 @@ contract OwnerRole {
         _;
     }
 
+    modifier notOwner() {
+        require(_owner != msg.sender, "Ownable: caller is the owner");
+        _;
+    }
+
     /**
      * @dev Leaves the contract without owner. It will not be possible to call
      * `onlyOwner` functions anymore. Can only be called by the current owner.
@@ -60,7 +65,8 @@ contract OwnerRole {
      * Can only be called by the current owner.
      */
     function transferOwnership(address newOwner) public onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(newOwner != address(0),
+            "Ownable: new owner is the zero address");
         emit OwnershipTransferred(_owner, newOwner);
         _owner = newOwner;
     }

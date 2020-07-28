@@ -8,11 +8,11 @@ import "./roles/OwnerRole.sol";
 
 
 contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
-    // the token (uint256) is shipped to (address)
-    mapping (uint256 => address) private _tokensSent;
+    // the token (uint256) is send from (address) to (address)
+    mapping (uint256 => mapping (address => address)) private _tokensSent;
 
-    // the token (uint256) has been received by (address)
-    mapping (uint256 => address) private _tokensReceived;
+    // the token (uint256) has been received from (address) by (address)
+    mapping (uint256 => mapping (address => address)) private _tokensReceived;
 
     // the purchaser (address) has ordered the token (uint256)
     mapping (uint256 => address) private _orders;
@@ -43,12 +43,16 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         renounceSupplier();
     }
 
-    function pendingDeliveries(uint256 tokenId) external view returns (address) {
-        return _tokensSent[tokenId];
+    function tokensSentFrom(uint256 tokenId, address from) external view returns (address) {
+        return _tokensSent[tokenId][from];
     }
 
-    function tokensReceivedBy(uint256 tokenId) external view returns (address) {
-        return _tokensReceived[tokenId];
+    function tokensReceivedFrom(uint256 tokenId, address from) external view returns (address) {
+        return _tokensReceived[tokenId][from];
+    }
+
+    function orders(uint256 tokenId) external view returns (address) {
+        return _orders[tokenId];
     }
 
     function approve(address to, uint256 tokenId) public whenNotRestrictedMode {
@@ -71,15 +75,15 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         _addDeliveryMan(account);
     }
 
-    function newProduct(address purchaser, uint256 tokenId) public onlySupplier {
+    function createProduct(address purchaser, uint256 tokenId) public onlySupplier {
         _mint(msg.sender, tokenId);
         _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);
     }
 
     function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
-        require(_tokensSent[tokenId] == address(0),
-            "Logistic: Can't send an product in pending delivery");
+        require(_tokensSent[tokenId][msg.sender] == address(0),
+            "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
         if (!isDeliveryMan(receiver)) {
@@ -87,31 +91,31 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
             require(_orders[tokenId] == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
-        if (_tokensReceived[tokenId] == receiver) {
+        if (_tokensReceived[tokenId][msg.sender] == receiver) {
             handoverToken(msg.sender, receiver, tokenId);
         } else {
             restrictedMode = false;
             approve(receiver, tokenId);
             restrictedMode = true;
-            _tokensSent[tokenId] = receiver;
         }
-        _tokensReceived[tokenId] = address(0);
+        _tokensSent[tokenId][msg.sender] = receiver;
         emit ProductShipped(msg.sender, receiver, tokenId);
     }
 
-    function receive(address sender, uint256 tokenId) public {
-        require(_tokensReceived[tokenId] == address(0),
-            "Logistic: Can't receive an product not delivered");
+    function receive(address sender, uint256 tokenId) public notOwner
+    notSupplier {
+        require(_tokensReceived[tokenId][sender] == address(0),
+            "Logistic: Already received");
         require(_isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
-        if (_tokensSent[tokenId] == msg.sender) {
-            handoverToken(sender, msg.sender, tokenId);
-        } else {
-            require(_tokensSent[tokenId] == address(0),
-                "Logistic: this product has been sent to someone else");
+        if (!isDeliveryMan(msg.sender)) {
+            require(_orders[tokenId] == msg.sender,
+                "Logistic: This purchaser has not ordered this product");
         }
-        _tokensReceived[tokenId] = msg.sender;
-        _tokensSent[tokenId] = address(0);
+        if (_tokensSent[tokenId][sender] == msg.sender) {
+            handoverToken(sender, msg.sender, tokenId);
+        }
+        _tokensReceived[tokenId][sender] = msg.sender;
         emit ProductReceived(sender, msg.sender, tokenId);
     }
 

@@ -16,7 +16,14 @@ contract SupplierRole {
     }
 
     modifier onlySupplier() {
-        require(isSupplier(msg.sender), "SupplierRole: caller does not have the Supplier role");
+        require(isSupplier(msg.sender),
+            "SupplierRole: caller does not have the Supplier role");
+        _;
+    }
+
+    modifier notSupplier() {
+        require(!isSupplier(msg.sender),
+            "SupplierRole: caller has the Supplier role");
         _;
     }
 

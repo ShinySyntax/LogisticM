@@ -21,5 +21,6 @@ module.exports = {
     solc: {
       version: "0.5.5",    // Fetch exact version from solc-bin (default: truffle's version)
     }
-  }
+  },
+  plugins: ["solidity-coverage"]
 };

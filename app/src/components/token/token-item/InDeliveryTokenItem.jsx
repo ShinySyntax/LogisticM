@@ -8,6 +8,7 @@ import { Container,
 
 import TokenLink from "../token-page/TokenLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
+import Address from '../Address'
 
 class InDeliveryTokenItem extends React.Component {
 	state = {
@@ -47,14 +48,12 @@ class InDeliveryTokenItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								<TokenLink
-									tokenId={this.props.tokenId}
-								/>
+								<TokenLink tokenId={this.props.tokenId} />
 							</span>
 						</Col>
 						<Col>
 							<span className="m-2">
-								to: { tokenInDelivery }
+								to: <Address address={tokenInDelivery} />
 							</span>
 						</Col>
 				  </Row>

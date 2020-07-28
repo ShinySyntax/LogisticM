@@ -31,6 +31,7 @@ class EventList extends React.Component {
 			}
 			return keepThis && this.props.eventNames.includes(event.event)
 		})
+
 		if (!this.props.showAll) {
 			events = getEventsAboutUser(
 				events,

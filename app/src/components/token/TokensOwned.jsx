@@ -2,6 +2,8 @@ import React from 'react'
 import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import TokenLink from "./token-page/TokenLink"
+
 class TokensOwned extends React.Component {
 	initialState = {
 		tokenIds: []
@@ -45,7 +47,7 @@ class TokensOwned extends React.Component {
 		}
 		return (
 			<ListGroup.Item key={idx}>
-				{tokenId}
+				<TokenLink tokenId={tokenId} />
 			</ListGroup.Item>
 		)
 	}

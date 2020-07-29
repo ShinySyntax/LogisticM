@@ -7,6 +7,7 @@ import { getEventsAboutToken } from "../../store/selectors"
 import History from '../token/token-page/History'
 import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
 import TokenLink from "../token/token-page/TokenLink";
+import ReceiveProduct from '../token/ReceiveProduct'
 
 const { AccountData } = newContextComponents;
 
@@ -38,6 +39,14 @@ class PurchaserPanel extends React.Component {
 							accountIndex={0}
 							units="ether"
 							precision={5}
+						/>
+					</Card>
+
+					<Card className="m-2 p-2">
+						<p>Receive a product</p>
+						<ReceiveProduct
+							drizzle={this.props.drizzle}
+							drizzleState={this.props.drizzleState}
 						/>
 					</Card>
 

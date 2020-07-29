@@ -11,6 +11,7 @@ import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
  	PRODUCT_SHIPPED } from "../../store/constants"
+import ReceiveProduct from '../token/ReceiveProduct'
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -52,8 +53,13 @@ class DeliveryManPanel extends React.Component {
 			<div>
 				<div className="section">
 					<h2>Logistic - Delivery Man Panel</h2>
-
 					<Card className="m-2 p-2">
+						<p>Receive a product</p>
+						<ReceiveProduct
+							drizzle={drizzle}
+							drizzleState={drizzleState}
+						/>
+
 						<p>Product(s) that you will receive</p>
 						<TokenList
 							drizzle={drizzle}

@@ -10,15 +10,14 @@ class Address extends React.Component {
 		return (
 			<DrizzleContext.Consumer>
         {drizzleContext => {
-					let you = ""
-					if (drizzleContext.drizzleState.accounts[0] === this.props.address) {
-						you += ' (you)'
-					}
+					const variant =
+						(drizzleContext.drizzleState.accounts[0] === this.props.address)
+						? 'primary'
+						: 'secondary'
 
 					return (
 						<React.Fragment>
-							<Badge variant="info">{this.props.address}</Badge>
-							<span className="text-secondary">{you}</span>
+							<Badge variant={variant}>{this.props.address}</Badge>
 						</React.Fragment>
 					)
 				}}

@@ -3,6 +3,7 @@ import { addAllEvents } from './actions'
 import { NEW_PRODUCT,
 	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED,
+	HANDOVER,
  	mapEventToString } from './constants'
 
 export const getPastEvents = (drizzle, eventNames, filters) => {
@@ -37,6 +38,7 @@ export const getEventFilterToken = (tokenId) => {
 		[NEW_PRODUCT]: { tokenId },
 		[PRODUCT_SHIPPED]: { tokenId },
 		[PRODUCT_RECEIVED]: { tokenId },
+		[HANDOVER]: { tokenId }
 	}
 }
 

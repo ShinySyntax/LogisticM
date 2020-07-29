@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Navbar, Nav, Form, FormControl, Button, Card, Badge } from 'react-bootstrap';
+import { Navbar, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import Address from "./token/Address"
@@ -15,22 +15,6 @@ export default function({ drizzle, drizzleState }) {
 			<Navbar.Brand><Link to="/">Logistic</Link></Navbar.Brand>
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse id="basic-navbar-nav">
-				<Nav className="mr-auto">
-					<AccountData
-						drizzle={drizzle}
-						drizzleState={drizzleState}
-						accountIndex={0}
-						units="ether"
-						precision={5}
-						render={({address, balance, units}) => {
-							return (
-								<p>You are <Address address={address}/> and
-									you have <Badge variant="secondary">
-										{balance} </Badge>{units} (Ξ)</p>
-							)
-						}}
-						/>
-				</Nav>
 				<Form inline>
 					<FormControl
 						type="text"
@@ -46,6 +30,24 @@ export default function({ drizzle, drizzleState }) {
 						</Button>
 					</Link>
 				</Form>
+				<Nav className="ml-auto">
+					<AccountData
+						drizzle={drizzle}
+						drizzleState={drizzleState}
+						accountIndex={0}
+						units="ether"
+						precision={5}
+						render={({address, balance, units}) => {
+							return (
+								<p>
+									<Address address={address}/>
+									<br/>
+									<Badge variant="secondary">{balance}</Badge> {units} (Ξ)
+								</p>
+							)
+						}}
+						/>
+				</Nav>
 			</Navbar.Collapse>
 		</Navbar>
 	)

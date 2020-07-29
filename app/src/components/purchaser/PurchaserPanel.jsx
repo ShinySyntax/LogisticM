@@ -52,10 +52,8 @@ class PurchaserPanel extends React.Component {
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
 						<TokenAccountForm
-							drizzle={this.props.drizzle}
-							drizzleState={this.props.drizzleState}
-							accoutLabel="Sender"
-							callBack={this.receiveToken}
+							accountLabel="Sender"
+							handleSubmit={this.receiveToken}
 						/>
 					</Card>
 

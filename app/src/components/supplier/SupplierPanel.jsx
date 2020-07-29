@@ -71,10 +71,8 @@ class SupplierPanel extends React.Component {
 						<div className="m-2">
 							<p>Add a product</p>
 							<TokenAccountForm
-								drizzle={drizzle}
-								drizzleState={drizzleState}
 								accountLabel="Purchaser"
-								callBack={this.createProduct}
+								handleSubmit={this.createProduct}
 							/>
 						</div>
 					</Card>

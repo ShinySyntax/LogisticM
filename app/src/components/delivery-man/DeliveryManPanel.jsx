@@ -62,10 +62,8 @@ class DeliveryManPanel extends React.Component {
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
 						<TokenAccountForm
-							drizzle={drizzle}
-							drizzleState={drizzleState}
-							accoutLabel="Sender"
-							callBack={this.receiveToken}
+							accountLabel="Sender"
+							handleSubmit={this.receiveToken}
 						/>
 
 						<p>Product(s) that you will receive</p>

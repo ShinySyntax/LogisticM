@@ -1,55 +1,38 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
-class TokenAccountForm extends React.Component {
-	initialState = {
-		tokenId: null,
-		account: null
-	}
+export default function({accountLabel, handleSubmit}) {
+	const [tokenId, setTokenId] = useState("");
+	const [account, setAccount] = useState("");
+	const [submit, setSubmit] = useState(false);
 
-	state = this.initialState;
+	useEffect(() => {
+		if (submit) {
+			handleSubmit(tokenId, account)
+			setSubmit(false)
+		}
+	}, [submit, handleSubmit, tokenId, account]);
 
-	handleChangeTokenId = (event) => {
-		this.setState({
-			tokenId: event.target.value
-		})
-	}
-
-	handleChangeSender = (event) => {
-		this.setState({
-			account: event.target.value
-		})
-	}
-
-	handleSubmit = (event) => {
-		event.preventDefault();
-		this.props.callBack(this.state.tokenId, this.state.account)
-	}
-
-	render () {
-		return (
-			<InputGroup className="mb-3">
-				<FormControl
-					placeholder="Token id"
-					aria-label="Token id"
-					onChange={this.handleChangeTokenId}
-				/>
-				<FormControl
-					placeholder={this.props.accountLabel}
-					aria-label={this.props.accountLabel}
-					onChange={this.handleChangeSender}
-				/>
-				<InputGroup.Append>
-					<Button
-						onClick={this.handleSubmit}
-						variant="outline-primary"
-					>
-						Validate
-					</Button>
-				</InputGroup.Append>
-			</InputGroup>
-		)
-	}
+	return (
+		<InputGroup className="mb-3">
+			<FormControl
+				placeholder="Token id"
+				aria-label="Token id"
+				onChange={event => setTokenId(event.target.value)}
+			/>
+			<FormControl
+				placeholder={accountLabel}
+				aria-label={accountLabel}
+				onChange={event => setAccount(event.target.value)}
+			/>
+			<InputGroup.Append>
+				<Button
+					onClick={event => {event.preventDefault();setSubmit(true)}}
+					variant="outline-primary"
+				>
+					Validate
+				</Button>
+			</InputGroup.Append>
+		</InputGroup>
+	)
 }
-
-export default TokenAccountForm;

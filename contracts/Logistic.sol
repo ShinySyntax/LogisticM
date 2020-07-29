@@ -43,11 +43,13 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         renounceSupplier();
     }
 
-    function tokensSentFrom(uint256 tokenId, address from) external view returns (address) {
+    function tokensSentFrom(uint256 tokenId, address from) external view
+    returns (address) {
         return _tokensSent[tokenId][from];
     }
 
-    function tokensReceivedFrom(uint256 tokenId, address from) external view returns (address) {
+    function tokensReceivedFrom(uint256 tokenId, address from) external view
+    returns (address) {
         return _tokensReceived[tokenId][from];
     }
 
@@ -75,13 +77,17 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         _addDeliveryMan(account);
     }
 
-    function createProduct(address purchaser, uint256 tokenId) public onlySupplier {
+    function createProduct(address purchaser, uint256 tokenId) public
+    onlySupplier {
+        require(owner() != purchaser && !isSupplier(purchaser),
+            "Logistic: Can't send to supplier nor owner");
         _mint(msg.sender, tokenId);
         _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);
     }
 
-    function send(address receiver, uint256 tokenId) public supplierOrDeliveryMan {
+    function send(address receiver, uint256 tokenId) public
+    supplierOrDeliveryMan {
         require(_tokensSent[tokenId][msg.sender] == address(0),
             "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
@@ -131,7 +137,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         super._transferFrom(from, to, tokenId);
     }
 
-    function _isSupplierOrDeliveryMan(address account) private view returns (bool) {
+    function _isSupplierOrDeliveryMan(address account) private view
+    returns (bool) {
         return isSupplier(account) || isDeliveryMan(account);
     }
 }

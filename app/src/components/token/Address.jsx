@@ -1,58 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { Badge } from 'react-bootstrap';
 
-class Address extends React.Component {
-	state = {
-		dataKey: null
-	}
+export default function Address({ drizzle, drizzleState, address, useAddress }) {
+	const [dataKey, setDataKey] = useState();
 
-	getName(address) {
-		this.setState({
-			dataKey: this.props.drizzle.contracts.Logistic.methods.name
-			.cacheCall(address)
-		})
-	}
+  useEffect(() => {
+		setDataKey(drizzle.contracts.Logistic.methods.name.cacheCall(address))
+	}, [setDataKey, drizzle, address]);
 
-	componentDidMount() {
-		this.getName(this.props.address)
-	}
+	const nameObject = drizzleState.contracts.Logistic.name[dataKey]
 
-	componentDidUpdate(prevProps, prevState) {
-		if (this.props.address !== prevProps.address) {
-			this.getName(this.props.address)
+	let account = address;
+
+	if (nameObject && nameObject.value) {
+		account = nameObject.value
+		if (useAddress) {
+			account = `${address} (${account})`
 		}
 	}
 
-	render () {
-		const nameObject = this.props.drizzleState.contracts.Logistic
-			.name[this.state.dataKey]
+	const variant =
+		(drizzleState.accounts[0] === address)
+		? 'primary'
+		: 'secondary'
 
-		let account = this.props.address;
-		
-		if (nameObject && nameObject.value) {
-			account = nameObject.value
-			if (this.props.useAddress) {
-				account = `${this.props.address} (${account})`
-			}
-		}
-
-		const variant =
-			(this.props.drizzleState.accounts[0] === this.props.address)
-			? 'primary'
-			: 'secondary'
-
-		return (
-			<React.Fragment>
-				<Badge variant={variant}>{account}</Badge>
-			</React.Fragment>
-		)
-	}
+	return (
+		<React.Fragment>
+			<Badge variant={variant}>{account}</Badge>
+		</React.Fragment>
+	)
 }
-
-Address.propTypes = {
-	address: PropTypes.string.isRequired,
-};
-
-export default Address;

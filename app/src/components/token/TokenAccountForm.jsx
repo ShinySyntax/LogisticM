@@ -1,10 +1,10 @@
 import React from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
-class NewProduct extends React.Component {
+class TokenAccountForm extends React.Component {
 	initialState = {
 		tokenId: null,
-		purchaser: null
+		account: null
 	}
 
 	state = this.initialState;
@@ -15,31 +15,29 @@ class NewProduct extends React.Component {
 		})
 	}
 
-	handleChangePurchaser = (event) => {
+	handleChangeSender = (event) => {
 		this.setState({
-			purchaser: event.target.value
+			account: event.target.value
 		})
 	}
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		this.props.drizzle.contracts.Logistic.methods.createProduct.cacheSend(
-			this.state.purchaser, this.state.tokenId
-		)
+		this.props.callBack(this.state.tokenId, this.state.account)
 	}
 
 	render () {
 		return (
 			<InputGroup className="mb-3">
 				<FormControl
-					placeholder="Product id"
-					aria-label="Product id"
+					placeholder="Token id"
+					aria-label="Token id"
 					onChange={this.handleChangeTokenId}
 				/>
 				<FormControl
-					placeholder="Purchaser"
-					aria-label="Purchaser"
-					onChange={this.handleChangePurchaser}
+					placeholder={this.props.accountLabel}
+					aria-label={this.props.accountLabel}
+					onChange={this.handleChangeSender}
 				/>
 				<InputGroup.Append>
 					<Button
@@ -54,4 +52,4 @@ class NewProduct extends React.Component {
 	}
 }
 
-export default NewProduct;
+export default TokenAccountForm;

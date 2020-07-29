@@ -7,7 +7,8 @@ import { getEventsAboutToken } from "../../store/selectors"
 import History from '../token/token-page/History'
 import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
 import TokenLink from "../token/token-page/TokenLink";
-import ReceiveProduct from '../token/ReceiveProduct'
+import TokenAccountForm from '../token/TokenAccountForm'
+import { HANDOVER } from "../../store/constants"
 
 const { AccountData } = newContextComponents;
 
@@ -24,6 +25,12 @@ class PurchaserPanel extends React.Component {
 			});
 			this.setState(state);
 		}
+	}
+
+	receiveToken = (tokenId, sender) => {
+		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
+			sender, tokenId
+		)
 	}
 
 	render () {
@@ -44,9 +51,11 @@ class PurchaserPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
-						<ReceiveProduct
+						<TokenAccountForm
 							drizzle={this.props.drizzle}
 							drizzleState={this.props.drizzleState}
+							accoutLabel="Sender"
+							callBack={this.receiveToken}
 						/>
 					</Card>
 
@@ -62,7 +71,7 @@ class PurchaserPanel extends React.Component {
 									<History
 										drizzle={this.props.drizzle}
 										drizzleState={this.props.drizzleState}
-										events={events}
+										handovers={events.filter(ev => ev.event === HANDOVER)}
 									/>
 									<WillReceiveTokenItem
 										drizzle={this.props.drizzle}

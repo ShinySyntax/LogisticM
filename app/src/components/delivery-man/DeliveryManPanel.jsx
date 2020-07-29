@@ -11,7 +11,7 @@ import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
  	PRODUCT_SHIPPED } from "../../store/constants"
-import ReceiveProduct from '../token/ReceiveProduct'
+import TokenAccountForm from '../token/TokenAccountForm'
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -26,6 +26,12 @@ class DeliveryManPanel extends React.Component {
 			dataKey: contract.methods.balanceOf.cacheCall(
 				drizzleState.accounts[0])
 		});
+	}
+
+	receiveToken = (tokenId, sender) => {
+		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
+			sender, tokenId
+		)
 	}
 
 	render () {
@@ -55,9 +61,11 @@ class DeliveryManPanel extends React.Component {
 					<h2>Logistic - Delivery Man Panel</h2>
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
-						<ReceiveProduct
+						<TokenAccountForm
 							drizzle={drizzle}
 							drizzleState={drizzleState}
+							accoutLabel="Sender"
+							callBack={this.receiveToken}
 						/>
 
 						<p>Product(s) that you will receive</p>

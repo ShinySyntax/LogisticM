@@ -5,7 +5,7 @@ import TokensOwned from '../token/TokensOwned';
 import EventList from '../token/event/EventList';
 import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
 import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
-import NewProduct from './NewProduct';
+import TokenAccountForm from '../token/TokenAccountForm';
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
@@ -28,6 +28,12 @@ class SupplierPanel extends React.Component {
 
 		// save the `dataKey` to local component state for later reference
 		this.setState({ dataKey });
+	}
+
+	createProduct = (tokenId, purchaser) => {
+		this.props.drizzle.contracts.Logistic.methods.createProduct.cacheSend(
+			purchaser, tokenId
+		)
 	}
 
 	render () {
@@ -64,9 +70,11 @@ class SupplierPanel extends React.Component {
 						/>
 						<div className="m-2">
 							<p>Add a product</p>
-							<NewProduct
+							<TokenAccountForm
 								drizzle={drizzle}
 								drizzleState={drizzleState}
+								accountLabel="Purchaser"
+								callBack={this.createProduct}
 							/>
 						</div>
 					</Card>

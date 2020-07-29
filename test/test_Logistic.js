@@ -82,11 +82,15 @@ contract("Logistic test", async accounts => {
         )
         await truffleAssert.reverts(
             instance.createProduct(supplier, product1, { from: supplier }),
-            "Logistic: Can't create for supplier nor owner"
+            "Logistic: Can't create for supplier nor owner nor delivery man"
         )
         await truffleAssert.reverts(
             instance.createProduct(owner, product1, { from: supplier }),
-            "Logistic: Can't create for supplier nor owner"
+            "Logistic: Can't create for supplier nor owner nor delivery man"
+        )
+        await truffleAssert.reverts(
+            instance.createProduct(deliveryMan1, product1, { from: supplier }),
+            "Logistic: Can't create for supplier nor owner nor delivery man"
         )
 
         await instance.createProduct(purchaser1, product1, { from: supplier })

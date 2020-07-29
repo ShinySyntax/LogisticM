@@ -79,8 +79,8 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
 
     function createProduct(address purchaser, uint256 tokenId) public
     onlySupplier {
-        require(owner() != purchaser && !isSupplier(purchaser),
-            "Logistic: Can't create for supplier nor owner");
+        require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
+            "Logistic: Can't create for supplier nor owner nor delivery man");
         _mint(msg.sender, tokenId);
         _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);

@@ -6,7 +6,7 @@ import "openzeppelin-solidity/contracts/access/Roles.sol";
 contract SupplierRole {
     using Roles for Roles.Role;
 
-    event SupplierAdded(address indexed account);
+    event SupplierAdded(address indexed account, string name);
     event SupplierRemoved(address indexed account);
 
     Roles.Role private _supplier;
@@ -31,9 +31,9 @@ contract SupplierRole {
         _removeSupplier(msg.sender);
     }
 
-    function _addSupplier(address account) internal {
+    function _addSupplier(address account, string memory name_) internal {
         _supplier.add(account);
-        emit SupplierAdded(account);
+        emit SupplierAdded(account, name_);
     }
 
     function _removeSupplier(address account) internal {

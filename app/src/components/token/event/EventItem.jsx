@@ -82,7 +82,14 @@ class EventItem extends React.Component {
 			return (
 				<tr key={idx}>
 					<td>{key}</td>
-					<td><Address address={value} /></td>
+					<td>
+						<Address
+							drizzle={this.props.drizzle}
+							drizzleState={this.props.drizzleState}
+							address={value}
+							useAddress={true}
+						/>
+				</td>
 				</tr>
 			)
 		}

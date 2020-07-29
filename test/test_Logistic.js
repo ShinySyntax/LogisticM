@@ -32,20 +32,25 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.addSupplier(owner, { from: owner }),
+            instance.addSupplier(owner, "supplier", { from: owner }),
             "Logistic: Owner can't be supplier"
         )
 
         assert.isFalse((await instance.isSupplier(supplier)))
-        await instance.addSupplier(supplier, { from: owner })
+        const result = await instance.addSupplier(supplier, "supplier", { from: owner })
+        truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
+            ev.account === supplier &&
+            ev.name === "supplier"
+        );
+        assert.equal((await instance.name(supplier)), "supplier")
         assert.isTrue((await instance.isSupplier(supplier)))
 
         await truffleAssert.reverts(
-            instance.addSupplier(deliveryMan3, { from: supplier }),
+            instance.addSupplier(deliveryMan3, "supplier", { from: supplier }),
             "Ownable: caller is not the owner"
         )
         await truffleAssert.reverts(
-            instance.addDeliveryMan(supplier, { from: owner }),
+            instance.addDeliveryMan(supplier, "supplier", { from: owner }),
             "Logistic: Account is supplier"
         )
     })
@@ -54,28 +59,32 @@ contract("Logistic test", async accounts => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
-            instance.addDeliveryMan(owner, { from: owner }),
+            instance.addDeliveryMan(owner, "delivery man", { from: owner }),
             "Logistic: Owner can't be delivery man"
         )
 
         assert.isFalse((await instance.isDeliveryMan(deliveryMan1)))
-        await instance.addDeliveryMan(deliveryMan1, { from: owner })
+        const result = await instance.addDeliveryMan(deliveryMan1, "delivery man", { from: owner })
         assert.isTrue((await instance.isDeliveryMan(deliveryMan1)))
-        await instance.addDeliveryMan(deliveryMan2, { from: owner })
-        await instance.addDeliveryMan(deliveryMan3, { from: owner })
+        truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
+            ev.account === deliveryMan1 &&
+            ev.name === "delivery man"
+        );
+        await instance.addDeliveryMan(deliveryMan2, "delivery man", { from: owner })
+        await instance.addDeliveryMan(deliveryMan3, "delivery man", { from: owner })
 
         await truffleAssert.reverts(
-            instance.addSupplier(deliveryMan1, { from: owner }),
+            instance.addSupplier(deliveryMan1, "deliveryMan1", { from: owner }),
             "Logistic: Account is delivery man"
         )
 
         await truffleAssert.reverts(
-            instance.addDeliveryMan(owner, { from: owner }),
+            instance.addDeliveryMan(owner, "delivery man", { from: owner }),
             "Logistic: Owner can't be delivery man"
         )
 
         await truffleAssert.reverts(
-            instance.addDeliveryMan(deliveryMan3, { from: deliveryMan1 }),
+            instance.addDeliveryMan(deliveryMan3, "delivery man", { from: deliveryMan1 }),
             "Ownable: caller is not the owner"
         )
     })

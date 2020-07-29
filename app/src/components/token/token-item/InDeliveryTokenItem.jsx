@@ -53,7 +53,11 @@ class InDeliveryTokenItem extends React.Component {
 						</Col>
 						<Col>
 							<span className="m-2">
-								to: <Address address={tokenInDelivery} />
+								to: <Address
+									drizzle={this.props.drizzle}
+									drizzleState={this.props.drizzleState}
+									address={tokenInDelivery}
+								/>
 							</span>
 						</Col>
 				  </Row>

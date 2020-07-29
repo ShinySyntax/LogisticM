@@ -20,9 +20,17 @@ class History extends React.Component {
 		return (
 			<ListGroup.Item key={idx}>
 				<p>
-					<Address address={handover.returnValues.from} />
+					<Address
+						drizzle={this.props.drizzle}
+						drizzleState={this.props.drizzleState}
+						address={handover.returnValues.from}
+					/>
 					<BsArrowRight size={25} />
-					<Address address={handover.returnValues.to} />
+					<Address
+						drizzle={this.props.drizzle}
+						drizzleState={this.props.drizzleState}
+						address={handover.returnValues.to}
+					/>
 				</p>
 			</ListGroup.Item>
 		)

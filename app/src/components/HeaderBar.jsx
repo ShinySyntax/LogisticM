@@ -40,7 +40,11 @@ export default function({ drizzle, drizzleState }) {
 						render={({address, balance, units}) => {
 							return (
 								<p>
-									<Address address={address}/>
+									<Address
+										drizzle={drizzle}
+										drizzleState={drizzleState}
+										address={address}
+									/>
 									<br/>
 									<Badge variant="secondary">{balance}</Badge> {units} (Ξ)
 								</p>

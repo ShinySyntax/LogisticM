@@ -3,11 +3,16 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 class GrantAccess extends React.Component {
 	state = {
-		address: null
+		address: null,
+		name: null
 	};
 
-	handleChange = (event) => {
+	handleChangeAddress = (event) => {
 		this.setState({ address: event.target.value })
+	}
+
+	handleChangeName = (event) => {
+		this.setState({ name: event.target.value })
 	}
 
 	handleSubmit = (event) => {
@@ -16,7 +21,7 @@ class GrantAccess extends React.Component {
     const contract = drizzle.contracts.Logistic;
 
 		contract.methods[this.props.grandAccessMethod].cacheSend(
-			this.state.address
+			this.state.address, this.state.name
 		)
 	}
 
@@ -26,7 +31,12 @@ class GrantAccess extends React.Component {
 				<FormControl
 					placeholder="Account address"
 					aria-label="Account address"
-					onChange={this.handleChange}
+					onChange={this.handleChangeAddress}
+				/>
+				<FormControl
+					placeholder="Account name"
+					aria-label="Account name"
+					onChange={this.handleChangeName}
 				/>
 				<InputGroup.Append>
 					<Button

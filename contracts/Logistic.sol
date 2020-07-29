@@ -17,6 +17,10 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     // the purchaser (address) has ordered the token (uint256)
     mapping (uint256 => address) private _orders;
 
+    // User (address) is named (string)
+    mapping (address => string) private _names;
+
+
     bool private restrictedMode;
 
     event NewProduct(address indexed by, address indexed purchaser, uint256 indexed tokenId);
@@ -55,6 +59,10 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         return _orders[tokenId];
     }
 
+    function name(address account) public view returns (string memory) {
+        return _names[account];
+    }
+
     function approve(address to, uint256 tokenId) public whenNotRestrictedMode {
         super.approve(to, tokenId);
     }
@@ -63,16 +71,19 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         revert("Logistic: cannot approve for all");
     }
 
-    function addSupplier(address account) public onlyOwner {
+    function addSupplier(address account, string memory name_) public onlyOwner {
         require(!isDeliveryMan(account), "Logistic: Account is delivery man");
         require(owner() != account, "Logistic: Owner can't be supplier");
-        _addSupplier(account);
+        _setName(account, name_);
+        _addSupplier(account, name_);
     }
 
-    function addDeliveryMan(address account) public onlyOwner {
+    function addDeliveryMan(address account, string memory name_) public
+    onlyOwner {
         require(!isSupplier(account), "Logistic: Account is supplier");
         require(owner() != account, "Logistic: Owner can't be delivery man");
-        _addDeliveryMan(account);
+        _setName(account, name_);
+        _addDeliveryMan(account, name_);
     }
 
     function createProduct(address purchaser, uint256 tokenId) public
@@ -133,6 +144,12 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     function _transferFrom(address from, address to, uint256 tokenId) internal
     whenNotRestrictedMode {
         super._transferFrom(from, to, tokenId);
+    }
+
+    function _setName(address account, string memory name_) internal
+    onlyOwner {
+        require(keccak256(bytes(_names[account])) == keccak256("")); // TODO: pause the contract
+        _names[account] = name_;
     }
 
     function _isSupplierOrDeliveryMan(address account) private view

@@ -35,7 +35,7 @@ class OwnerPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - SuperUser Panel</h2>
+					<h2>SuperUser Panel</h2>
 
 					<Card className="m-2 p-2">
 						<AccountData

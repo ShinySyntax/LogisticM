@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card } from 'react-bootstrap';
-import { newContextComponents } from "@drizzle/react-components";
 
 import { getEventsAboutToken } from "../../store/selectors"
 import History from '../token/token-page/History'
@@ -9,8 +8,6 @@ import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
 import TokenLink from "../token/token-page/TokenLink";
 import TokenAccountForm from '../token/TokenAccountForm'
 import { HANDOVER } from "../../store/constants"
-
-const { AccountData } = newContextComponents;
 
 class PurchaserPanel extends React.Component {
 	// { '1561561111': [event1, event2...]}
@@ -37,17 +34,7 @@ class PurchaserPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - Purchaser Panel</h2>
-
-					<Card className="m-2 p-2">
-						<AccountData
-							drizzle={this.props.drizzle}
-							drizzleState={this.props.drizzleState}
-							accountIndex={0}
-							units="ether"
-							precision={5}
-						/>
-					</Card>
+					<h2>Purchaser Panel</h2>
 
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>

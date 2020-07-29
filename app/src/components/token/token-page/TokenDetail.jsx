@@ -31,7 +31,7 @@ class TokenDetail extends React.Component {
 		if (!events.length) {
 			return (
 				<div className="section">
-					<h2>Logistic - Product Details</h2>
+					<h2>Product Details</h2>
 					<Card className="m-2 p-2">
 						<p>This product does not exists.</p>
 					</Card>

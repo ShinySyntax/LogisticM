@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import drizzleOptions from "./store/drizzleOptions";
 import drizzleStore from "./store/store";
 import Home from "./components/Home";
+import HeaderBar from "./components/HeaderBar";
 import TokenDetail from './components/token/token-page/TokenDetail'
 import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
@@ -29,6 +30,7 @@ const App = () => {
         draggable
         pauseOnHover
       />
+
       <DrizzleContext.Consumer>
         {drizzleContext => {
           const { drizzle, drizzleState, initialized } = drizzleContext;
@@ -39,7 +41,9 @@ const App = () => {
               drizzleState={drizzleState}
               initialized={initialized}
             >
+
               <Router>
+                <HeaderBar drizzle={drizzle} drizzleState={drizzleState} />
                 <Route exact path="/">
                   <Home drizzle={drizzle} drizzleState={drizzleState} />
                 </Route>

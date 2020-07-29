@@ -58,7 +58,7 @@ class DeliveryManPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - Delivery Man Panel</h2>
+					<h2>Delivery Man Panel</h2>
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
 						<TokenAccountForm

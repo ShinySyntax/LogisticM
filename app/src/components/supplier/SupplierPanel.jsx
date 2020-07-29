@@ -58,7 +58,7 @@ class SupplierPanel extends React.Component {
 		return (
 			<div>
 				<div className="section">
-					<h2>Logistic - Supplier Panel</h2>
+					<h2>Supplier Panel</h2>
 
 					<Card className="m-2 p-2">
 						<p>You have <em>{balance}</em> product(s).</p>

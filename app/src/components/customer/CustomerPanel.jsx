@@ -21,17 +21,12 @@ class CustomerPanel extends React.Component {
 	render () {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
-		let eventsUser = getEventsAboutUser(
+		let tokenIds = getEventsAboutUser(
 			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
-		)
+		).map(event => event.returnValues.tokenId)
 
-		let tokenIds = []
-		eventsUser.forEach(event => {
-			tokenIds.push(event.returnValues.tokenId)
-		});
-
-		if (!eventsUser.length) {
+		if (!tokenIds.length) {
 			return <NoUserPanel/>
 		}
 

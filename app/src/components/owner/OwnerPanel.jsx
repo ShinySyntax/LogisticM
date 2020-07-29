@@ -38,16 +38,6 @@ class OwnerPanel extends React.Component {
 					<h2>SuperUser Panel</h2>
 
 					<Card className="m-2 p-2">
-						<AccountData
-							drizzle={drizzle}
-							drizzleState={drizzleState}
-							accountIndex={0}
-							units="ether"
-							precision={5}
-						/>
-					</Card>
-
-					<Card className="m-2 p-2">
 						<p>Total product(s): {totalSupply}</p>
 						<TokenList
 							drizzle={drizzle}

@@ -66,21 +66,21 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     }
 
     function addSupplier(address account) public onlyOwner {
-        require(!isDeliveryMan(account), "Account is delivery man");
-        require(owner() != account, "Owner can't be supplier");
+        require(!isDeliveryMan(account), "Logistic: Account is delivery man");
+        require(owner() != account, "Logistic: Owner can't be supplier");
         _addSupplier(account);
     }
 
     function addDeliveryMan(address account) public onlyOwner {
-        require(!isSupplier(account), "Account is supplier");
-        require(owner() != account, "Owner can't be delivery man");
+        require(!isSupplier(account), "Logistic: Account is supplier");
+        require(owner() != account, "Logistic: Owner can't be delivery man");
         _addDeliveryMan(account);
     }
 
     function createProduct(address purchaser, uint256 tokenId) public
     onlySupplier {
         require(owner() != purchaser && !isSupplier(purchaser),
-            "Logistic: Can't send to supplier nor owner");
+            "Logistic: Can't create for supplier nor owner");
         _mint(msg.sender, tokenId);
         _orders[tokenId] = purchaser;
         emit NewProduct(msg.sender, purchaser, tokenId);

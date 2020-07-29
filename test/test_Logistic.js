@@ -1,6 +1,7 @@
 const truffleAssert = require('truffle-assertions')
 
 const Logistic = artifacts.require("Logistic")
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 contract("Logistic test", async accounts => {
     console.log(accounts);
@@ -23,6 +24,11 @@ contract("Logistic test", async accounts => {
     it("Add a supplier", async () => {
         let instance = await Logistic.deployed()
 
+        await truffleAssert.reverts(
+            instance.addSupplier(owner, { from: owner }),
+            "Logistic: Owner can't be supplier"
+        )
+
         assert.isFalse((await instance.isSupplier(supplier)))
         await instance.addSupplier(supplier, { from: owner })
         assert.isTrue((await instance.isSupplier(supplier)))
@@ -31,16 +37,35 @@ contract("Logistic test", async accounts => {
             instance.addSupplier(deliveryMan3, { from: supplier }),
             "Ownable: caller is not the owner"
         )
+        await truffleAssert.reverts(
+            instance.addDeliveryMan(supplier, { from: owner }),
+            "Logistic: Account is supplier"
+        )
     })
 
     it("Add delivery mans", async () => {
         let instance = await Logistic.deployed()
+
+        await truffleAssert.reverts(
+            instance.addDeliveryMan(owner, { from: owner }),
+            "Logistic: Owner can't be delivery man"
+        )
 
         assert.isFalse((await instance.isDeliveryMan(deliveryMan1)))
         await instance.addDeliveryMan(deliveryMan1, { from: owner })
         assert.isTrue((await instance.isDeliveryMan(deliveryMan1)))
         await instance.addDeliveryMan(deliveryMan2, { from: owner })
         await instance.addDeliveryMan(deliveryMan3, { from: owner })
+
+        await truffleAssert.reverts(
+            instance.addSupplier(deliveryMan1, { from: owner }),
+            "Logistic: Account is delivery man"
+        )
+
+        await truffleAssert.reverts(
+            instance.addDeliveryMan(owner, { from: owner }),
+            "Logistic: Owner can't be delivery man"
+        )
 
         await truffleAssert.reverts(
             instance.addDeliveryMan(deliveryMan3, { from: deliveryMan1 }),
@@ -54,6 +79,14 @@ contract("Logistic test", async accounts => {
         await truffleAssert.reverts(
             instance.createProduct(purchaser1, product1, { from: deliveryMan1 }),
             "SupplierRole: caller does not have the Supplier role"
+        )
+        await truffleAssert.reverts(
+            instance.createProduct(supplier, product1, { from: supplier }),
+            "Logistic: Can't create for supplier nor owner"
+        )
+        await truffleAssert.reverts(
+            instance.createProduct(owner, product1, { from: supplier }),
+            "Logistic: Can't create for supplier nor owner"
         )
 
         await instance.createProduct(purchaser1, product1, { from: supplier })
@@ -390,5 +423,16 @@ contract("Logistic test", async accounts => {
             ev.to === purchaser1 &&
             ev.tokenId.toNumber() === product6
         );
+    })
+
+    it("Manage ownership", async () => {
+        let instance = await Logistic.deployed()
+
+        await truffleAssert.reverts(
+            instance.transferOwnership(ZERO_ADDRESS, { from: owner }),
+            "Ownable: new owner is the zero address"
+        )
+        await instance.transferOwnership(user, { from: owner })
+        await instance.renounceOwnership({ from: user })
     })
 })

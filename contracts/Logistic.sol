@@ -39,8 +39,6 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
 
     constructor() public ERC721Full("Logistic", "LM") {
         restrictedMode = true;
-        renounceDeliveryMan();
-        renounceSupplier();
     }
 
     function tokensSentFrom(uint256 tokenId, address from) external view

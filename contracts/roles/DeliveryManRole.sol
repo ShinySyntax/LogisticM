@@ -11,10 +11,6 @@ contract DeliveryManRole {
 
     Roles.Role private _deliveryMan;
 
-    constructor () internal {
-        _addDeliveryMan(msg.sender);
-    }
-
     function isDeliveryMan(address account) public view returns (bool) {
         return _deliveryMan.has(account);
     }

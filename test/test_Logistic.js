@@ -21,6 +21,13 @@ contract("Logistic test", async accounts => {
     const product4 = 4;
     const product5 = 5;
 
+    it("Test initialization", async () => {
+        let instance = await Logistic.deployed()
+
+        assert.isFalse((await instance.isSupplier(owner)))
+        assert.isFalse((await instance.isDeliveryMan(owner)))
+    })
+
     it("Add a supplier", async () => {
         let instance = await Logistic.deployed()
 
@@ -438,5 +445,7 @@ contract("Logistic test", async accounts => {
         )
         await instance.transferOwnership(user, { from: owner })
         await instance.renounceOwnership({ from: user })
+        await instance.renounceDeliveryMan({ from: deliveryMan1 })
+        await instance.renounceSupplier({ from: supplier })
     })
 })

@@ -11,10 +11,6 @@ contract SupplierRole {
 
     Roles.Role private _supplier;
 
-    constructor () internal {
-        _addSupplier(msg.sender);
-    }
-
     modifier onlySupplier() {
         require(isSupplier(msg.sender),
             "SupplierRole: caller does not have the Supplier role");

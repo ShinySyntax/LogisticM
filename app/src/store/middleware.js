@@ -10,13 +10,11 @@ const TransactionActions = { TX_ERROR, ERROR_CONTRACT_VAR };
 let processedEvents = [];
 
 const contractNotifier = _store => next => action => {
-  // console.log("event", action.type, action);
 
   switch(action.type) {
     case EventActions.EVENT_FIRED:
       if (!processedEvents.includes(
           action.event.transactionHash + action.event.event)) {
-        console.log("event", action.event);
         processedEvents.push(action.event.transactionHash + action.event.event)
         _store.dispatch(addEvent(action.event, action))
       }

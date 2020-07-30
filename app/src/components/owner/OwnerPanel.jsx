@@ -6,7 +6,7 @@ import GrantAccess from './GrantAccess'
 import TokenList from '../token/TokenList'
 import EventList from '../token/event/EventList';
 
-const { AccountData, ContractForm } = newContextComponents;
+const { ContractForm } = newContextComponents;
 
 class OwnerPanel extends React.Component {
 	state = { dataKey: null };
@@ -77,10 +77,18 @@ class OwnerPanel extends React.Component {
 							<h3>Danger zone</h3>
 
 							<em>Transfer ownership</em>
-							<ContractForm drizzle={drizzle} contract="Logistic" method="transferOwnership" />
+							<ContractForm
+								drizzle={drizzle}
+								contract="Logistic"
+								method="transferOwnership"
+							/>
 							<br/>
 							<em>Renounce ownership</em>
-							<ContractForm drizzle={drizzle} contract="Logistic" method="renounceOwnership" />
+							<ContractForm
+								drizzle={drizzle}
+								contract="Logistic"
+								method="renounceOwnership"
+							/>
 						</Alert>
 					</div>
 				</div>

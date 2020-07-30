@@ -65,7 +65,9 @@ class DeliveryManPanel extends React.Component {
 							accountLabel="Sender"
 							handleSubmit={this.receiveToken}
 						/>
+					</Card>
 
+					<Card className="m-2 p-2">
 						<p>Product(s) that you will receive</p>
 						<TokenList
 							drizzle={drizzle}

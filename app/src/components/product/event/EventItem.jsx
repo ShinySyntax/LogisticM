@@ -4,7 +4,7 @@ import { Accordion, Card, Table } from 'react-bootstrap';
 
 import { ZERO_ADDRESS } from '../../../store/constants';
 import { getBlockTimestamp } from '../../../store/events-helpers';
-import TokenLink from "../token-page/TokenLink";
+import ProductLink from "../product-page/ProductLink";
 import Address from "../Address"
 
 class EventItem extends React.Component {
@@ -70,7 +70,7 @@ class EventItem extends React.Component {
 				<tr key={idx}>
 					<td>{key}</td>
 					<td>
-						<TokenLink
+						<ProductLink
 							tokenId={value}
 						/>
 					</td>

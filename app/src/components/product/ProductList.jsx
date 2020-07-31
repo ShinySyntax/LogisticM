@@ -2,9 +2,9 @@ import React from 'react'
 import { ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import TokenLink from "./token-page/TokenLink"
+import ProductLink from "./product-page/ProductLink"
 
-class TokenList extends React.Component {
+class ProductList extends React.Component {
 	initialState = {
 		tokenIds: []
 	}
@@ -57,7 +57,7 @@ class TokenList extends React.Component {
 						}
 						return (
 							<ListGroup.Item key={idx}>
-								<TokenLink tokenId={tokenId} />
+								<ProductLink tokenId={tokenId} />
 							</ListGroup.Item>
 						)
 					})
@@ -67,10 +67,10 @@ class TokenList extends React.Component {
 	}
 }
 
-TokenList.propTypes = {
+ProductList.propTypes = {
 	totalSupply: PropTypes.number,
 	tokenItemComponent: PropTypes.any,
 	tokenIds: PropTypes.array
 };
 
-export default TokenList;
+export default ProductList;

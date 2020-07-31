@@ -2,11 +2,11 @@ import React from 'react'
 import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import TokenLink from "./token-page/TokenLink"
+import ProductLink from "./product-page/ProductLink"
 
-class TokensOwned extends React.Component {
+class ProductsOwned extends React.Component {
 	initialState = {
-		tokenIds: []
+		productIds: []
 	}
 
 	state = this.initialState;
@@ -18,7 +18,11 @@ class TokensOwned extends React.Component {
 				this.props.drizzleState.accounts[0], i)
 				.call()
 				.then(tokenId => {
-					this.setState({ tokenIds: [tokenId, ...this.state.tokenIds]})
+					return this.props.drizzle.contracts.Logistic.methods
+					.getProductId(tokenId).call()
+				})
+				.then(productId => {
+					this.setState({ productIds: [productId, ...this.state.productIds]})
 				})
 		}
 	}
@@ -33,21 +37,21 @@ class TokensOwned extends React.Component {
 		}
 	}
 
-	renderRow = (tokenId, idx) => {
+	renderRow = (productId, idx) => {
 		if (this.props.tokenItemComponent) {
 			return (
 				<this.props.tokenItemComponent
 					key={idx}
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
-					tokenId={tokenId}
+					productId={productId}
 					idx={idx}
 				/>
 			)
 		}
 		return (
 			<ListGroup.Item key={idx}>
-				<TokenLink tokenId={tokenId} />
+				<ProductLink productId={productId} />
 			</ListGroup.Item>
 		)
 	}
@@ -56,8 +60,8 @@ class TokensOwned extends React.Component {
 		return (
 			<Accordion>
 				{
-					this.state.tokenIds.map((tokenId, idx) => {
-						return this.renderRow(tokenId, idx)
+					this.state.productIds.map((productId, idx) => {
+						return this.renderRow(productId, idx)
 					})
 				}
 			</Accordion>
@@ -65,9 +69,9 @@ class TokensOwned extends React.Component {
 	}
 }
 
-TokensOwned.propTypes = {
+ProductsOwned.propTypes = {
 	balance: PropTypes.number.isRequired,
 	tokenItemComponent: PropTypes.any
 };
 
-export default TokensOwned;
+export default ProductsOwned;

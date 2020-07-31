@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { Card } from 'react-bootstrap';
 
 import { getEventsAboutToken } from "../../store/selectors"
-import History from '../token/token-page/History'
-import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
-import TokenLink from "../token/token-page/TokenLink";
-import TokenAccountForm from '../token/TokenAccountForm'
+import History from '../product/product-page/History'
+import WillReceiveProductItem from '../product/product-item/WillReceiveProductItem';
+import ProductLink from "../product/product-page/ProductLink";
+import ProductAccountForm from '../product/ProductAccountForm'
 import { HANDOVER } from "../../store/constants"
 
 class PurchaserPanel extends React.Component {
@@ -38,7 +38,7 @@ class PurchaserPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
-						<TokenAccountForm
+						<ProductAccountForm
 							accountLabel="Sender"
 							handleSubmit={this.receiveToken}
 						/>
@@ -49,7 +49,7 @@ class PurchaserPanel extends React.Component {
 							return (
 								<Card className="m-2 p-2" key={idx}>
 									<Card.Title><span>Product id: </span>
-										<TokenLink
+										<ProductLink
 											tokenId={tokenId}
 										/>
 									</Card.Title>
@@ -58,7 +58,7 @@ class PurchaserPanel extends React.Component {
 										drizzleState={this.props.drizzleState}
 										handovers={events.filter(ev => ev.event === HANDOVER)}
 									/>
-									<WillReceiveTokenItem
+									<WillReceiveProductItem
 										drizzle={this.props.drizzle}
 										drizzleState={this.props.drizzleState}
 										tokenId={tokenId}

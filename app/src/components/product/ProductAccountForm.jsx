@@ -16,8 +16,8 @@ export default function({accountLabel, handleSubmit}) {
 	return (
 		<InputGroup className="mb-3">
 			<FormControl
-				placeholder="Token id"
-				aria-label="Token id"
+				placeholder="Product barcode"
+				aria-label="Product barcode"
 				onChange={event => setTokenId(event.target.value)}
 			/>
 			<FormControl

@@ -6,11 +6,11 @@ import { Container,
 	ListGroup
  } from 'react-bootstrap';
 
-import TokenLink from "../token-page/TokenLink";
+import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import Address from '../Address'
 
-class InDeliveryTokenItem extends React.Component {
+class InDeliveryProductItem extends React.Component {
 	state = {
 		dataKey: null
 	}
@@ -48,7 +48,7 @@ class InDeliveryTokenItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								<TokenLink tokenId={this.props.tokenId} />
+								<ProductLink tokenId={this.props.tokenId} />
 							</span>
 						</Col>
 						<Col>
@@ -68,8 +68,8 @@ class InDeliveryTokenItem extends React.Component {
 	}
 }
 
-InDeliveryTokenItem.propTypes = {
+InDeliveryProductItem.propTypes = {
 	tokenId: PropTypes.string.isRequired
 };
 
-export default InDeliveryTokenItem;
+export default InDeliveryProductItem;

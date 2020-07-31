@@ -1,17 +1,17 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 
-import EventList from '../token/event/EventList';
-import TokensOwned from '../token/TokensOwned';
-import TokenList from '../token/TokenList'
-import WillReceiveTokenItem from '../token/token-item/WillReceiveTokenItem';
-import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
-import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
+import EventList from '../product/event/EventList';
+import ProductsOwned from '../product/ProductsOwned';
+import ProductList from '../product/ProductList'
+import WillReceiveProductItem from '../product/product-item/WillReceiveProductItem';
+import OwnedProductItem from '../product/product-item/OwnedProductItem';
+import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
 import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
  	PRODUCT_SHIPPED } from "../../store/constants"
-import TokenAccountForm from '../token/TokenAccountForm'
+import ProductAccountForm from '../product/ProductAccountForm'
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -28,9 +28,9 @@ class DeliveryManPanel extends React.Component {
 		});
 	}
 
-	receiveToken = (tokenId, sender) => {
+	receiveToken = (productId, sender) => {
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-			sender, tokenId
+			sender, productId
 		)
 	}
 
@@ -49,10 +49,10 @@ class DeliveryManPanel extends React.Component {
 			[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
 		}
 
-		const tokenIds = this.props.drizzleState.events.events
+		const productIds = this.props.drizzleState.events.events
 			.filter(event => event.event === PRODUCT_SHIPPED)
 			.map(event => {
-				return event.returnValues.tokenId
+				return event.returnValues.productId
 			})
 
 		return (
@@ -61,7 +61,7 @@ class DeliveryManPanel extends React.Component {
 					<h2>Delivery Man Panel</h2>
 					<Card className="m-2 p-2">
 						<p>Receive a product</p>
-						<TokenAccountForm
+						<ProductAccountForm
 							accountLabel="Sender"
 							handleSubmit={this.receiveToken}
 						/>
@@ -69,31 +69,31 @@ class DeliveryManPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>Product(s) that you will receive</p>
-						<TokenList
+						<ProductList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							tokenIds={tokenIds}
-							tokenItemComponent={WillReceiveTokenItem}
+							productIds={productIds}
+							tokenItemComponent={WillReceiveProductItem}
 						/>
 					</Card>
 
 					<Card className="m-2 p-2">
 						<p>You have <em>{balance}</em> product(s).</p>
-						<TokensOwned
+						<ProductsOwned
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={OwnedTokenItem}
+							tokenItemComponent={OwnedProductItem}
 						/>
 					</Card>
 
 					<Card className="m-2 p-2">
 						<p>Product(s) in delivery</p>
-						<TokensOwned
+						<ProductsOwned
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={InDeliveryTokenItem}
+							tokenItemComponent={InDeliveryProductItem}
 							/>
 					</Card>
 

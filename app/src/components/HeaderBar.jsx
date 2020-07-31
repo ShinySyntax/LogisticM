@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
-import Address from "./token/Address"
+import Address from "./product/Address"
 
 const { AccountData } = newContextComponents;
 

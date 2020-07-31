@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 
-class TokenLink extends React.Component {
+class ProductLink extends React.Component {
 	render () {
 		const path = `/product/${this.props.tokenId}`
 
@@ -26,9 +26,9 @@ class TokenLink extends React.Component {
 	}
 }
 
-TokenLink.propTypes = {
+ProductLink.propTypes = {
 	tokenId: PropTypes.string.isRequired,
 	label: PropTypes.string
 };
 
-export default TokenLink;
+export default ProductLink;

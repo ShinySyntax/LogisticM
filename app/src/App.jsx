@@ -10,7 +10,7 @@ import drizzleOptions from "./store/drizzleOptions";
 import drizzleStore from "./store/store";
 import Home from "./components/Home";
 import HeaderBar from "./components/HeaderBar";
-import TokenDetail from './components/token/token-page/TokenDetail'
+import ProductDetail from './components/product/product-page/ProductDetail'
 import LoadingContainer from "./components/LoadingContainer";
 import "./App.css";
 
@@ -47,9 +47,9 @@ const App = () => {
                 <Route exact path="/">
                   <Home drizzle={drizzle} drizzleState={drizzleState} />
                 </Route>
-                <Route exact path="/product/:tokenId" render={(props) => {
+                <Route exact path="/product/:productId" render={(props) => {
                     return (
-                      <TokenDetail {...props}
+                      <ProductDetail {...props}
                         drizzle={drizzle}
                         drizzleState={drizzleState}
                       />

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 
-import TokensOwned from '../token/TokensOwned';
-import EventList from '../token/event/EventList';
-import OwnedTokenItem from '../token/token-item/OwnedTokenItem';
-import InDeliveryTokenItem from '../token/token-item/InDeliveryTokenItem';
-import TokenAccountForm from '../token/TokenAccountForm';
+import ProductsOwned from '../product/ProductsOwned';
+import EventList from '../product/event/EventList';
+import OwnedProductItem from '../product/product-item/OwnedProductItem';
+import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
+import ProductAccountForm from '../product/ProductAccountForm';
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
@@ -62,15 +62,15 @@ class SupplierPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>You have <em>{balance}</em> product(s).</p>
-						<TokensOwned
+						<ProductsOwned
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={OwnedTokenItem}
+							tokenItemComponent={OwnedProductItem}
 						/>
 						<div className="m-2">
 							<p>Add a product</p>
-							<TokenAccountForm
+							<ProductAccountForm
 								accountLabel="Purchaser"
 								handleSubmit={this.createProduct}
 							/>
@@ -79,11 +79,11 @@ class SupplierPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>Product(s) in delivery</p>
-						<TokensOwned
+						<ProductsOwned
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={InDeliveryTokenItem}
+							tokenItemComponent={InDeliveryProductItem}
 							/>
 					</Card>
 

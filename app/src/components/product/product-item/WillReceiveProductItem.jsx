@@ -7,10 +7,10 @@ import { Container,
 	Button } from 'react-bootstrap';
 import { PRODUCT_SHIPPED,
  	PRODUCT_RECEIVED } from "../../../store/constants"
-import TokenLink from "../token-page/TokenLink";
+import ProductLink from "../product-page/ProductLink";
 import { getPastEvents } from '../../../store/events-helpers'
 
-class WillReceiveTokenItem extends React.Component {
+class WillReceiveProductItem extends React.Component {
 	componentDidMount () {
 		getPastEvents(
 			this.props.drizzle,
@@ -60,7 +60,7 @@ class WillReceiveTokenItem extends React.Component {
 				  <Row>
 				    <Col md={10}>
 							<span className="m-2">
-								<TokenLink
+								<ProductLink
 									tokenId={this.props.tokenId}
 								/>
 							</span>
@@ -81,8 +81,8 @@ class WillReceiveTokenItem extends React.Component {
 	}
 }
 
-WillReceiveTokenItem.propTypes = {
+WillReceiveProductItem.propTypes = {
 	tokenId: PropTypes.string.isRequired
 };
 
-export default WillReceiveTokenItem
+export default WillReceiveProductItem

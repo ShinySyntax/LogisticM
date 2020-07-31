@@ -8,9 +8,9 @@ import { getPastEvents,
 	getEventFilterToken } from '../../../store/events-helpers'
 import { getEventsAboutToken } from "../../../store/selectors"
 import Loading from '../../Loading';
-import TokenLink from './TokenLink'
+import ProductLink from './ProductLink'
 
-class TokenDetail extends React.Component {
+class ProductDetail extends React.Component {
 	componentDidMount () {
 		this.filters = getEventFilterToken(this.props.match.params.tokenId)
 		getPastEvents(
@@ -42,7 +42,7 @@ class TokenDetail extends React.Component {
 		return (
 			<div className="section">
 				<h2>Logistic - Product Details</h2>
-				<p>Product id: <strong><TokenLink tokenId={tokenId} /></strong></p>
+				<p>Product id: <strong><ProductLink tokenId={tokenId} /></strong></p>
 
 				<Card className="m-2 p-2">
 					<Card.Title>History</Card.Title>
@@ -69,4 +69,4 @@ class TokenDetail extends React.Component {
 	}
 }
 
-export default TokenDetail
+export default ProductDetail

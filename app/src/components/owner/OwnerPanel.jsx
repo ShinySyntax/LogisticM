@@ -3,8 +3,8 @@ import { Alert, Card } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
-import TokenList from '../token/TokenList'
-import EventList from '../token/event/EventList';
+import ProductList from '../product/ProductList'
+import EventList from '../product/event/EventList';
 
 const { ContractForm } = newContextComponents;
 
@@ -39,7 +39,7 @@ class OwnerPanel extends React.Component {
 
 					<Card className="m-2 p-2">
 						<p>Total product(s): {totalSupply}</p>
-						<TokenList
+						<ProductList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							totalSupply={totalSupply}

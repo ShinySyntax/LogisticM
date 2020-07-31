@@ -11,11 +11,11 @@ import { Container,
 import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
 
-import TokenLink from "../token-page/TokenLink";
+import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS, NEW_PRODUCT } from '../../../store/constants';
 import { getPastEvents } from '../../../store/events-helpers'
 
-class OwnedTokenItem extends React.Component {
+class OwnedProductItem extends React.Component {
 	state = {
 		dataKey: null,
 		address: null
@@ -105,7 +105,7 @@ class OwnedTokenItem extends React.Component {
 						<Container fluid>
 							<Row>
 								<Col md={2}>
-									<TokenLink
+									<ProductLink
 										tokenId={this.props.tokenId}
 										as={Button}
 									/>
@@ -141,8 +141,8 @@ class OwnedTokenItem extends React.Component {
 	}
 }
 
-OwnedTokenItem.propTypes = {
+OwnedProductItem.propTypes = {
 	tokenId: PropTypes.string.isRequired
 };
 
-export default OwnedTokenItem
+export default OwnedProductItem

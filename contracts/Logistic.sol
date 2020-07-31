@@ -22,13 +22,16 @@ SupplierRole {
         mapping (address => address) received; // from -> by
     }
 
+    // Mapping from productHash to Product
     mapping (bytes32 => Product) private _products;
-    mapping (uint256 => bytes32) private _tokenToProductId;
 
-    event NewProduct(address indexed by, address indexed purchaser, string indexed productId);
-    event ProductShipped(address indexed from, address indexed to, string indexed productId);
-    event ProductReceived(address indexed from, address indexed by, string indexed productId);
-    event Handover(address indexed from, address indexed to, string indexed productId);
+    // Mapping from tokenId to productId
+    mapping (uint256 => bytes32) private _tokenToProductHash;
+
+    event NewProduct(address indexed by, address indexed purchaser, string productId);
+    event ProductShipped(address indexed from, address indexed to, string productId);
+    event ProductReceived(address indexed from, address indexed by, string productId);
+    event Handover(address indexed from, address indexed to, string productId);
 
     modifier supplierOrDeliveryMan() {
         require(_isSupplierOrDeliveryMan(msg.sender),
@@ -55,6 +58,10 @@ SupplierRole {
     function getTokenId(string memory productId) public view
     returns (uint256) {
         return _products[keccak256(bytes(productId))].tokenId;
+    }
+
+    function getProductId(uint256 tokenId) public view returns (string memory) {
+        return _products[_tokenToProductHash[tokenId]].productId;
     }
 
     function addSupplier(address account, string memory name_) public
@@ -89,7 +96,7 @@ SupplierRole {
         uint256 tokenId = _getCounter();
         bytes32 productHash = keccak256(bytes(productId));
 
-        _tokenToProductId[tokenId] = productHash;
+        _tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(productId, purchaser, tokenId);
         _mint(msg.sender);
 

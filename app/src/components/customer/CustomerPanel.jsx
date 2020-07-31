@@ -21,12 +21,12 @@ class CustomerPanel extends React.Component {
 	render () {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
-		let tokenIds = getEventsAboutUser(
+		let productIds = getEventsAboutUser(
 			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
-		).map(event => event.returnValues.tokenId)
+		).map(event => event.returnValues.productId)
 
-		if (!tokenIds.length) {
+		if (!productIds.length) {
 			return <NoUserPanel/>
 		}
 
@@ -35,7 +35,7 @@ class CustomerPanel extends React.Component {
 				drizzle={this.props.drizzle}
 				drizzleState={this.props.drizzleState}
 				events={this.props.drizzleState.events.events}
-				tokenIds={tokenIds}
+				productIds={productIds}
 			/>
 		)
 	}

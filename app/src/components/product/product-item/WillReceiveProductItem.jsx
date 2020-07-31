@@ -5,6 +5,7 @@ import { Container,
 	Col,
 	ListGroup,
 	Button } from 'react-bootstrap';
+
 import { PRODUCT_SHIPPED,
  	PRODUCT_RECEIVED } from "../../../store/constants"
 import ProductLink from "../product-page/ProductLink";
@@ -18,11 +19,11 @@ class WillReceiveProductItem extends React.Component {
 			{
 				[PRODUCT_SHIPPED]: {
 					to: this.props.drizzleState.accounts[0],
-					tokenId: this.props.tokenId
+					productId: this.props.productId
 				},
 				[PRODUCT_RECEIVED]: {
 					by: this.props.drizzleState.accounts[0],
-					tokenId: this.props.tokenId
+					productI: this.props.productId
 				}
 			}
 		)
@@ -31,24 +32,24 @@ class WillReceiveProductItem extends React.Component {
 	receive = () => {
 		const event = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
-				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.productId === this.props.productId &&
 				event.returnValues.to === this.props.drizzleState.accounts[0];
 		})
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
 			event.returnValues.from,
-			this.props.tokenId
+			this.props.productId
 		)
 	}
 
 	render () {
 		const eventShip = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
-				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.productId === this.props.productId &&
 				event.returnValues.to === this.props.drizzleState.accounts[0];
 		})
 		const eventReceive = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_RECEIVED &&
-				event.returnValues.tokenId === this.props.tokenId &&
+				event.returnValues.productId === this.props.productId &&
 				event.returnValues.by === this.props.drizzleState.accounts[0];
 		})
 
@@ -61,7 +62,7 @@ class WillReceiveProductItem extends React.Component {
 				    <Col md={10}>
 							<span className="m-2">
 								<ProductLink
-									tokenId={this.props.tokenId}
+									productId={this.props.productId}
 								/>
 							</span>
 						</Col>
@@ -82,7 +83,7 @@ class WillReceiveProductItem extends React.Component {
 }
 
 WillReceiveProductItem.propTypes = {
-	tokenId: PropTypes.string.isRequired
+	productId: PropTypes.string.isRequired
 };
 
 export default WillReceiveProductItem

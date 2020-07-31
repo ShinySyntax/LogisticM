@@ -12,12 +12,12 @@ export const getEventsAboutUser = (events, account) => {
 	})
 }
 
-export const getEventsAboutToken = (events, tokenId) => {
+export const getEventsAboutToken = (events, productId) => {
 	return events.filter(event => {
 		let isAboutToken = false
 		for (let key in event.returnValues) {
 			if (event.returnValues.hasOwnProperty(key) &&
-				event.returnValues.tokenId === tokenId) {
+				event.returnValues.productId === productId) {
 				isAboutToken = true
 			}
 		}

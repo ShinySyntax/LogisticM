@@ -12,7 +12,7 @@ import ProductLink from './ProductLink'
 
 class ProductDetail extends React.Component {
 	componentDidMount () {
-		this.filters = getEventFilterToken(this.props.match.params.tokenId)
+		this.filters = getEventFilterToken(this.props.match.params.productId)
 		getPastEvents(
 			this.props.drizzle,
 			PRODUCT_EVENT_NAMES,
@@ -23,9 +23,9 @@ class ProductDetail extends React.Component {
 	render () {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
-		const tokenId = this.props.match.params.tokenId
+		const productId = this.props.match.params.productId
 		const events = getEventsAboutToken(this.props.drizzleState.events.events,
-			tokenId)
+			productId)
 		const handovers = events.filter(event => event.event === HANDOVER)
 
 		if (!events.length) {
@@ -42,7 +42,8 @@ class ProductDetail extends React.Component {
 		return (
 			<div className="section">
 				<h2>Logistic - Product Details</h2>
-				<p>Product id: <strong><ProductLink tokenId={tokenId} /></strong></p>
+				<p>Product id: <strong>
+					<ProductLink productId={productId} /></strong></p>
 
 				<Card className="m-2 p-2">
 					<Card.Title>History</Card.Title>
@@ -61,7 +62,7 @@ class ProductDetail extends React.Component {
 							eventNames={PRODUCT_EVENT_NAMES}
 							showAll={true}
 							filters={this.filters}
-							filter={{ tokenId }}
+							filter={{ productId }}
 						/>
 				</Card>
 			</div>

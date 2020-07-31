@@ -6,25 +6,29 @@ import ProductLink from "./product-page/ProductLink"
 
 class ProductList extends React.Component {
 	initialState = {
-		tokenIds: []
+		productIds: []
 	}
 
 	state = this.initialState;
 
 	getTokens(totalSupply) {
 
-		if (!this.props.tokenIds) {
+		if (!this.props.productIds) {
 			this.setState(this.initialState)
 			for (var i = 0; i < totalSupply; i++) {
 				this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
 				.call()
 				.then(tokenId => {
-					this.setState({ tokenIds: [tokenId, ...this.state.tokenIds]})
+					return this.props.drizzle.contracts.Logistic.methods
+					.getProductId(tokenId).call()
+				})
+				.then(productId => {
+					this.setState({ productIds: [productId, ...this.state.productIds]})
 				})
 			}
 		}
 		else {
-			this.setState({ tokenIds: this.props.tokenIds })
+			this.setState({ productIds: this.props.productIds })
 		}
 	}
 
@@ -34,7 +38,7 @@ class ProductList extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.totalSupply !== prevProps.totalSupply ||
-			this.props.tokenIds !== prevProps.tokenIds ) {
+			this.props.productIds !== prevProps.productIds ) {
 			this.getTokens(this.props.totalSupply)
 		}
 	}
@@ -43,21 +47,21 @@ class ProductList extends React.Component {
 		return (
 			<ListGroup>
 				{
-					this.state.tokenIds.map((tokenId, idx) => {
+					this.state.productIds.map((productId, idx) => {
 						if (this.props.tokenItemComponent) {
 							return (
 								<this.props.tokenItemComponent
 									key={idx}
 									drizzle={this.props.drizzle}
 									drizzleState={this.props.drizzleState}
-									tokenId={tokenId}
+									productId={productId}
 									idx={idx}
 								/>
 							)
 						}
 						return (
 							<ListGroup.Item key={idx}>
-								<ProductLink tokenId={tokenId} />
+								<ProductLink productId={productId} />
 							</ListGroup.Item>
 						)
 					})
@@ -70,7 +74,7 @@ class ProductList extends React.Component {
 ProductList.propTypes = {
 	totalSupply: PropTypes.number,
 	tokenItemComponent: PropTypes.any,
-	tokenIds: PropTypes.array
+	productIds: PropTypes.array
 };
 
 export default ProductList;

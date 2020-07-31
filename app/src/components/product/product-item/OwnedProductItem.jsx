@@ -24,7 +24,7 @@ class OwnedProductItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			this.props.tokenId,
+			this.props.productId,
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
@@ -36,7 +36,7 @@ class OwnedProductItem extends React.Component {
 			[NEW_PRODUCT],
 			{
 				[NEW_PRODUCT]: {
-					tokenId: this.props.tokenId,
+					productId: this.props.productId,
 					by: this.props.drizzleState.accounts[0]
 				}
 			}
@@ -45,7 +45,7 @@ class OwnedProductItem extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.tokenId !== prevProps.tokenId) {
+		if (this.props.productId !== prevProps.productId) {
 			this.getPendingDelivery()
 		}
 	}
@@ -61,17 +61,17 @@ class OwnedProductItem extends React.Component {
 
 		contract.methods.send.cacheSend(
 			this.state.address,
-			this.props.tokenId
+			this.props.productId
 		)
 	}
 
 	sendToPurchaser = () => {
 		const event = this.props.drizzleState.events.events.find(event => {
 			return event.event === NEW_PRODUCT &&
-				event.returnValues.tokenId === this.props.tokenId;
+				event.returnValues.productId === this.props.productId;
 		})
 		this.props.drizzle.contracts.Logistic.methods.send.cacheSend(
-			event.returnValues.purchaser, this.props.tokenId
+			event.returnValues.purchaser, this.props.productId
 		)
 	}
 
@@ -95,7 +95,7 @@ class OwnedProductItem extends React.Component {
 						eventKey={this.props.idx+1}
 					>
 						<span className="mr-2">
-							{this.props.tokenId}
+							{this.props.productId}
 						</span>
 						<BsChevronDoubleDown />
 		      </Accordion.Toggle>
@@ -106,7 +106,7 @@ class OwnedProductItem extends React.Component {
 							<Row>
 								<Col md={2}>
 									<ProductLink
-										tokenId={this.props.tokenId}
+										productId={this.props.productId}
 										as={Button}
 									/>
 								</Col>
@@ -142,7 +142,7 @@ class OwnedProductItem extends React.Component {
 }
 
 OwnedProductItem.propTypes = {
-	tokenId: PropTypes.string.isRequired
+	productId: PropTypes.string.isRequired
 };
 
 export default OwnedProductItem

@@ -30,9 +30,9 @@ class SupplierPanel extends React.Component {
 		this.setState({ dataKey });
 	}
 
-	createProduct = (tokenId, purchaser) => {
+	createProduct = (productId, purchaser) => {
 		this.props.drizzle.contracts.Logistic.methods.createProduct.cacheSend(
-			purchaser, tokenId
+			purchaser, productId
 		)
 	}
 

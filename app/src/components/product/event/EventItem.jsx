@@ -65,13 +65,13 @@ class EventItem extends React.Component {
 	renderReturnValue(key, value, idx) {
 		if (value === ZERO_ADDRESS) return null
 
-		if (key === 'tokenId') {
+		if (key === 'productId') {
 			return (
 				<tr key={idx}>
 					<td>{key}</td>
 					<td>
 						<ProductLink
-							tokenId={value}
+							productId={value}
 						/>
 					</td>
 				</tr>

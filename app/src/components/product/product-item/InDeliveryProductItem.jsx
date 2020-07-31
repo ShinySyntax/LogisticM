@@ -18,7 +18,7 @@ class InDeliveryProductItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			this.props.tokenId,
+			this.props.productId,
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
@@ -29,7 +29,7 @@ class InDeliveryProductItem extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.tokenId !== prevProps.tokenId) {
+		if (this.props.productId !== prevProps.productId) {
 			this.getPendingDelivery()
 		}
 	}
@@ -48,7 +48,7 @@ class InDeliveryProductItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								<ProductLink tokenId={this.props.tokenId} />
+								<ProductLink productId={this.props.productId} />
 							</span>
 						</Col>
 						<Col>
@@ -69,7 +69,7 @@ class InDeliveryProductItem extends React.Component {
 }
 
 InDeliveryProductItem.propTypes = {
-	tokenId: PropTypes.string.isRequired
+	productId: PropTypes.string.isRequired
 };
 
 export default InDeliveryProductItem;

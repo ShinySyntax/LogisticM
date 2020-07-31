@@ -14,19 +14,19 @@ class PurchaserPanel extends React.Component {
 	state = {}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.tokenIds !== prevProps.tokenIds) {
+		if (this.props.productIds !== prevProps.productIds) {
 			let state = {}
-			this.props.tokenIds.forEach(tokenId => {
-				let eventsToken = getEventsAboutToken(this.props.events, tokenId)
-				state[tokenId] = eventsToken
+			this.props.productIds.forEach(productId => {
+				let eventsToken = getEventsAboutToken(this.props.events, productId)
+				state[productId] = eventsToken
 			});
 			this.setState(state);
 		}
 	}
 
-	receiveToken = (tokenId, sender) => {
+	receiveToken = (productId, sender) => {
 		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-			sender, tokenId
+			sender, productId
 		)
 	}
 
@@ -45,12 +45,12 @@ class PurchaserPanel extends React.Component {
 					</Card>
 
 					{
-						Object.entries(this.state).map(([tokenId, events], idx) => {
+						Object.entries(this.state).map(([productId, events], idx) => {
 							return (
 								<Card className="m-2 p-2" key={idx}>
 									<Card.Title><span>Product id: </span>
 										<ProductLink
-											tokenId={tokenId}
+											productId={productId}
 										/>
 									</Card.Title>
 									<History
@@ -61,7 +61,7 @@ class PurchaserPanel extends React.Component {
 									<WillReceiveProductItem
 										drizzle={this.props.drizzle}
 										drizzleState={this.props.drizzleState}
-										tokenId={tokenId}
+										productId={productId}
 									/>
 								</Card>
 							)
@@ -76,7 +76,7 @@ class PurchaserPanel extends React.Component {
 
 PurchaserPanel.propTypes = {
 	events: PropTypes.array.isRequired, // Events about the user
-	tokenIds: PropTypes.array.isRequired // Tokens for the user
+	productIds: PropTypes.array.isRequired // Tokens for the user
 };
 
 export default PurchaserPanel;

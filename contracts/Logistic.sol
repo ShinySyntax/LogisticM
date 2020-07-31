@@ -1,32 +1,34 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
-
 import "./roles/SupplierRole.sol";
 import "./roles/DeliveryManRole.sol";
 import "./roles/OwnerRole.sol";
+import "./RestrictedERC721.sol";
+import "./Named.sol";
 
 
-contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
-    // the token (uint256) is send from (address) to (address)
-    mapping (uint256 => mapping (address => address)) private _tokensSent;
+contract Logistic is RestrictedERC721, Named, OwnerRole, DeliveryManRole,
+SupplierRole {
+    // Naming convention:
+    //    string productId
+    //    uint256 tokenId (ERC721)
+    //    bytes32 productHash
 
-    // the token (uint256) has been received from (address) by (address)
-    mapping (uint256 => mapping (address => address)) private _tokensReceived;
+    struct Product {
+        string productId;
+        address purchaser;
+        uint256 tokenId;
+        mapping (address => address) sent; // from -> to
+        mapping (address => address) received; // from -> by
+    }
 
-    // the purchaser (address) has ordered the token (uint256)
-    mapping (uint256 => address) private _orders;
+    mapping (bytes32 => Product) private _products;
+    mapping (uint256 => bytes32) private _tokenToProductId;
 
-    // User (address) is named (string)
-    mapping (address => string) private _names;
-
-
-    bool private restrictedMode;
-
-    event NewProduct(address indexed by, address indexed purchaser, uint256 indexed tokenId);
-    event ProductShipped(address indexed from, address indexed to, uint256 indexed tokenId);
-    event ProductReceived(address indexed from, address indexed by, uint256 indexed tokenId);
-    event Handover(address indexed from, address indexed to, uint256 indexed tokenId);
+    event NewProduct(address indexed by, address indexed purchaser, string indexed productId);
+    event ProductShipped(address indexed from, address indexed to, string indexed productId);
+    event ProductReceived(address indexed from, address indexed by, string indexed productId);
+    event Handover(address indexed from, address indexed to, string indexed productId);
 
     modifier supplierOrDeliveryMan() {
         require(_isSupplierOrDeliveryMan(msg.sender),
@@ -34,46 +36,32 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
         _;
     }
 
-    modifier whenNotRestrictedMode() {
-        require(restrictedMode == false,
-            "Logistic: restricted mode activated"
-        );
-        _;
-    }
-
-    constructor() public ERC721Full("Logistic", "LM") {
-        restrictedMode = true;
-    }
-
-    function tokensSentFrom(uint256 tokenId, address from) external view
+    function productsOrders(string memory productId) public view
     returns (address) {
-        return _tokensSent[tokenId][from];
+        return _products[keccak256(bytes(productId))].purchaser;
     }
 
-    function tokensReceivedFrom(uint256 tokenId, address from) external view
+    function productsSentFrom(string memory productId, address from) public view
     returns (address) {
-        return _tokensReceived[tokenId][from];
+        return _products[keccak256(bytes(productId))].sent[from];
     }
 
-    function orders(uint256 tokenId) external view returns (address) {
-        return _orders[tokenId];
+    function productsReceivedFrom(string memory productId, address from) public
+    view
+    returns (address) {
+        return _products[keccak256(bytes(productId))].received[from];
     }
 
-    function name(address account) public view returns (string memory) {
-        return _names[account];
+    function getTokenId(string memory productId) public view
+    returns (uint256) {
+        return _products[keccak256(bytes(productId))].tokenId;
     }
 
-    function approve(address to, uint256 tokenId) public whenNotRestrictedMode {
-        super.approve(to, tokenId);
-    }
-
-    function setApprovalForAll(address to, bool approved) public {
-        revert("Logistic: cannot approve for all");
-    }
-
-    function addSupplier(address account, string memory name_) public onlyOwner {
+    function addSupplier(address account, string memory name_) public
+    onlyOwner {
         require(!isDeliveryMan(account), "Logistic: Account is delivery man");
         require(owner() != account, "Logistic: Owner can't be supplier");
+
         _setName(account, name_);
         _addSupplier(account, name_);
     }
@@ -82,77 +70,100 @@ contract Logistic is ERC721Full, OwnerRole, DeliveryManRole, SupplierRole {
     onlyOwner {
         require(!isSupplier(account), "Logistic: Account is supplier");
         require(owner() != account, "Logistic: Owner can't be delivery man");
+
         _setName(account, name_);
         _addDeliveryMan(account, name_);
     }
 
-    function createProduct(address purchaser, uint256 tokenId) public
+    function createProductWithName(address purchaser, string memory productId,
+    string memory purchaserName) public onlySupplier {
+        _setName(purchaser, purchaserName);
+        createProduct(purchaser, productId);
+    }
+
+    function createProduct(address purchaser, string memory productId) public
     onlySupplier {
         require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
-        _mint(msg.sender, tokenId);
-        _orders[tokenId] = purchaser;
-        emit NewProduct(msg.sender, purchaser, tokenId);
+
+        uint256 tokenId = _getCounter();
+        bytes32 productHash = keccak256(bytes(productId));
+
+        _tokenToProductId[tokenId] = productHash;
+        _products[productHash] = Product(productId, purchaser, tokenId);
+        _mint(msg.sender);
+
+        emit NewProduct(msg.sender, purchaser, productId);
     }
 
-    function send(address receiver, uint256 tokenId) public
+    function send(address receiver, string memory productId) public
     supplierOrDeliveryMan {
-        require(_tokensSent[tokenId][msg.sender] == address(0),
+        require(productsSentFrom(productId, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
         if (!isDeliveryMan(receiver)) {
             // the receiver is a purchaser
-            require(_orders[tokenId] == receiver,
+            require(productsOrders(productId) == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
-        if (_tokensReceived[tokenId][msg.sender] == receiver) {
-            handoverToken(msg.sender, receiver, tokenId);
+
+        if (productsReceivedFrom(productId, msg.sender) == receiver) {
+            _handoverToken(msg.sender, receiver, productId);
         } else {
-            restrictedMode = false;
-            approve(receiver, tokenId);
-            restrictedMode = true;
+            _restrictedMode = false;
+            approve(receiver, _getProduct(productId).tokenId);
+            _restrictedMode = true;
         }
-        _tokensSent[tokenId][msg.sender] = receiver;
-        emit ProductShipped(msg.sender, receiver, tokenId);
+        _setProductSent(productId, msg.sender, receiver);
+
+        emit ProductShipped(msg.sender, receiver, productId);
     }
 
-    function receive(address sender, uint256 tokenId) public notOwner
+    function receive(address sender, string memory productId) public notOwner
     notSupplier {
-        require(_tokensReceived[tokenId][sender] == address(0),
+        require(productsReceivedFrom(productId, sender) == address(0),
             "Logistic: Already received");
         require(_isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
         if (!isDeliveryMan(msg.sender)) {
-            require(_orders[tokenId] == msg.sender,
+            // the caller is a purchaser
+            require(productsOrders(productId) == msg.sender,
                 "Logistic: This purchaser has not ordered this product");
         }
-        if (_tokensSent[tokenId][sender] == msg.sender) {
-            handoverToken(sender, msg.sender, tokenId);
+
+        if (productsSentFrom(productId, sender) == msg.sender) {
+            _handoverToken(sender, msg.sender, productId);
         }
-        _tokensReceived[tokenId][sender] = msg.sender;
-        emit ProductReceived(sender, msg.sender, tokenId);
+        _setProductReceived(productId, sender, msg.sender);
+
+        emit ProductReceived(sender, msg.sender, productId);
     }
 
-    function handoverToken(address from, address to, uint256 tokenId) internal {
-        restrictedMode = false;
-        transferFrom(from, to, tokenId);
-        restrictedMode = true;
-        emit Handover(from, to, tokenId);
+    function _handoverToken(address from, address to, string memory productId)
+    internal {
+        _restrictedMode = false;
+        transferFrom(from, to, _getProduct(productId).tokenId);
+        _restrictedMode = true;
+        emit Handover(from, to, productId);
     }
 
-    function _transferFrom(address from, address to, uint256 tokenId) internal
-    whenNotRestrictedMode {
-        super._transferFrom(from, to, tokenId);
+    function _setProductSent(string memory productId, address from, address to)
+    internal {
+        _getProduct(productId).sent[from] = to;
     }
 
-    function _setName(address account, string memory name_) internal
-    onlyOwner {
-        require(keccak256(bytes(_names[account])) == keccak256("")); // TODO: pause the contract
-        _names[account] = name_;
+    function _setProductReceived(string memory productId, address from,
+    address by) internal {
+        _getProduct(productId).received[from] = by;
     }
 
-    function _isSupplierOrDeliveryMan(address account) private view
+    function _getProduct(string memory productId) internal view
+    returns (Product storage) {
+        return _products[keccak256(bytes(productId))];
+    }
+
+    function _isSupplierOrDeliveryMan(address account) internal view
     returns (bool) {
         return isSupplier(account) || isDeliveryMan(account);
     }

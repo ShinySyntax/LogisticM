@@ -59,10 +59,19 @@ class OwnedProductItem extends React.Component {
 		const { drizzle } = this.props;
     const contract = drizzle.contracts.Logistic;
 
-		contract.methods.send.cacheSend(
-			this.state.address,
-			this.props.productId
-		)
+		if (this.state.address.startsWith('0x')
+			&& this.state.address.length === 42) {
+			contract.methods.send.cacheSend(
+				this.state.address,
+				this.props.productId
+			)
+		}
+		else {
+			contract.methods.sendWithName.cacheSend(
+				this.state.address,
+				this.props.productId
+			)
+		}
 	}
 
 	sendToPurchaser = () => {

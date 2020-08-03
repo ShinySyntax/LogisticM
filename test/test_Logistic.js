@@ -124,7 +124,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'NewProduct', ev =>
             ev.by === supplier &&
             ev.purchaser === purchaser2 &&
-            ev.productId === web3.utils.keccak256(product2)
+            ev.productId === product2
         );
     })
 
@@ -151,7 +151,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
             ev.from === supplier &&
             ev.to === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product1)
+            ev.productId === product1
         );
         assert.equal(await instance.productsSentFrom(product1, supplier),
             deliveryMan1)
@@ -188,7 +188,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
             ev.from === supplier &&
             ev.by === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product1)
+            ev.productId === product1
         );
         assert.equal((await instance.ownerOf(tokenId)), deliveryMan1)
         assert.equal((await instance.productsReceivedFrom(product1, supplier)),
@@ -226,7 +226,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
             ev.from === deliveryMan1 &&
             ev.to === deliveryMan2 &&
-            ev.productId === web3.utils.keccak256(product1)
+            ev.productId === product1
         );
         assert.equal(await instance.productsSentFrom(product1, deliveryMan1), deliveryMan2)
         assert.equal(await instance.getApproved(tokenId), deliveryMan2)
@@ -290,7 +290,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
             ev.from === deliveryMan2 &&
             ev.to === purchaser1 &&
-            ev.productId === web3.utils.keccak256(product1)
+            ev.productId === product1
         );
     })
 
@@ -356,7 +356,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
             ev.from === supplier &&
             ev.by === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         assert.equal((await instance.ownerOf(tokenId)), supplier)
         assert.equal((await instance.productsReceivedFrom(product5, supplier)),
@@ -378,12 +378,12 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
             ev.from === supplier &&
             ev.to === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         truffleAssert.eventEmitted(result, 'Handover', ev =>
             ev.from === supplier &&
             ev.to === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         assert.equal(await instance.productsSentFrom(product5, supplier), deliveryMan1)
         assert.equal(await instance.getApproved(tokenId), 0)
@@ -398,7 +398,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'ProductShipped', ev =>
             ev.from === deliveryMan1 &&
             ev.to === deliveryMan2 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         truffleAssert.eventEmitted(result, 'Approval', ev =>
             ev.owner === deliveryMan1 &&
@@ -420,12 +420,12 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result, 'Handover', ev =>
             ev.from === deliveryMan1 &&
             ev.to === deliveryMan2 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         truffleAssert.eventEmitted(result, 'ProductReceived', ev =>
             ev.from === deliveryMan1 &&
             ev.by === deliveryMan2 &&
-            ev.productId === web3.utils.keccak256(product5)
+            ev.productId === product5
         );
         assert.equal((await instance.productsReceivedFrom(product5, deliveryMan1)),
             deliveryMan2)
@@ -449,7 +449,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result3, 'Handover', ev =>
             ev.from === supplier &&
             ev.to === deliveryMan1 &&
-            ev.productId === web3.utils.keccak256(product6)
+            ev.productId === product6
         );
 
         let result4 = await instance.send(purchaser1, product6,
@@ -457,7 +457,7 @@ contract("Logistic test", async accounts => {
         truffleAssert.eventEmitted(result4, 'Handover', ev =>
             ev.from === deliveryMan1 &&
             ev.to === purchaser1 &&
-            ev.productId === web3.utils.keccak256(product6)
+            ev.productId === product6
         );
     })
 

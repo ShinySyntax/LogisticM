@@ -29,9 +29,16 @@ class DeliveryManPanel extends React.Component {
 	}
 
 	receiveToken = (productId, sender) => {
-		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-			sender, productId
-		)
+		if (sender.startsWith('0x') && sender.length === 42) {
+			this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
+				sender, productId
+			)
+		}
+		else {
+			this.props.drizzle.contracts.Logistic.methods.receiveWithName.cacheSend(
+				sender, productId
+			)
+		}
 	}
 
 	render () {

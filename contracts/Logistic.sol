@@ -103,6 +103,11 @@ SupplierRole {
         emit NewProduct(msg.sender, purchaser, productId);
     }
 
+    function sendWithName(string memory receiverName, string memory productId)
+    public supplierOrDeliveryMan {
+        send(addressByName(receiverName), productId);
+    }
+
     function send(address receiver, string memory productId) public
     supplierOrDeliveryMan {
         require(productsSentFrom(productId, msg.sender) == address(0),
@@ -125,6 +130,11 @@ SupplierRole {
         _setProductSent(productId, msg.sender, receiver);
 
         emit ProductShipped(msg.sender, receiver, productId);
+    }
+
+    function receiveWithName(string memory senderName, string memory productId)
+    public notOwner {
+        receive(addressByName(senderName), productId);
     }
 
     function receive(address sender, string memory productId) public notOwner

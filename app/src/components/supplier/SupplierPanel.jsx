@@ -6,6 +6,7 @@ import EventList from '../product/event/EventList';
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
 import ProductAccountForm from '../product/ProductAccountForm';
+import CreateProductWithName from './CreateProductWithName'
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
@@ -73,6 +74,9 @@ class SupplierPanel extends React.Component {
 							<ProductAccountForm
 								accountLabel="Purchaser"
 								handleSubmit={this.createProduct}
+							/>
+							<CreateProductWithName
+								drizzle={drizzle}
 							/>
 						</div>
 					</Card>

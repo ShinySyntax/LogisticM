@@ -1,26 +1,16 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 
 
-contract RestrictedERC721 is ERC721Full {
-    using SafeMath for uint256;
-
-    bool internal _restrictedMode;
-
-    uint256 private _counter;
+contract ERC721Restricted is ERC721 {
+    bool private _restrictedMode = true;
 
     modifier whenNotRestrictedMode() {
         require(_restrictedMode == false,
             "Logistic: restricted mode activated"
         );
         _;
-    }
-
-    constructor() public ERC721Full("Logistic", "LM") {
-        _restrictedMode = true;
-        _counter = 0;
     }
 
     function approve(address to, uint256 tokenId) public whenNotRestrictedMode {
@@ -36,12 +26,7 @@ contract RestrictedERC721 is ERC721Full {
         super._transferFrom(from, to, tokenId);
     }
 
-    function _getCounter() internal view returns (uint256) {
-        return _counter;
-    }
-
-    function _mint(address to) internal {
-        super._safeMint(to, _counter);
-        _counter = _counter.add(1);
+    function _setRestricted(bool restricted) internal {
+        _restrictedMode = restricted;
     }
 }

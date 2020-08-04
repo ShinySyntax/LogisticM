@@ -56,7 +56,7 @@ contract("Logistic test", async accounts => {
             ev.account === supplier &&
             ev.name === "supplier"
         );
-        assert.equal((await instance.name(supplier)), "supplier")
+        assert.equal((await instance.getNameByAddress(supplier)), "supplier")
         assert.isTrue((await instance.isSupplier(supplier)))
 
         await truffleAssert.reverts(
@@ -69,7 +69,7 @@ contract("Logistic test", async accounts => {
         )
     })
 
-    it("Add delivery mans", async () => {
+    it("Add delivery men", async () => {
         let instance = await Logistic.deployed()
 
         await truffleAssert.reverts(
@@ -137,7 +137,7 @@ contract("Logistic test", async accounts => {
         );
 
         await truffleAssert.reverts(
-            instance.createProduct(deliveryMan1, product1, "product1",
+            instance.createProduct(purchaser1, product1, "product1",
               { from: supplier }),
             "Logistic: This product already exists"
         )

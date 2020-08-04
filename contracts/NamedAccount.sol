@@ -1,18 +1,18 @@
 pragma solidity ^0.5.0;
 
 
-contract Named {
+contract NamedAccount {
     // User (address) is named (string)
     mapping (address => string) internal _names;
 
     // name (string) refer to user (address)
     mapping (string => address) internal _addresses;
 
-    function name(address account) public view returns (string memory) {
+    function getNameByAddress(address account) public view returns (string memory) {
         return _names[account];
     }
 
-    function addressByName(string memory name_) public view returns (address) {
+    function getAddressByName(string memory name_) public view returns (address) {
         return _addresses[name_];
     }
 

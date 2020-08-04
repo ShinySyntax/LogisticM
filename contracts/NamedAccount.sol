@@ -17,7 +17,8 @@ contract NamedAccount {
     }
 
     function _setName(address account, string memory name_) internal {
-        assert(keccak256(bytes(_names[account])) == keccak256("")); // TODO: pause the contract
+        require(keccak256(bytes(_names[account])) == keccak256(""),
+            "NamedAccount: invalid name"); // TODO: pause the contract
         _names[account] = name_;
         _addresses[name_] = account;
     }

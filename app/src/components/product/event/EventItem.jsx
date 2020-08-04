@@ -73,7 +73,7 @@ class EventItem extends React.Component {
 					<td>{key}</td>
 					<td>
 						<ProductLink
-							productId={value}
+							productName={value}
 						/>
 					</td>
 				</tr>

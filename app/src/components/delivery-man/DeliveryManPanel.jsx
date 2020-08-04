@@ -29,8 +29,8 @@ class DeliveryManPanel extends React.Component {
 		});
 	}
 
-	receiveToken = (productId, sender) => {
-		receive(this.props.drizzle, sender, productId)
+	receiveToken = (productName, sender) => {
+		receive(this.props.drizzle, sender, productName)
 	}
 
 	render () {
@@ -51,7 +51,7 @@ class DeliveryManPanel extends React.Component {
 		const productIds = this.props.drizzleState.events.events
 			.filter(event => event.event === PRODUCT_SHIPPED)
 			.map(event => {
-				return event.returnValues.productId
+				return event.returnValues.productName
 			})
 
 		return (

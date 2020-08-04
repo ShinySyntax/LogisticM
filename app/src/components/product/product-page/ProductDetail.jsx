@@ -5,14 +5,14 @@ import { PRODUCT_EVENT_NAMES, HANDOVER } from '../../../store/constants'
 import EventList from '../event/EventList';
 import History from './History'
 import { getPastEvents,
-	getEventFilterToken } from '../../../store/events-helpers'
-import { getEventsAboutToken } from "../../../store/selectors"
+	getEventFilterProduct } from '../../../store/events-helpers'
+import { getEventsAboutProduct } from "../../../store/selectors"
 import Loading from '../../Loading';
 import ProductLink from './ProductLink'
 
 class ProductDetail extends React.Component {
 	componentDidMount () {
-		this.filters = getEventFilterToken(this.props.match.params.productId)
+		this.filters = getEventFilterProduct(this.props.match.params.productName)
 		getPastEvents(
 			this.props.drizzle,
 			PRODUCT_EVENT_NAMES,
@@ -23,9 +23,9 @@ class ProductDetail extends React.Component {
 	render () {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
-		const productId = this.props.match.params.productId
-		const events = getEventsAboutToken(this.props.drizzleState.events.events,
-			productId)
+		const productName = this.props.match.params.productName
+		const events = getEventsAboutProduct(this.props.drizzleState.events.events,
+			productName)
 		const handovers = events.filter(event => event.event === HANDOVER)
 
 		if (!events.length) {
@@ -43,7 +43,7 @@ class ProductDetail extends React.Component {
 			<div className="section">
 				<h2>Logistic - Product Details</h2>
 				<p>Product id: <strong>
-					<ProductLink productId={productId} /></strong></p>
+					<ProductLink productName={productName} /></strong></p>
 
 				<Card className="m-2 p-2">
 					<Card.Title>History</Card.Title>
@@ -62,7 +62,7 @@ class ProductDetail extends React.Component {
 							eventNames={PRODUCT_EVENT_NAMES}
 							showAll={true}
 							filters={this.filters}
-							filter={{ productId }}
+							filter={{ productName }}
 						/>
 				</Card>
 			</div>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 class ProductLink extends React.Component {
 	render () {
-		const path = `/product/${this.props.productId}`
+		const path = `/product/${this.props.productName}`
 
 		if (this.props.as) {
 			return (
@@ -20,14 +20,14 @@ class ProductLink extends React.Component {
 
 		return (
 			<Link to={path}>
-					<span>{this.props.productId}</span>
+					<span>{this.props.productName}</span>
 			</Link>
 		)
 	}
 }
 
 ProductLink.propTypes = {
-	productId: PropTypes.string.isRequired,
+	productName: PropTypes.string.isRequired,
 	label: PropTypes.string
 };
 

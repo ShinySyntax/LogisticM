@@ -25,7 +25,7 @@ class OwnedProductItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			Web3.utils.keccak256(this.props.productId),
+			Web3.utils.keccak256(this.props.productName),
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
@@ -36,7 +36,7 @@ class OwnedProductItem extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.productId !== prevProps.productId) {
+		if (this.props.productName !== prevProps.productName) {
 			this.getPendingDelivery()
 		}
 	}
@@ -47,11 +47,11 @@ class OwnedProductItem extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		send(this.props.drizzle, this.state.account, this.props.productId)
+		send(this.props.drizzle, this.state.account, this.props.productName)
 	}
 
 	sendToPurchaser = () => {
-		sendToPurchaser(this.props.drizzle, this.props.productId)
+		sendToPurchaser(this.props.drizzle, this.props.productName)
 	}
 
 	render () {
@@ -74,7 +74,7 @@ class OwnedProductItem extends React.Component {
 						eventKey={this.props.idx+1}
 					>
 						<span className="mr-2">
-							{this.props.productId}
+							{this.props.productName}
 						</span>
 						<BsChevronDoubleDown />
 		      </Accordion.Toggle>
@@ -85,7 +85,7 @@ class OwnedProductItem extends React.Component {
 							<Row>
 								<Col md={2}>
 									<ProductLink
-										productId={this.props.productId}
+										productName={this.props.productName}
 										as={Button}
 									/>
 								</Col>
@@ -121,7 +121,7 @@ class OwnedProductItem extends React.Component {
 }
 
 OwnedProductItem.propTypes = {
-	productId: PropTypes.string.isRequired
+	productName: PropTypes.string.isRequired
 };
 
 export default OwnedProductItem

@@ -2,23 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 
 export default function({accountLabel, handleSubmit}) {
-	const [productId, setProductId] = useState("");
+	const [productName, setProductName] = useState("");
 	const [account, setAccount] = useState("");
 	const [submit, setSubmit] = useState(false);
 
 	useEffect(() => {
 		if (submit) {
-			handleSubmit(productId, account)
+			handleSubmit(productName, account)
 			setSubmit(false)
 		}
-	}, [submit, handleSubmit, productId, account]);
+	}, [submit, handleSubmit, productName, account]);
 
 	return (
 		<InputGroup className="mb-3">
 			<FormControl
 				placeholder="Product barcode"
 				aria-label="Product barcode"
-				onChange={event => setProductId(event.target.value)}
+				onChange={event => setProductName(event.target.value)}
 			/>
 			<FormControl
 				placeholder={accountLabel}

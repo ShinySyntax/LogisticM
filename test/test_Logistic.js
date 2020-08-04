@@ -123,13 +123,13 @@ contract("Logistic test", async accounts => {
             "Logistic: Can't create for supplier nor owner nor delivery man"
         )
 
-        await instance.createProduct(purchaser1, product1, "product1",
-          { from: supplier })
+        await instance.createProductWithName(purchaser1, product1, "product1",
+            "John", { from: supplier })
         assert.equal((await instance.balanceOf(supplier)).toNumber(), 1)
         assert.equal((await instance.ownerOf(0)), supplier)
         assert.equal((await instance.productsOrders(product1)), purchaser1)
         let result = await instance.createProduct(purchaser2, product2,
-          "product2", { from: supplier })
+            "product2", { from: supplier })
         truffleAssert.eventEmitted(result, 'NewProduct', ev =>
             ev.by === supplier &&
             ev.purchaser === purchaser2 &&
@@ -140,6 +140,11 @@ contract("Logistic test", async accounts => {
             instance.createProduct(purchaser1, product1, "product1",
               { from: supplier }),
             "Logistic: This product already exists"
+        )
+        await truffleAssert.reverts(
+            instance.createProductWithName(purchaser1, product3, "product3",
+                "Billy", { from: supplier }),
+            "NamedAccount: invalid name"
         )
     })
 

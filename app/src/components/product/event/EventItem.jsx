@@ -6,6 +6,7 @@ import { ZERO_ADDRESS } from '../../../store/constants';
 import { getBlockTimestamp } from '../../../store/events-helpers';
 import ProductLink from "../product-page/ProductLink";
 import Address from "../Address"
+var Web3 = require('web3');
 
 class EventItem extends React.Component {
 	state = {
@@ -64,8 +65,9 @@ class EventItem extends React.Component {
 
 	renderReturnValue(key, value, idx) {
 		if (value === ZERO_ADDRESS) return null
+		if (key === "productHash") return null
 
-		if (key === 'productId') {
+		if (key === 'productName') {
 			return (
 				<tr key={idx}>
 					<td>{key}</td>
@@ -78,7 +80,7 @@ class EventItem extends React.Component {
 			)
 		}
 
-		if (value.startsWith('0x') && value.length === 42) {
+		if (Web3.utils.isAddress(value)) {
 			return (
 				<tr key={idx}>
 					<td>{key}</td>

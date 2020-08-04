@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { createProduct } from '../../contract-call'
 
-export default function({ drizzle}) {
+export default function({ drizzle }) {
 	const [productId, setProductId] = useState("");
 	const [account, setAccount] = useState("");
-	const [name, setName] = useState("");
+	const [productName, setProductName] = useState("");
+	const [purchaserName, setPurchaserName] = useState("");
 	const [submit, setSubmit] = useState(false);
 
 	useEffect(() => {
 		if (submit) {
-			drizzle.contracts.Logistic.methods.createProductWithName
-			.cacheSend(account, productId, name)
+			createProduct(drizzle, account, productId, productName, purchaserName)
 			setSubmit(false)
 		}
-	}, [submit, productId, account, name,
-		drizzle.contracts.Logistic.methods.createProductWithName]);
+	}, [submit, productId, account, purchaserName, productName, drizzle]);
 
 	return (
 		<InputGroup className="mb-3">
@@ -29,13 +29,18 @@ export default function({ drizzle}) {
 				onChange={event => setAccount(event.target.value)}
 			/>
 			<FormControl
+				placeholder="Product name (id)"
+				aria-label="Product name (id)"
+				onChange={event => setProductName(event.target.value)}
+			/>
+			<FormControl
 				placeholder="Purchaser name (optional)"
 				aria-label="Purchaser name (optional)"
-				onChange={event => setName(event.target.value)}
+				onChange={event => setPurchaserName(event.target.value)}
 			/>
 			<InputGroup.Append>
 				<Button
-					onClick={event => {event.preventDefault();setSubmit(true)}}
+					onClick={event => {event.preventDefault(); setSubmit(true)}}
 					variant="outline-primary"
 				>
 					Validate

@@ -5,8 +5,7 @@ import ProductsOwned from '../product/ProductsOwned';
 import EventList from '../product/event/EventList';
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
-import ProductAccountForm from '../product/ProductAccountForm';
-import CreateProductWithName from './CreateProductWithName'
+import CreateProduct from './CreateProduct'
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
@@ -29,12 +28,6 @@ class SupplierPanel extends React.Component {
 
 		// save the `dataKey` to local component state for later reference
 		this.setState({ dataKey });
-	}
-
-	createProduct = (productId, purchaser) => {
-		this.props.drizzle.contracts.Logistic.methods.createProduct.cacheSend(
-			purchaser, productId
-		)
 	}
 
 	render () {
@@ -71,11 +64,7 @@ class SupplierPanel extends React.Component {
 						/>
 						<div className="m-2">
 							<p>Add a product</p>
-							<ProductAccountForm
-								accountLabel="Purchaser"
-								handleSubmit={this.createProduct}
-							/>
-							<CreateProductWithName
+							<CreateProduct
 								drizzle={drizzle}
 							/>
 						</div>

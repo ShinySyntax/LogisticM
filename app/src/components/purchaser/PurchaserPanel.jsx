@@ -8,6 +8,7 @@ import WillReceiveProductItem from '../product/product-item/WillReceiveProductIt
 import ProductLink from "../product/product-page/ProductLink";
 import ProductAccountForm from '../product/ProductAccountForm'
 import { HANDOVER } from "../../store/constants"
+import { receive } from '../../contract-call'
 
 class PurchaserPanel extends React.Component {
 	// { '1561561111': [event1, event2...]}
@@ -25,16 +26,7 @@ class PurchaserPanel extends React.Component {
 	}
 
 	receiveToken = (productId, sender) => {
-		if (sender.startsWith('0x') && sender.length === 42) {
-			this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-				sender, productId
-			)
-		}
-		else {
-			this.props.drizzle.contracts.Logistic.methods.receiveWithName.cacheSend(
-				sender, productId
-			)
-		}
+		receive(this.props.drizzle, sender, productId)
 	}
 
 	render () {

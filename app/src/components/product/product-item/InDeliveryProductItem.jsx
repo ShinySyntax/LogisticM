@@ -9,6 +9,7 @@ import { Container,
 import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import Address from '../Address'
+var Web3 = require('web3');
 
 class InDeliveryProductItem extends React.Component {
 	state = {
@@ -18,7 +19,7 @@ class InDeliveryProductItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			this.props.productId,
+			Web3.utils.keccak256(this.props.productId),
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });

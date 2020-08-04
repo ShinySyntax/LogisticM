@@ -20,10 +20,10 @@ class ProductList extends React.Component {
 				.call()
 				.then(tokenId => {
 					return this.props.drizzle.contracts.Logistic.methods
-					.getProductId(tokenId).call()
+					.getProductName(tokenId).call()
 				})
-				.then(productId => {
-					this.setState({ productIds: [productId, ...this.state.productIds]})
+				.then(productName => {
+					this.setState({ productIds: [productName, ...this.state.productIds]})
 				})
 			}
 		}

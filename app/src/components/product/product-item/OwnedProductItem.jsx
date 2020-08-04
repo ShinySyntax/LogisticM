@@ -12,35 +12,26 @@ import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
 
 import ProductLink from "../product-page/ProductLink";
-import { ZERO_ADDRESS, NEW_PRODUCT } from '../../../store/constants';
-import { getPastEvents } from '../../../store/events-helpers'
+import { ZERO_ADDRESS } from '../../../store/constants';
+import { send, sendToPurchaser } from '../../../contract-call'
+var Web3 = require('web3');
 
 class OwnedProductItem extends React.Component {
 	state = {
 		dataKey: null,
-		address: null
+		account: null
 	}
 
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			this.props.productId,
+			Web3.utils.keccak256(this.props.productId),
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
 	}
 
 	componentDidMount() {
-		getPastEvents(
-			this.props.drizzle,
-			[NEW_PRODUCT],
-			{
-				[NEW_PRODUCT]: {
-					productId: this.props.productId,
-					by: this.props.drizzleState.accounts[0]
-				}
-			}
-		)
 		this.getPendingDelivery()
 	}
 
@@ -51,37 +42,16 @@ class OwnedProductItem extends React.Component {
 	}
 
 	handleChange = (event) => {
-		this.setState({ address: event.target.value })
+		this.setState({ account: event.target.value })
 	}
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		const { drizzle } = this.props;
-    const contract = drizzle.contracts.Logistic;
-
-		if (this.state.address.startsWith('0x')
-			&& this.state.address.length === 42) {
-			contract.methods.send.cacheSend(
-				this.state.address,
-				this.props.productId
-			)
-		}
-		else {
-			contract.methods.sendWithName.cacheSend(
-				this.state.address,
-				this.props.productId
-			)
-		}
+		send(this.props.drizzle, this.state.account, this.props.productId)
 	}
 
 	sendToPurchaser = () => {
-		const event = this.props.drizzleState.events.events.find(event => {
-			return event.event === NEW_PRODUCT &&
-				event.returnValues.productId === this.props.productId;
-		})
-		this.props.drizzle.contracts.Logistic.methods.send.cacheSend(
-			event.returnValues.purchaser, this.props.productId
-		)
+		sendToPurchaser(this.props.drizzle, this.props.productId)
 	}
 
 	render () {
@@ -127,8 +97,8 @@ class OwnedProductItem extends React.Component {
 								<Col md={6}>
 									<InputGroup>
 										<FormControl
-											placeholder="Recipient's address"
-											aria-label="Recipient's address"
+											placeholder="Recipient"
+											aria-label="Recipient"
 											onChange={this.handleChange}
 										/>
 										<InputGroup.Append>

@@ -4,13 +4,14 @@ import "openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
 import "./ERC721/ERC721AutoIncrement.sol";
 import "./ERC721/ERC721Restricted.sol";
+import "./ERC721/ERC721Pausable.sol";
 import "./NamedAccount.sol";
 import "./ProductManager.sol";
 import "./AccessManager.sol";
 
 
 contract Logistic is ERC721Enumerable, ERC721Metadata, ProductManager,
-AccessManager, ERC721AutoIncrement, ERC721Restricted {
+AccessManager, ERC721AutoIncrement, ERC721Restricted, ERC721Pausable {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash

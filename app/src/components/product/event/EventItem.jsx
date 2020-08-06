@@ -6,7 +6,7 @@ import { ZERO_ADDRESS } from '../../../store/constants';
 import { getBlockTimestamp } from '../../../store/events-helpers';
 import ProductLink from "../product-page/ProductLink";
 import Address from "../Address"
-var Web3 = require('web3');
+import Web3 from "web3";
 
 class EventItem extends React.Component {
 	state = {

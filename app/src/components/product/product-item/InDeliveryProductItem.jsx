@@ -9,7 +9,7 @@ import { Container,
 import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import Address from '../Address'
-var Web3 = require('web3');
+import Web3 from "web3";
 
 class InDeliveryProductItem extends React.Component {
 	state = {

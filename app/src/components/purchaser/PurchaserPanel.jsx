@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Card } from 'react-bootstrap';
 
-import { getEventsAboutToken } from "../../store/selectors"
+import { getEventsAboutProduct } from "../../store/selectors"
 import History from '../product/product-page/History'
 import WillReceiveProductItem from '../product/product-item/WillReceiveProductItem';
 import ProductLink from "../product/product-page/ProductLink";
 import ProductAccountForm from '../product/ProductAccountForm'
 import { HANDOVER } from "../../store/constants"
+import { receive } from '../../contract-call'
 
 class PurchaserPanel extends React.Component {
 	// { '1561561111': [event1, event2...]}
@@ -16,25 +17,16 @@ class PurchaserPanel extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.productIds !== prevProps.productIds) {
 			let state = {}
-			this.props.productIds.forEach(productId => {
-				let eventsToken = getEventsAboutToken(this.props.events, productId)
-				state[productId] = eventsToken
+			this.props.productIds.forEach(productName => {
+				let eventsToken = getEventsAboutProduct(this.props.events, productName)
+				state[productName] = eventsToken
 			});
 			this.setState(state);
 		}
 	}
 
-	receiveToken = (productId, sender) => {
-		if (sender.startsWith('0x') && sender.length === 42) {
-			this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-				sender, productId
-			)
-		}
-		else {
-			this.props.drizzle.contracts.Logistic.methods.receiveWithName.cacheSend(
-				sender, productId
-			)
-		}
+	receiveToken = (productName, sender) => {
+		receive(this.props.drizzle, sender, productName)
 	}
 
 	render () {
@@ -52,12 +44,12 @@ class PurchaserPanel extends React.Component {
 					</Card>
 
 					{
-						Object.entries(this.state).map(([productId, events], idx) => {
+						Object.entries(this.state).map(([productName, events], idx) => {
 							return (
 								<Card className="m-2 p-2" key={idx}>
 									<Card.Title><span>Product id: </span>
 										<ProductLink
-											productId={productId}
+											productName={productName}
 										/>
 									</Card.Title>
 									<History
@@ -68,7 +60,7 @@ class PurchaserPanel extends React.Component {
 									<WillReceiveProductItem
 										drizzle={this.props.drizzle}
 										drizzleState={this.props.drizzleState}
-										productId={productId}
+										productName={productName}
 									/>
 								</Card>
 							)

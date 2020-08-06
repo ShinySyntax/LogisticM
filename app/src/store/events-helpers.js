@@ -33,12 +33,12 @@ export const getBlockTimestamp = (web3, blockNumber) => {
 	})
 }
 
-export const getEventFilterToken = (productId) => {
+export const getEventFilterProduct = (productName) => {
 	return {
-		[NEW_PRODUCT]: { productId },
-		[PRODUCT_SHIPPED]: { productId },
-		[PRODUCT_RECEIVED]: { productId },
-		[HANDOVER]: { productId }
+		[NEW_PRODUCT]: { productName },
+		[PRODUCT_SHIPPED]: { productName },
+		[PRODUCT_RECEIVED]: { productName },
+		[HANDOVER]: { productName }
 	}
 }
 

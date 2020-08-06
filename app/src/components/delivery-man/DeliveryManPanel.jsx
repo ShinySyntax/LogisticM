@@ -12,6 +12,7 @@ import { DELIVERY_MAN_EVENT_NAMES,
 	DELIVERY_MAN_REMOVED,
  	PRODUCT_SHIPPED } from "../../store/constants"
 import ProductAccountForm from '../product/ProductAccountForm'
+import { receive } from '../../contract-call'
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -28,17 +29,8 @@ class DeliveryManPanel extends React.Component {
 		});
 	}
 
-	receiveToken = (productId, sender) => {
-		if (sender.startsWith('0x') && sender.length === 42) {
-			this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-				sender, productId
-			)
-		}
-		else {
-			this.props.drizzle.contracts.Logistic.methods.receiveWithName.cacheSend(
-				sender, productId
-			)
-		}
+	receiveToken = (productName, sender) => {
+		receive(this.props.drizzle, sender, productName)
 	}
 
 	render () {
@@ -59,7 +51,7 @@ class DeliveryManPanel extends React.Component {
 		const productIds = this.props.drizzleState.events.events
 			.filter(event => event.event === PRODUCT_SHIPPED)
 			.map(event => {
-				return event.returnValues.productId
+				return event.returnValues.productName
 			})
 
 		return (

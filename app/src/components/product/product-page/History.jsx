@@ -38,7 +38,7 @@ class History extends React.Component {
 }
 
 History.propTypes = {
-	// Handover events about the productId we want to see
+	// Handover events about the productName we want to see
 	handovers: PropTypes.array.isRequired,
 };
 

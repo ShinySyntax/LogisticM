@@ -10,6 +10,7 @@ import { PRODUCT_SHIPPED,
  	PRODUCT_RECEIVED } from "../../../store/constants"
 import ProductLink from "../product-page/ProductLink";
 import { getPastEvents } from '../../../store/events-helpers'
+import { receive } from '../../../contract-call'
 
 class WillReceiveProductItem extends React.Component {
 	componentDidMount () {
@@ -19,11 +20,11 @@ class WillReceiveProductItem extends React.Component {
 			{
 				[PRODUCT_SHIPPED]: {
 					to: this.props.drizzleState.accounts[0],
-					productId: this.props.productId
+					productName: this.props.productName
 				},
 				[PRODUCT_RECEIVED]: {
 					by: this.props.drizzleState.accounts[0],
-					productI: this.props.productId
+					productI: this.props.productName
 				}
 			}
 		)
@@ -32,24 +33,21 @@ class WillReceiveProductItem extends React.Component {
 	receive = () => {
 		const event = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
-				event.returnValues.productId === this.props.productId &&
+				event.returnValues.productName === this.props.productName &&
 				event.returnValues.to === this.props.drizzleState.accounts[0];
 		})
-		this.props.drizzle.contracts.Logistic.methods.receive.cacheSend(
-			event.returnValues.from,
-			this.props.productId
-		)
+		receive(this.props.drizzle, event.returnValues.from, this.props.productName)
 	}
 
 	render () {
 		const eventShip = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_SHIPPED &&
-				event.returnValues.productId === this.props.productId &&
+				event.returnValues.productName === this.props.productName &&
 				event.returnValues.to === this.props.drizzleState.accounts[0];
 		})
 		const eventReceive = this.props.drizzleState.events.events.find(event => {
 			return event.event === PRODUCT_RECEIVED &&
-				event.returnValues.productId === this.props.productId &&
+				event.returnValues.productName === this.props.productName &&
 				event.returnValues.by === this.props.drizzleState.accounts[0];
 		})
 
@@ -62,7 +60,7 @@ class WillReceiveProductItem extends React.Component {
 				    <Col md={10}>
 							<span className="m-2">
 								<ProductLink
-									productId={this.props.productId}
+									productName={this.props.productName}
 								/>
 							</span>
 						</Col>
@@ -83,7 +81,7 @@ class WillReceiveProductItem extends React.Component {
 }
 
 WillReceiveProductItem.propTypes = {
-	productId: PropTypes.string.isRequired
+	productName: PropTypes.string.isRequired
 };
 
 export default WillReceiveProductItem

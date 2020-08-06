@@ -19,10 +19,10 @@ class ProductsOwned extends React.Component {
 				.call()
 				.then(tokenId => {
 					return this.props.drizzle.contracts.Logistic.methods
-					.getProductId(tokenId).call()
+					.getProductName(tokenId).call()
 				})
-				.then(productId => {
-					this.setState({ productIds: [productId, ...this.state.productIds]})
+				.then(productName => {
+					this.setState({ productIds: [productName, ...this.state.productIds]})
 				})
 		}
 	}
@@ -37,21 +37,21 @@ class ProductsOwned extends React.Component {
 		}
 	}
 
-	renderRow = (productId, idx) => {
+	renderRow = (productName, idx) => {
 		if (this.props.tokenItemComponent) {
 			return (
 				<this.props.tokenItemComponent
 					key={idx}
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
-					productId={productId}
+					productName={productName}
 					idx={idx}
 				/>
 			)
 		}
 		return (
 			<ListGroup.Item key={idx}>
-				<ProductLink productId={productId} />
+				<ProductLink productName={productName} />
 			</ListGroup.Item>
 		)
 	}
@@ -60,8 +60,8 @@ class ProductsOwned extends React.Component {
 		return (
 			<Accordion>
 				{
-					this.state.productIds.map((productId, idx) => {
-						return this.renderRow(productId, idx)
+					this.state.productIds.map((productName, idx) => {
+						return this.renderRow(productName, idx)
 					})
 				}
 			</Accordion>

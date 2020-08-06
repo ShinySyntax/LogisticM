@@ -1,187 +1,114 @@
 pragma solidity ^0.5.0;
 
-import "./roles/SupplierRole.sol";
-import "./roles/DeliveryManRole.sol";
-import "./roles/OwnerRole.sol";
-import "./RestrictedERC721.sol";
-import "./Named.sol";
+import "openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol";
+import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
+import "./ERC721/ERC721AutoIncrement.sol";
+import "./ERC721/ERC721Restricted.sol";
+import "./NamedAccount.sol";
+import "./ProductManager.sol";
+import "./AccessManager.sol";
 
 
-contract Logistic is RestrictedERC721, Named, OwnerRole, DeliveryManRole,
-SupplierRole {
+contract Logistic is ERC721Enumerable, ERC721Metadata, ProductManager,
+AccessManager, ERC721AutoIncrement, ERC721Restricted {
     // Naming convention:
-    //    string productId
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
+    //    string productName
 
-    struct Product {
-        string productId;
-        address purchaser;
-        uint256 tokenId;
-        mapping (address => address) sent; // from -> to
-        mapping (address => address) received; // from -> by
-    }
+    event NewProduct(address indexed by, address indexed purchaser, bytes32 indexed productHash, string productName);
+    event ProductShipped(address indexed from, address indexed to, bytes32 indexed productHash, string productName);
+    event ProductReceived(address indexed from, address indexed by, bytes32 indexed productHash, string productName);
+    event Handover(address indexed from, address indexed to, bytes32 indexed productHash, string productName);
 
-    // Mapping from productHash to Product
-    mapping (bytes32 => Product) private _products;
+    constructor () public ERC721Metadata("LogisticM", "LM") {}
 
-    // Mapping from tokenId to productId
-    mapping (uint256 => bytes32) private _tokenToProductHash;
-
-    event NewProduct(address indexed by, address indexed purchaser, string productId);
-    event ProductShipped(address indexed from, address indexed to, string productId);
-    event ProductReceived(address indexed from, address indexed by, string productId);
-    event Handover(address indexed from, address indexed to, string productId);
-
-    modifier supplierOrDeliveryMan() {
-        require(_isSupplierOrDeliveryMan(msg.sender),
-            "Logistic: caller does not have the Supplier role nor the DeliveryMan role");
-        _;
-    }
-
-    function productsOrders(string memory productId) public view
-    returns (address) {
-        return _products[keccak256(bytes(productId))].purchaser;
-    }
-
-    function productsSentFrom(string memory productId, address from) public view
-    returns (address) {
-        return _products[keccak256(bytes(productId))].sent[from];
-    }
-
-    function productsReceivedFrom(string memory productId, address from) public
-    view
-    returns (address) {
-        return _products[keccak256(bytes(productId))].received[from];
-    }
-
-    function getTokenId(string memory productId) public view
-    returns (uint256) {
-        return _products[keccak256(bytes(productId))].tokenId;
-    }
-
-    function getProductId(uint256 tokenId) public view returns (string memory) {
-        return _products[_tokenToProductHash[tokenId]].productId;
-    }
-
-    function addSupplier(address account, string memory name_) public
-    onlyOwner {
-        require(!isDeliveryMan(account), "Logistic: Account is delivery man");
-        require(owner() != account, "Logistic: Owner can't be supplier");
-
-        _setName(account, name_);
-        _addSupplier(account, name_);
-    }
-
-    function addDeliveryMan(address account, string memory name_) public
-    onlyOwner {
-        require(!isSupplier(account), "Logistic: Account is supplier");
-        require(owner() != account, "Logistic: Owner can't be delivery man");
-
-        _setName(account, name_);
-        _addDeliveryMan(account, name_);
-    }
-
-    function createProductWithName(address purchaser, string memory productId,
-    string memory purchaserName) public onlySupplier {
+    function createProductWithName(address purchaser,
+    bytes32 productHash, string memory productName, string memory purchaserName)
+    public onlySupplier {
         _setName(purchaser, purchaserName);
-        createProduct(purchaser, productId);
+        createProduct(purchaser, productHash, productName);
     }
 
-    function createProduct(address purchaser, string memory productId) public
-    onlySupplier {
+    function createProduct(address purchaser, bytes32 productHash,
+    string memory productName) public onlySupplier {
         require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
+        require(
+            !_productExists(productHash, productName),
+            "Logistic: This product already exists"
+        );
 
         uint256 tokenId = _getCounter();
-        bytes32 productHash = keccak256(bytes(productId));
-
         _tokenToProductHash[tokenId] = productHash;
-        _products[productHash] = Product(productId, purchaser, tokenId);
+        _products[productHash] = Product(purchaser, tokenId, productName);
         _mint(msg.sender);
 
-        emit NewProduct(msg.sender, purchaser, productId);
+        emit NewProduct(msg.sender, purchaser, productHash, productName);
+        assert(_productExists(productHash, productName));
     }
 
-    function sendWithName(string memory receiverName, string memory productId)
+    function sendWithName(string memory receiverName, bytes32 productHash)
     public supplierOrDeliveryMan {
-        send(addressByName(receiverName), productId);
+        send(getAddressByName(receiverName), productHash);
     }
 
-    function send(address receiver, string memory productId) public
+    function send(address receiver, bytes32 productHash) public
     supplierOrDeliveryMan {
-        require(productsSentFrom(productId, msg.sender) == address(0),
+        require(productsSentFrom(productHash, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
         if (!isDeliveryMan(receiver)) {
             // the receiver is a purchaser
-            require(productsOrders(productId) == receiver,
+            require(productsOrders(productHash) == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (productsReceivedFrom(productId, msg.sender) == receiver) {
-            _handoverToken(msg.sender, receiver, productId);
+        if (productsReceivedFrom(productHash, msg.sender) == receiver) {
+            _handoverToken(msg.sender, receiver, productHash);
         } else {
-            _restrictedMode = false;
-            approve(receiver, _getProduct(productId).tokenId);
-            _restrictedMode = true;
+            _setRestricted(false);
+            approve(receiver, _getTokenId(productHash));
+            _setRestricted(true);
         }
-        _setProductSent(productId, msg.sender, receiver);
+        _setProductSent(productHash, msg.sender, receiver);
 
-        emit ProductShipped(msg.sender, receiver, productId);
+        emit ProductShipped(msg.sender, receiver, productHash,
+            _getProductName(productHash));
     }
 
-    function receiveWithName(string memory senderName, string memory productId)
+    function receiveWithName(string memory senderName, bytes32 productHash)
     public notOwner {
-        receive(addressByName(senderName), productId);
+        receive(getAddressByName(senderName), productHash);
     }
 
-    function receive(address sender, string memory productId) public notOwner
-    notSupplier {
-        require(productsReceivedFrom(productId, sender) == address(0),
+    function receive(address sender, bytes32 productHash)
+    public notOwner notSupplier {
+        require(productsReceivedFrom(productHash, sender) == address(0),
             "Logistic: Already received");
         require(_isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
         if (!isDeliveryMan(msg.sender)) {
             // the caller is a purchaser
-            require(productsOrders(productId) == msg.sender,
+            require(productsOrders(productHash) == msg.sender,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (productsSentFrom(productId, sender) == msg.sender) {
-            _handoverToken(sender, msg.sender, productId);
+        if (productsSentFrom(productHash, sender) == msg.sender) {
+            _handoverToken(sender, msg.sender, productHash);
         }
-        _setProductReceived(productId, sender, msg.sender);
+        _setProductReceived(productHash, sender, msg.sender);
 
-        emit ProductReceived(sender, msg.sender, productId);
+        emit ProductReceived(sender, msg.sender, productHash,
+            _getProductName(productHash));
     }
 
-    function _handoverToken(address from, address to, string memory productId)
+    function _handoverToken(address from, address to, bytes32 productHash)
     internal {
-        _restrictedMode = false;
-        transferFrom(from, to, _getProduct(productId).tokenId);
-        _restrictedMode = true;
-        emit Handover(from, to, productId);
-    }
-
-    function _setProductSent(string memory productId, address from, address to)
-    internal {
-        _getProduct(productId).sent[from] = to;
-    }
-
-    function _setProductReceived(string memory productId, address from,
-    address by) internal {
-        _getProduct(productId).received[from] = by;
-    }
-
-    function _getProduct(string memory productId) internal view
-    returns (Product storage) {
-        return _products[keccak256(bytes(productId))];
-    }
-
-    function _isSupplierOrDeliveryMan(address account) internal view
-    returns (bool) {
-        return isSupplier(account) || isDeliveryMan(account);
+        _setRestricted(false);
+        transferFrom(from, to, _getTokenId(productHash));
+        _setRestricted(true);
+        emit Handover(from, to, productHash, _getProductName(productHash));
     }
 }

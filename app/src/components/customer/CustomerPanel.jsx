@@ -24,7 +24,7 @@ class CustomerPanel extends React.Component {
 		let productIds = getEventsAboutUser(
 			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
-		).map(event => event.returnValues.productId)
+		).map(event => event.returnValues.productName)
 
 		if (!productIds.length) {
 			return <NoUserPanel/>

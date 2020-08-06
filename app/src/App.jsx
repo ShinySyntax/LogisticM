@@ -47,7 +47,7 @@ const App = () => {
                 <Route exact path="/">
                   <Home drizzle={drizzle} drizzleState={drizzleState} />
                 </Route>
-                <Route exact path="/product/:productId" render={(props) => {
+                <Route exact path="/product/:productName" render={(props) => {
                     return (
                       <ProductDetail {...props}
                         drizzle={drizzle}

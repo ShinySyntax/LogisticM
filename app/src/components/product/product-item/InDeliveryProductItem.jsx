@@ -9,6 +9,7 @@ import { Container,
 import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import Address from '../Address'
+import Web3 from "web3";
 
 class InDeliveryProductItem extends React.Component {
 	state = {
@@ -18,7 +19,7 @@ class InDeliveryProductItem extends React.Component {
 	getPendingDelivery() {
 		const dataKey = this.props.drizzle.contracts.Logistic.methods
 		.productsSentFrom.cacheCall(
-			this.props.productId,
+			Web3.utils.keccak256(this.props.productName),
 			this.props.drizzleState.accounts[0]
 		);
 		this.setState({ dataKey });
@@ -29,7 +30,7 @@ class InDeliveryProductItem extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.productId !== prevProps.productId) {
+		if (this.props.productName !== prevProps.productName) {
 			this.getPendingDelivery()
 		}
 	}
@@ -48,7 +49,7 @@ class InDeliveryProductItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								<ProductLink productId={this.props.productId} />
+								<ProductLink productName={this.props.productName} />
 							</span>
 						</Col>
 						<Col>
@@ -69,7 +70,7 @@ class InDeliveryProductItem extends React.Component {
 }
 
 InDeliveryProductItem.propTypes = {
-	productId: PropTypes.string.isRequired
+	productName: PropTypes.string.isRequired
 };
 
 export default InDeliveryProductItem;

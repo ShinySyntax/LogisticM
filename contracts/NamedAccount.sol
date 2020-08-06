@@ -17,8 +17,11 @@ contract NamedAccount {
     }
 
     function _setName(address account, string memory name_) internal {
-        require(keccak256(bytes(_names[account])) == keccak256(""),
+        string memory empty = "";
+        require(keccak256(bytes(_names[account])) == keccak256(bytes(empty)),
             "NamedAccount: invalid name"); // TODO: pause the contract
+        require(_addresses[name_] == address(0),
+            "NamedAccount: invalid address");
         _names[account] = name_;
         _addresses[name_] = account;
     }

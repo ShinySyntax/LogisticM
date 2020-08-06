@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
+import "./ERC721AutoIncrement.sol";
 
 
-contract ERC721Restricted is ERC721 {
+contract ERC721Restricted is ERC721AutoIncrement {
     bool private _restrictedMode = true;
 
     modifier whenNotRestrictedMode() {

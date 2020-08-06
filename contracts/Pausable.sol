@@ -2,10 +2,10 @@ pragma solidity ^0.5.0;
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/lifecycle/Pausable.sol
 
-import "./roles/OwnerRole.sol";
+import "./AccessManager.sol";
 
 
-contract Pausable is OwnerRole {
+contract Pausable is AccessManager {
     /**
      * @dev Emitted when the pause is triggered by a pauser (`account`).
      */
@@ -48,7 +48,7 @@ contract Pausable is OwnerRole {
         require(_paused, "Pausable: not paused");
         _;
     }
-
+    
     /**
      * @dev Called by a pauser to pause, triggers stopped state.
      */

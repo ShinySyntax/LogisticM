@@ -1,6 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "../Pausable.sol";
 
 
@@ -8,7 +7,7 @@ import "../Pausable.sol";
  * @title ERC721 Non-Fungible Pausable token
  * @dev ERC721 modified with pausable transfers.
  */
-contract ERC721Pausable is ERC721, Pausable {
+contract ERC721Pausable is Pausable {
     function approve(address to, uint256 tokenId) public whenNotPaused {
         super.approve(to, tokenId);
     }
@@ -17,7 +16,10 @@ contract ERC721Pausable is ERC721, Pausable {
         super.setApprovalForAll(to, approved);
     }
 
-    function _transferFrom(address from, address to, uint256 tokenId) internal whenNotPaused {
+    function _transferFrom(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+    {
         super._transferFrom(from, to, tokenId);
     }
 }

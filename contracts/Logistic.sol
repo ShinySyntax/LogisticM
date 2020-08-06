@@ -1,38 +1,65 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol";
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
-import "./ERC721/ERC721AutoIncrement.sol";
-import "./ERC721/ERC721Restricted.sol";
-import "./ERC721/ERC721Pausable.sol";
-import "./NamedAccount.sol";
 import "./ProductManager.sol";
-import "./AccessManager.sol";
 
 
-contract Logistic is ERC721Enumerable, ERC721Metadata, ProductManager,
-AccessManager, ERC721AutoIncrement, ERC721Restricted, ERC721Pausable {
+contract Logistic is ProductManager {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
     //    string productName
 
-    event NewProduct(address indexed by, address indexed purchaser, bytes32 indexed productHash, string productName);
-    event ProductShipped(address indexed from, address indexed to, bytes32 indexed productHash, string productName);
-    event ProductReceived(address indexed from, address indexed by, bytes32 indexed productHash, string productName);
-    event Handover(address indexed from, address indexed to, bytes32 indexed productHash, string productName);
+    event NewProduct(
+        address indexed by,
+        address indexed purchaser,
+        bytes32 indexed productHash,
+        string productName
+    );
 
-    constructor () public ERC721Metadata("LogisticM", "LM") {}
+    event ProductShipped(
+        address indexed from,
+        address indexed to,
+        bytes32 indexed productHash,
+        string productName
+    );
 
-    function createProductWithName(address purchaser,
-    bytes32 productHash, string memory productName, string memory purchaserName)
-    public onlySupplier {
+    event ProductReceived(
+        address indexed from,
+        address indexed by,
+        bytes32 indexed productHash,
+        string productName
+    );
+
+    event Handover(
+        address indexed from,
+        address indexed to, bytes32
+        indexed productHash,
+        string productName
+    );
+
+    constructor () public {}
+
+    function createProductWithName(
+        address purchaser,
+        bytes32 productHash,
+        string memory productName,
+        string memory purchaserName
+    )
+        public
+        onlySupplier
+    {
         _setName(purchaser, purchaserName);
         createProduct(purchaser, productHash, productName);
     }
 
-    function createProduct(address purchaser, bytes32 productHash,
-    string memory productName) public onlySupplier {
+    function createProduct(
+        address purchaser,
+        bytes32 productHash,
+        string memory productName
+    )
+        public
+        onlySupplier
+    {
         require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
         require(
@@ -50,12 +77,15 @@ AccessManager, ERC721AutoIncrement, ERC721Restricted, ERC721Pausable {
     }
 
     function sendWithName(string memory receiverName, bytes32 productHash)
-    public supplierOrDeliveryMan {
+        public
+        supplierOrDeliveryMan
+    {
         send(getAddressByName(receiverName), productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
-    supplierOrDeliveryMan {
+        supplierOrDeliveryMan
+    {
         require(productsSentFrom(productHash, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
@@ -80,12 +110,17 @@ AccessManager, ERC721AutoIncrement, ERC721Restricted, ERC721Pausable {
     }
 
     function receiveWithName(string memory senderName, bytes32 productHash)
-    public notOwner {
+        public
+        notOwner
+    {
         receive(getAddressByName(senderName), productHash);
     }
 
     function receive(address sender, bytes32 productHash)
-    public notOwner notSupplier {
+        public
+        notOwner
+        notSupplier
+    {
         require(productsReceivedFrom(productHash, sender) == address(0),
             "Logistic: Already received");
         require(_isSupplierOrDeliveryMan(sender),
@@ -106,7 +141,8 @@ AccessManager, ERC721AutoIncrement, ERC721Restricted, ERC721Pausable {
     }
 
     function _handoverToken(address from, address to, bytes32 productHash)
-    internal {
+        internal
+    {
         _setRestricted(false);
         transferFrom(from, to, _getTokenId(productHash));
         _setRestricted(true);

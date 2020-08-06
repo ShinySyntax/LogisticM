@@ -1,7 +1,9 @@
 pragma solidity ^0.5.0;
 
+import "./ERC721/ERC721Pausable.sol";
 
-contract ProductManager {
+
+contract ProductManager is ERC721Pausable {
     struct Product {
         address purchaser;
         uint256 tokenId;

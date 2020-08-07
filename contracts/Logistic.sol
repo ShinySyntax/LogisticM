@@ -67,9 +67,9 @@ contract Logistic is ProductManager {
             "Logistic: This product already exists"
         );
 
+        uint256 tokenId = counter;
         _tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);
-        uint256 tokenId = counter;
         _mint(msg.sender);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
@@ -80,7 +80,7 @@ contract Logistic is ProductManager {
         public
         supplierOrDeliveryMan
     {
-        send(getAddressByName(receiverName), productHash);
+        send(addresses[receiverName], productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
@@ -113,7 +113,7 @@ contract Logistic is ProductManager {
         public
         notOwner
     {
-        receive(getAddressByName(senderName), productHash);
+        receive(addresses[senderName], productHash);
     }
 
     function receive(address sender, bytes32 productHash)

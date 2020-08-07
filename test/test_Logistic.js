@@ -496,8 +496,10 @@ contract("Logistic test", async accounts => {
 			"Ownable: caller is not the owner"
 		)
 		await instance.renounceDeliveryMan({ from: deliveryMan1 })
-		await instance.renounceDeliveryMan({ from: deliveryMan1 })
-		await instance.renounceSupplier({ from: supplier })
+		await truffleAssert.reverts(
+			instance.renounceDeliveryMan({ from: deliveryMan1 }),
+			"Roles: account does not have role"
+		)
 		await instance.renounceSupplier({ from: supplier })
 	})
 })

@@ -1,11 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "./ProductLibrary.sol";
-import "./ERC721/ERC721Pausable.sol";
+import "./ProductManager.sol";
 
 
-contract Logistic is ERC721Pausable {
-    using ProductLibrary for ProductLibrary.Data;
+contract Logistic is ProductManager {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
@@ -39,7 +37,7 @@ contract Logistic is ERC721Pausable {
         string productName
     );
 
-    ProductLibrary.Data private data;
+    constructor () public {}
 
     function createProductWithName(
         address purchaser,
@@ -65,13 +63,13 @@ contract Logistic is ERC721Pausable {
         require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
         require(
-            !data._productExists(productHash),
+            !_productExists(productHash, productName),
             "Logistic: This product already exists"
         );
 
+        _tokenToProductHash[tokenId] = productHash;
+        _products[productHash] = Product(purchaser, tokenId, productName);
         uint256 tokenId = counter;
-        data._tokenToProductHash[tokenId] = productHash;
-        data._products[productHash] = ProductLibrary.Product(purchaser, tokenId, productName);
         _mint(msg.sender);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
@@ -82,40 +80,40 @@ contract Logistic is ERC721Pausable {
         public
         supplierOrDeliveryMan
     {
-        send(addresses[receiverName], productHash);
+        send(getAddressByName(receiverName), productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
         supplierOrDeliveryMan
     {
-        require(data.productsSentFrom(productHash, msg.sender) == address(0),
+        require(productsSentFrom(productHash, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
         require(owner() != receiver && !isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
         if (!isDeliveryMan(receiver)) {
             // the receiver is a purchaser
-            require(data.productsOrders(productHash) == receiver,
+            require(productsOrders(productHash) == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (data.productsReceivedFrom(productHash, msg.sender) == receiver) {
+        if (productsReceivedFrom(productHash, msg.sender) == receiver) {
             _handoverToken(msg.sender, receiver, productHash);
         } else {
             _setRestricted(false);
-            approve(receiver, data._getTokenId(productHash));
+            approve(receiver, _getTokenId(productHash));
             _setRestricted(true);
         }
-        data._setProductSent(productHash, msg.sender, receiver);
+        _setProductSent(productHash, msg.sender, receiver);
 
         emit ProductShipped(msg.sender, receiver, productHash,
-            data._getProductName(productHash));
+            _getProductName(productHash));
     }
 
     function receiveWithName(string memory senderName, bytes32 productHash)
         public
         notOwner
     {
-        receive(addresses[senderName], productHash);
+        receive(getAddressByName(senderName), productHash);
     }
 
     function receive(address sender, bytes32 productHash)
@@ -123,31 +121,31 @@ contract Logistic is ERC721Pausable {
         notOwner
         notSupplier
     {
-        require(data.productsReceivedFrom(productHash, sender) == address(0),
+        require(productsReceivedFrom(productHash, sender) == address(0),
             "Logistic: Already received");
         require(_isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
         if (!isDeliveryMan(msg.sender)) {
             // the caller is a purchaser
-            require(data.productsOrders(productHash) == msg.sender,
+            require(productsOrders(productHash) == msg.sender,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (data.productsSentFrom(productHash, sender) == msg.sender) {
+        if (productsSentFrom(productHash, sender) == msg.sender) {
             _handoverToken(sender, msg.sender, productHash);
         }
-        data._setProductReceived(productHash, sender, msg.sender);
+        _setProductReceived(productHash, sender, msg.sender);
 
         emit ProductReceived(sender, msg.sender, productHash,
-            data._getProductName(productHash));
+            _getProductName(productHash));
     }
 
     function _handoverToken(address from, address to, bytes32 productHash)
         internal
     {
         _setRestricted(false);
-        transferFrom(from, to, data._getTokenId(productHash));
+        transferFrom(from, to, _getTokenId(productHash));
         _setRestricted(true);
-        emit Handover(from, to, productHash, data._getProductName(productHash));
+        emit Handover(from, to, productHash, _getProductName(productHash));
     }
 }

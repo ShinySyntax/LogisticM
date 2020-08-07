@@ -56,8 +56,8 @@ contract("Logistic test", async accounts => {
 			ev.account === supplier &&
 			ev.name === "supplier"
 		);
-		assert.equal((await instance.getNameByAddress(supplier)), "supplier")
-		assert.equal((await instance.getAddressByName("supplier")), supplier)
+		assert.equal((await instance.names(supplier)), "supplier")
+		assert.equal((await instance.addresses("supplier")), supplier)
 		assert.isTrue((await instance.isSupplier(supplier)))
 
 		await truffleAssert.reverts(
@@ -80,8 +80,8 @@ contract("Logistic test", async accounts => {
 
 		assert.isFalse((await instance.isDeliveryMan(deliveryMan1)))
 		const result = await instance.addDeliveryMan(deliveryMan1, "delivery man", { from: owner })
-		assert.equal((await instance.getNameByAddress(deliveryMan1)), "delivery man")
-		assert.equal((await instance.getAddressByName("delivery man")), deliveryMan1)
+		assert.equal((await instance.names(deliveryMan1)), "delivery man")
+		assert.equal((await instance.addresses("delivery man")), deliveryMan1)
 		assert.isTrue((await instance.isDeliveryMan(deliveryMan1)))
 		truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
 			ev.account === deliveryMan1 &&
@@ -491,8 +491,13 @@ contract("Logistic test", async accounts => {
 			"Ownable: new owner is the zero address"
 		)
 		await instance.transferOwnership(user, { from: owner })
-		await instance.renounceOwnership({ from: user })
+		await truffleAssert.reverts(
+			instance.transferOwnership(user, { from: owner }),
+			"Ownable: caller is not the owner"
+		)
 		await instance.renounceDeliveryMan({ from: deliveryMan1 })
+		await instance.renounceDeliveryMan({ from: deliveryMan1 })
+		await instance.renounceSupplier({ from: supplier })
 		await instance.renounceSupplier({ from: supplier })
 	})
 })

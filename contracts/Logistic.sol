@@ -67,13 +67,13 @@ contract Logistic is ProductManager {
             "Logistic: This product already exists"
         );
 
-        uint256 tokenId = _getCounter();
         _tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);
+        uint256 tokenId = counter;
         _mint(msg.sender);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
-        assert(_productExists(productHash, productName));
+        // assert(_productExists(productHash, productName));
     }
 
     function sendWithName(string memory receiverName, bytes32 productHash)

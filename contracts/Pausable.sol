@@ -16,28 +16,13 @@ contract Pausable is AccessManager {
      */
     event Unpaused(address account);
 
-    bool private _paused;
-
-    /**
-     * @dev Initializes the contract in unpaused state. Assigns the Pauser role
-     * to the deployer.
-     */
-    constructor () internal {
-        _paused = false;
-    }
-
-    /**
-     * @dev Returns true if the contract is paused, and false otherwise.
-     */
-    function getPaused() public view returns (bool) {
-        return _paused;
-    }
+    bool public paused = false;
 
     /**
      * @dev Modifier to make a function callable only when the contract is not paused.
      */
     modifier whenNotPaused() {
-        require(!_paused, "Pausable: paused");
+        require(!paused, "Pausable: paused");
         _;
     }
 
@@ -45,10 +30,10 @@ contract Pausable is AccessManager {
      * @dev Modifier to make a function callable only when the contract is paused.
      */
     modifier whenPaused() {
-        require(_paused, "Pausable: not paused");
+        require(paused, "Pausable: not paused");
         _;
     }
-    
+
     /**
      * @dev Called by a pauser to pause, triggers stopped state.
      */
@@ -60,17 +45,17 @@ contract Pausable is AccessManager {
      * @dev Called by a pauser to unpause, returns to normal state.
      */
     function unpause() public onlyOwner whenPaused {
-        _paused = false;
+        paused = false;
         emit Unpaused(msg.sender);
     }
 
     function _pause() internal whenNotPaused {
-        _paused = true;
+        paused = true;
         emit Paused(msg.sender);
     }
 
     function _unpause() internal whenPaused {
-        _paused = false;
+        paused = false;
         emit Unpaused(msg.sender);
     }
 }

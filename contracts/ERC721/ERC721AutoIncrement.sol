@@ -7,18 +7,10 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract ERC721AutoIncrement is ERC721Full("LogisticM", "LM") {
     using SafeMath for uint256;
 
-    uint256 private _counter;
-
-    constructor() public {
-        _counter = 0;
-    }
-
-    function _getCounter() internal view returns (uint256) {
-        return _counter;
-    }
+    uint256 internal counter = 0;
 
     function _mint(address to) internal {
-        super._mint(to, _counter);
-        _counter = _counter.add(1);
+        super._mint(to, counter);
+        counter = counter.add(1);
     }
 }

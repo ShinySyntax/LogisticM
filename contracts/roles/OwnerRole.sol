@@ -23,9 +23,8 @@ contract OwnerRole {
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
     constructor () internal {
-        address msgSender = msg.sender;
-        _owner = msgSender;
-        emit OwnershipTransferred(address(0), msgSender);
+        _owner = msg.sender;
+        emit OwnershipTransferred(address(0), msg.sender);
     }
 
     /**

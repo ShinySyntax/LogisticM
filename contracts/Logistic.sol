@@ -1,9 +1,10 @@
 pragma solidity ^0.5.0;
 
-import "./Pausable.sol";
+import "./LogisticBase/ILogisticBase.sol";
+import "./ERC721/ILogisticToken.sol";
 
 
-contract Logistic is Pausable {
+contract Logistic {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
@@ -38,9 +39,45 @@ contract Logistic is Pausable {
     );
 
     address private _productManager;
+    ILogisticBase private logisticBase;
+    ILogisticToken private logisticToken;
 
-    constructor (address productManager) public {
+    constructor(
+        address productManager,
+        address logisticBaseAddress,
+        address logisticTokenAddress
+    ) public {
         _productManager = productManager;
+        logisticBase = ILogisticBase(logisticBaseAddress);
+        logisticToken = ILogisticToken(logisticTokenAddress);
+    }
+
+    modifier onlySupplier {
+        require(
+            logisticBase.isSupplier(msg.sender),
+            "Logistic: caller is not supplier");
+        _;
+    }
+
+    modifier notSupplier {
+        require(
+            !logisticBase.isSupplier(msg.sender),
+            "Logistic: caller is owner");
+        _;
+    }
+
+    modifier supplierOrDeliveryMan {
+        require(
+            logisticBase._isSupplierOrDeliveryMan(msg.sender),
+            "Logistic: caller is not supplier nor delivery man");
+        _;
+    }
+
+    modifier notOwner {
+        require(
+            logisticBase.owner() != msg.sender,
+            "Logistic: caller is owner");
+        _;
     }
 
     function createProductWithName(
@@ -52,7 +89,7 @@ contract Logistic is Pausable {
         external
         onlySupplier
     {
-        _setName(purchaser, purchaserName);
+        logisticBase._setName(purchaser, purchaserName);
         createProduct(purchaser, productHash, productName);
     }
 
@@ -64,7 +101,9 @@ contract Logistic is Pausable {
         public
         onlySupplier
     {
-        require(owner != purchaser && !_isSupplierOrDeliveryMan(purchaser),
+        require(
+            logisticBase.owner() != purchaser
+                && !logisticBase._isSupplierOrDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
         (bool success, bytes memory result) = _productManager.call(
             abi.encodeWithSignature("productExists(bytes32)", productHash)
@@ -74,13 +113,13 @@ contract Logistic is Pausable {
             "Logistic: This product already exists"
         );
 
-        uint256 tokenId = counter;
+        uint256 tokenId = logisticToken.getCounter();
         _productManager.call(
             abi.encodeWithSignature(
                 "_createProduct(bytes32,uint256,address,string)"
             , productHash, tokenId, purchaser, productName)
         );
-        _mint(msg.sender);
+        logisticToken.mint(msg.sender);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
     }
@@ -89,7 +128,7 @@ contract Logistic is Pausable {
         external
         supplierOrDeliveryMan
     {
-        send(addresses[receiverName], productHash);
+        send(logisticBase.getAddress(receiverName), productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
@@ -102,9 +141,11 @@ contract Logistic is Pausable {
         );
         require(abi.decode(result, (address)) == address(0),
             "Logistic: Can't send a product in pending delivery");
-        require(owner != receiver && !isSupplier(receiver),
+        require(
+            logisticBase.owner() != receiver
+                && !logisticBase.isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
-        if (!isDeliveryMan(receiver)) {
+        if (!logisticBase.isDeliveryMan(receiver)) {
             // the receiver is a purchaser
             (success, result) = _productManager.call(
                 abi.encodeWithSignature("productsOrders(bytes32", productHash)
@@ -123,12 +164,12 @@ contract Logistic is Pausable {
         if (abi.decode(result, (address)) == receiver) {
             _handoverToken(msg.sender, receiver, productHash);
         } else {
-            _setRestricted(false);
+            logisticToken._setRestricted(false);
             (success, result) = _productManager.call(
                 abi.encodeWithSignature("getTokenId(butes32)", productHash)
             );
-            approve(receiver, abi.decode(result, (uint256)));
-            _setRestricted(true);
+            logisticToken.approve(receiver, abi.decode(result, (uint256)));
+            logisticToken._setRestricted(true);
         }
         _productManager.call(abi.encodeWithSignature(
             "_setProductSent(bytes32,address, address)",
@@ -150,7 +191,7 @@ contract Logistic is Pausable {
         external
         notOwner
     {
-        receive(addresses[senderName], productHash);
+        receive(logisticBase.getAddress(senderName), productHash);
     }
 
     function receive(address sender, bytes32 productHash)
@@ -165,9 +206,9 @@ contract Logistic is Pausable {
         );
         require(abi.decode(result, (address)) == address(0),
             "Logistic: Already received");
-        require(_isSupplierOrDeliveryMan(sender),
+        require(logisticBase._isSupplierOrDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
-        if (!isDeliveryMan(msg.sender)) {
+        if (!logisticBase.isDeliveryMan(msg.sender)) {
             // the caller is a purchaser
             (success, result) = _productManager.call(
                 abi.encodeWithSignature("productsOrders(bytes32", productHash)
@@ -203,9 +244,9 @@ contract Logistic is Pausable {
         (bool success, bytes memory result) = _productManager.call(
             abi.encodeWithSignature("getTokenId(bytes32)", productHash)
         );
-        _setRestricted(false);
-        transferFrom(from, to, abi.decode(result, (uint256)));
-        _setRestricted(true);
+        logisticToken._setRestricted(false);
+        logisticToken.transferFrom(from, to, abi.decode(result, (uint256)));
+        logisticToken._setRestricted(true);
         (success, result) = _productManager.call(
             abi.encodeWithSignature("getProductName(bytes32)", productHash)
         );

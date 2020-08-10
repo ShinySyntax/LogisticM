@@ -6,12 +6,14 @@ import "./roles/OwnerRole.sol";
 import "./NamedAccount.sol";
 
 
-contract AccessManager is NamedAccount, OwnerRole, DeliveryManRole, SupplierRole {
-    modifier supplierOrDeliveryMan() {
-        require(_isSupplierOrDeliveryMan(msg.sender),
-            "Logistic: invalid role");
-        _;
-    }
+contract AccessManager is
+    OwnerRole,
+    DeliveryManRole,
+    SupplierRole {
+
+    using NamedAccount for NamedAccount.AddressesAndNames;
+
+    NamedAccount.AddressesAndNames private addressesAndNames;
 
     function addSupplier(address account, string calldata name_)
         external
@@ -20,7 +22,7 @@ contract AccessManager is NamedAccount, OwnerRole, DeliveryManRole, SupplierRole
         require(!isDeliveryMan(account), "Logistic: Account is delivery man");
         require(owner != account, "Logistic: Owner can't be supplier");
 
-        _setName(account, name_);
+        addressesAndNames._setName(account, name_);
         _addSupplier(account, name_);
     }
 
@@ -35,7 +37,7 @@ contract AccessManager is NamedAccount, OwnerRole, DeliveryManRole, SupplierRole
         require(!isSupplier(account), "Logistic: Account is supplier");
         require(owner != account, "Logistic: Owner can't be delivery man");
 
-        _setName(account, name_);
+        addressesAndNames._setName(account, name_);
         _addDeliveryMan(account, name_);
     }
 
@@ -43,8 +45,16 @@ contract AccessManager is NamedAccount, OwnerRole, DeliveryManRole, SupplierRole
         _removeDeliveryMan(account);
     }
 
+    function getName(address account) external view returns (string memory) {
+        return addressesAndNames.names[account];
+    }
+
+    function getAddress(string calldata name) external view returns (address) {
+        return addressesAndNames.addresses[name];
+    }
+
     function _isSupplierOrDeliveryMan(address account)
-        internal
+        external
         view
         returns (bool)
     {

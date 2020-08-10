@@ -6,8 +6,7 @@ import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 contract ERC721AutoIncrement is ERC721Full("LogisticM", "LM") {
     uint256 internal counter = 0;
 
-    function _mint(address to) internal {
-        super._mint(to, counter);
-        counter = counter.add(1);
+    function getCounter() public view returns (uint256) {
+        return counter;
     }
 }

@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "./ProductManager.sol";
+import "./ILogisticBase.sol";
 
 
-contract Logistic is ProductManager {
+contract Logistic {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
@@ -37,18 +37,62 @@ contract Logistic is ProductManager {
         string productName
     );
 
-    constructor () public {}
+    ILogisticBase private logisticBase;
+
+    modifier onlySupplier {
+        require(
+            logisticBase.isSupplier(msg.sender),
+            "Logistic: caller is not supplier");
+        _;
+    }
+
+    modifier notSupplier {
+        require(
+            !logisticBase.isSupplier(msg.sender),
+            "Logistic: caller is owner");
+        _;
+    }
+
+    modifier supplierOrDeliveryMan {
+        require(
+            logisticBase.isSupplier(msg.sender)
+                || logisticBase.isDeliveryMan(msg.sender),
+            "Logistic: caller is not supplier nor delivery man");
+        _;
+    }
+
+    modifier onlyOwner {
+        require(
+            logisticBase.owner() == msg.sender,
+            "Logistic: caller is not owner");
+        _;
+    }
+
+    modifier notOwner {
+        require(
+            logisticBase.owner() != msg.sender,
+            "Logistic: caller is owner");
+        _;
+    }
+
+    constructor (address logisticBaseAddress) public {
+        logisticBase = ILogisticBase(logisticBaseAddress);
+    }
+
+    function setLogisticBaseAddress(address logisticBaseAddress) public onlyOwner {
+        logisticBase = ILogisticBase(logisticBaseAddress);
+    }
 
     function createProductWithName(
         address purchaser,
         bytes32 productHash,
-        string memory productName,
-        string memory purchaserName
+        string calldata productName,
+        string calldata purchaserName
     )
-        public
+        external
         onlySupplier
     {
-        _setName(purchaser, purchaserName);
+        logisticBase.setName(purchaser, purchaserName);
         createProduct(purchaser, productHash, productName);
     }
 
@@ -60,60 +104,59 @@ contract Logistic is ProductManager {
         public
         onlySupplier
     {
-        require(owner() != purchaser && !_isSupplierOrDeliveryMan(purchaser),
+        require(logisticBase.owner() != purchaser
+            && !logisticBase.isSupplier(purchaser)
+            && !logisticBase.isDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
+        (address purchaser_, uint256 tokenId, string memory productName_) = logisticBase.getProductInfo(productHash);
         require(
-            !_productExists(productHash, productName),
+            tokenId == 0,
             "Logistic: This product already exists"
         );
 
-        uint256 tokenId = counter;
-        _tokenToProductHash[tokenId] = productHash;
-        _products[productHash] = Product(purchaser, tokenId, productName);
-        _mint(msg.sender);
+        tokenId = logisticBase.counter();
+        logisticBase.newProduct(msg.sender, productHash, purchaser, tokenId, productName);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
         // assert(_productExists(productHash, productName));
     }
 
-    function sendWithName(string memory receiverName, bytes32 productHash)
-        public
+    function sendWithName(string calldata receiverName, bytes32 productHash)
+        external
         supplierOrDeliveryMan
     {
-        send(addresses[receiverName], productHash);
+        send(logisticBase.addresses(receiverName), productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
         supplierOrDeliveryMan
     {
-        require(productsSentFrom(productHash, msg.sender) == address(0),
+        require(logisticBase.productsSentFrom(productHash, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
-        require(owner() != receiver && !isSupplier(receiver),
+        require(logisticBase.owner() != receiver && !logisticBase.isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
-        if (!isDeliveryMan(receiver)) {
+        (address purchaser, uint256 tokenId, string memory productName) = logisticBase.getProductInfo(productHash);
+        if (!logisticBase.isDeliveryMan(receiver)) {
             // the receiver is a purchaser
-            require(productsOrders(productHash) == receiver,
+            require(purchaser == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (productsReceivedFrom(productHash, msg.sender) == receiver) {
+        if (logisticBase.productsReceivedFrom(productHash, msg.sender) == receiver) {
             _handoverToken(msg.sender, receiver, productHash);
         } else {
-            _setRestricted(false);
-            approve(receiver, _getTokenId(productHash));
-            _setRestricted(true);
+            logisticBase.approve(receiver, tokenId);
         }
-        _setProductSent(productHash, msg.sender, receiver);
+        logisticBase.setProductSent(productHash, msg.sender, receiver);
 
-        emit ProductShipped(msg.sender, receiver, productHash,
-            _getProductName(productHash));
+        emit ProductShipped(msg.sender, receiver, productHash, productName);
     }
 
-    function receiveWithName(string memory senderName, bytes32 productHash)
-        public
+    function receiveWithName(string calldata senderName, bytes32 productHash)
+        external
         notOwner
     {
-        receive(addresses[senderName], productHash);
+        receive(logisticBase.addresses(senderName), productHash);
     }
 
     function receive(address sender, bytes32 productHash)
@@ -121,31 +164,31 @@ contract Logistic is ProductManager {
         notOwner
         notSupplier
     {
-        require(productsReceivedFrom(productHash, sender) == address(0),
+        require(logisticBase.productsReceivedFrom(productHash, sender) == address(0),
             "Logistic: Already received");
-        require(_isSupplierOrDeliveryMan(sender),
+        require(logisticBase.isSupplier(sender)
+                || logisticBase.isDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
-        if (!isDeliveryMan(msg.sender)) {
+        (address purchaser, uint256 tokenId_, string memory productName) = logisticBase.getProductInfo(productHash);
+        if (!logisticBase.isDeliveryMan(msg.sender)) {
             // the caller is a purchaser
-            require(productsOrders(productHash) == msg.sender,
+            require(purchaser == msg.sender,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        if (productsSentFrom(productHash, sender) == msg.sender) {
+        if (logisticBase.productsSentFrom(productHash, sender) == msg.sender) {
             _handoverToken(sender, msg.sender, productHash);
         }
-        _setProductReceived(productHash, sender, msg.sender);
+        logisticBase.setProductReceived(productHash, sender, msg.sender);
 
-        emit ProductReceived(sender, msg.sender, productHash,
-            _getProductName(productHash));
+        emit ProductReceived(sender, msg.sender, productHash, productName);
     }
 
     function _handoverToken(address from, address to, bytes32 productHash)
         internal
     {
-        _setRestricted(false);
-        transferFrom(from, to, _getTokenId(productHash));
-        _setRestricted(true);
-        emit Handover(from, to, productHash, _getProductName(productHash));
+        (address purchaser_, uint256 tokenId, string memory productName) = logisticBase.getProductInfo(productHash);
+        logisticBase.transferFrom(from, to, tokenId);
+        emit Handover(from, to, productHash, productName);
     }
 }

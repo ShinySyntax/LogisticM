@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "./ERC721/ERC721Restricted.sol";
+import "./ERC721/ERC721AutoIncrement.sol";
 
 
-contract NamedAccount is ERC721Restricted {
+contract NamedAccount is ERC721AutoIncrement {
     // User (address) is named (string)
     mapping (address => string) public names;
 

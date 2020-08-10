@@ -20,10 +20,10 @@ module.exports = {
   compilers: {
     solc: {
       version: "0.5.5",    // Fetch exact version from solc-bin (default: truffle's version)
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
+      // optimizer: {
+      //   enabled: true,
+      //   runs: 200
+      // }
     },
   },
   plugins: ["solidity-coverage"]

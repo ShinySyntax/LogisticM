@@ -62,7 +62,7 @@ contract("Logistic test", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.addSupplier(deliveryMan3, "supplier", { from: supplier }),
-			"Ownable: caller is not the owner"
+			"OwnerRole: caller is not the owner"
 		)
 		await truffleAssert.reverts(
 			instance.addDeliveryMan(supplier, "supplier", { from: owner }),
@@ -106,7 +106,7 @@ contract("Logistic test", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.addDeliveryMan(deliveryMan3, "delivery man", { from: deliveryMan1 }),
-			"Ownable: caller is not the owner"
+			"OwnerRole: caller is not the owner"
 		)
 	})
 
@@ -162,7 +162,7 @@ contract("Logistic test", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.send(deliveryMan3, product1, { from: owner }),
-			"Logistic: caller does not have the Supplier role nor the DeliveryMan role"
+			"Logistic: invalid role"
 		)
 		await truffleAssert.reverts(
 			instance.send(deliveryMan1, product1, { from: deliveryMan2 }),
@@ -199,7 +199,7 @@ contract("Logistic test", async accounts => {
 		)
 		await truffleAssert.reverts(
 			instance.receive(deliveryMan3, product1, { from: owner }),
-			"Ownable: caller is the owner"
+			"OwnerRole: caller is the owner"
 		)
 		await truffleAssert.reverts(
 			instance.receive(deliveryMan3, product1, { from: supplier }),
@@ -295,7 +295,7 @@ contract("Logistic test", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.send(purchaser1, product1, { from: owner }),
-			"Logistic: caller does not have the Supplier role nor the DeliveryMan role"
+			"Logistic: invalid role"
 		)
 
 		await truffleAssert.reverts(
@@ -488,12 +488,12 @@ contract("Logistic test", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.transferOwnership(ZERO_ADDRESS, { from: owner }),
-			"Ownable: new owner is the zero address"
+			"OwnerRole: new owner is the zero address"
 		)
 		await instance.transferOwnership(user, { from: owner })
 		await truffleAssert.reverts(
 			instance.transferOwnership(user, { from: owner }),
-			"Ownable: caller is not the owner"
+			"OwnerRole: caller is not the owner"
 		)
 		await instance.renounceDeliveryMan({ from: deliveryMan1 })
 		await truffleAssert.reverts(

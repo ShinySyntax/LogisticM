@@ -58,4 +58,22 @@ contract Pausable is AccessManager {
         paused = false;
         emit Unpaused(msg.sender);
     }
+
+
+    // ERC721 methods
+
+    function approve(address to, uint256 tokenId) public whenNotPaused {
+        super.approve(to, tokenId);
+    }
+
+    function setApprovalForAll(address to, bool approved) public whenNotPaused {
+        super.setApprovalForAll(to, approved);
+    }
+
+    function _transferFrom(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+    {
+        super._transferFrom(from, to, tokenId);
+    }
 }

@@ -23,12 +23,12 @@ contract SupplierRole {
         _;
     }
 
-    function isSupplier(address account) public view returns (bool) {
-        return _supplier.has(account);
+    function renounceSupplier() external {
+        _removeSupplier(msg.sender);
     }
 
-    function renounceSupplier() public {
-        _removeSupplier(msg.sender);
+    function isSupplier(address account) public view returns (bool) {
+        return _supplier.has(account);
     }
 
     function _addSupplier(address account, string memory name_) internal {

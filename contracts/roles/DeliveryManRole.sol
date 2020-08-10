@@ -11,12 +11,12 @@ contract DeliveryManRole {
 
     Roles.Role private _deliveryMan;
 
-    function isDeliveryMan(address account) public view returns (bool) {
-        return _deliveryMan.has(account);
+    function renounceDeliveryMan() external {
+        _removeDeliveryMan(msg.sender);
     }
 
-    function renounceDeliveryMan() public {
-        _removeDeliveryMan(msg.sender);
+    function isDeliveryMan(address account) public view returns (bool) {
+        return _deliveryMan.has(account);
     }
 
     function _addDeliveryMan(address account, string memory name_) internal {

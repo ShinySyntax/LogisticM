@@ -17,7 +17,7 @@ contract ERC721Restricted is ERC721AutoIncrement {
         super.approve(to, tokenId);
     }
 
-    function setApprovalForAll(address to, bool approved) public {
+    function setApprovalForAll(address, bool) public {
         revert("Logistic: cannot approve for all");
     }
 

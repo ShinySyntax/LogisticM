@@ -118,30 +118,32 @@ contract("Logistic test", async accounts => {
 		let logistic = await Logistic.deployed()
 		let logisticBase = await LogisticBase.deployed()
 
-		await truffleAssert.reverts(
-			logistic.createProduct(purchaser1, product1, "product1", { from: deliveryMan1 }),
-			"Logistic: caller is not supplier"
-		)
-		await truffleAssert.reverts(
-			logistic.createProduct(supplier, product1, "product1", { from: supplier }),
-			"Logistic: Can't create for supplier nor owner nor delivery man"
-		)
-		await truffleAssert.reverts(
-			logistic.createProduct(owner, product1, "product1", { from: supplier }),
-			"Logistic: Can't create for supplier nor owner nor delivery man"
-		)
-		await truffleAssert.reverts(
-			logistic.createProduct(deliveryMan1, product1, "product1", { from: supplier }),
-			"Logistic: Can't create for supplier nor owner nor delivery man"
-		)
+		// await truffleAssert.reverts(
+		// 	logistic.createProduct(purchaser1, product1, "product1", { from: deliveryMan1 }),
+		// 	"Logistic: caller is not supplier"
+		// )
+		// await truffleAssert.reverts(
+		// 	logistic.createProduct(supplier, product1, "product1", { from: supplier }),
+		// 	"Logistic: Can't create for supplier nor owner nor delivery man"
+		// )
+		// await truffleAssert.reverts(
+		// 	logistic.createProduct(owner, product1, "product1", { from: supplier }),
+		// 	"Logistic: Can't create for supplier nor owner nor delivery man"
+		// )
+		// await truffleAssert.reverts(
+		// 	logistic.createProduct(deliveryMan1, product1, "product1", { from: supplier }),
+		// 	"Logistic: Can't create for supplier nor owner nor delivery man"
+		// )
 
 		await logistic.createProductWithName(purchaser1, product1, "product1",
 			"John", { from: supplier })
 		assert.equal((await logisticBase.balanceOf(supplier)).toNumber(), 1)
-		assert.equal((await logisticBase.ownerOf(0)), supplier)
-		assert.equal((await logisticBase.productsOrders(product1)), purchaser1)
-		assert.equal((await logisticBase.getProductHash(0)), product1)
-		assert.equal((await logisticBase.getProductName(0)), "product1")
+		assert.equal((await logisticBase.ownerOf(1)), supplier)
+		let productInfo = await logisticBase.getProductInfo(product1);
+		console.log(productInfo);
+		assert.equal(productInfo[0], purchaser1)
+		assert.equal(productInfo[1], 1)
+		assert.equal(productInfo[2], "product1")
 		let result = await logistic.createProduct(purchaser2, product2,
 			"product2", { from: supplier })
 		truffleAssert.eventEmitted(result, 'NewProduct', ev =>

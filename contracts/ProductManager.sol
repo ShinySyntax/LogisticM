@@ -52,7 +52,7 @@ contract ProductManager is ERC721Pausable {
         string memory productName
     )
         internal
-        onlySupplier
+        onlySupplier(supplier)
     {
         tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);

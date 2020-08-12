@@ -1,16 +1,16 @@
 const Logistic = artifacts.require('./Logistic.sol')
-const LogisticBase = artifacts.require('./LogisticBase.sol')
+const ERC721Restricted = artifacts.require('./ERC721Restricted.sol')
 
 module.exports = async (deployer) => {
-	await deployer.deploy(LogisticBase);
-	await deployer.deploy(Logistic, LogisticBase.address);
+	// await deployer.deploy(ERC721Restricted);
+	// await deployer.deploy(Logistic, ERC721Restricted.address);
 
-	deployer.deploy(LogisticBase)
+	deployer.deploy(ERC721Restricted)
 	.then(() => {
-		return deployer.deploy(Logistic, LogisticBase.address);
+		return deployer.deploy(Logistic, ERC721Restricted.address);
 	})
 	.then(() => {
-		return LogisticBase.deployed()
+		return ERC721Restricted.deployed()
 	})
 	.then(logisticBase => {
 		logisticBase.setLogistic(Logistic.address);

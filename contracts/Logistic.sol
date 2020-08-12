@@ -1,9 +1,10 @@
 pragma solidity ^0.5.0;
 
 import "./ILogisticBase.sol";
+import "./Proxy.sol";
 
 
-contract Logistic {
+contract Logistic is Proxy {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
@@ -79,6 +80,14 @@ contract Logistic {
         logisticBase = ILogisticBase(logisticBaseAddress);
     }
 
+    function test() public returns (address, uint256, address, address, address) {
+        return logisticBase.howIAm(66);
+    }
+
+    function implementation() public view returns (address) {
+        return address(logisticBase);
+    }
+
     function setLogisticBaseAddress(address logisticBaseAddress) public onlyOwner {
         logisticBase = ILogisticBase(logisticBaseAddress);
     }
@@ -105,7 +114,7 @@ contract Logistic {
         onlySupplier
     {
         require(logisticBase.owner() != purchaser
-            && !logisticBase.isSupplier(purchaser)
+            // && !logisticBase.isSupplier(purchaser)
             && !logisticBase.isDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
         (address purchaser_, uint256 tokenId, string memory productName_) = logisticBase.getProductInfo(productHash);

@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
+import "./ERC721.sol";
 
 
-contract ERC721AutoIncrement is ERC721Full("LogisticM", "LM") {
+contract ERC721AutoIncrement is ERC721("LogisticM", "LM") {
     uint256 public counter = 1;
 
     function _mint(address to) internal {

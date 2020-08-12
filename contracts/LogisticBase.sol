@@ -1,10 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "./ILogisticBase.sol";
 import "./ProductManager.sol";
 
 
-contract LogisticBase is ILogisticBase, ProductManager {
+contract LogisticBase is ProductManager {
     address public logistic;
 
     modifier onlyLogistic() {
@@ -12,17 +11,21 @@ contract LogisticBase is ILogisticBase, ProductManager {
         _;
     }
 
-    function approve(address to, uint256 tokenId) public onlyLogistic {
-        super.approve(to, tokenId);
+    function howIAm(uint256 a) external view returns (address, uint256, address, address, address) {
+        return (msg.sender, a, logistic, owner, tx.origin);
     }
 
-    function setApprovalForAll(address to, bool approved) public {
-        revert("Logistic: cannot approve for all");
-    }
-
-    function _transferFrom(address from, address to, uint256 tokenId) internal
-    onlyLogistic {
-        super._transferFrom(from, to, tokenId);
+    function howIsCalling() external {
+        if (msg.sender == owner) {
+            revert("owner!");
+        }
+        if (msg.sender == logistic) {
+            revert("logistic");
+        }
+        if (msg.sender == address(0)) {
+            revert("0");
+        }
+        revert();
     }
 
     function setLogistic(address newLogistic) external onlyOwner {

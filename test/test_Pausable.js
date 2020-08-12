@@ -5,6 +5,7 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Logistic = artifacts.require("Logistic")
+const LogisticBase = artifacts.require("LogisticBase")
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 
@@ -13,24 +14,25 @@ contract("Pausable test", async accounts => {
 	const user = accounts[1]
 
 	it("Test initialization", async () => {
-		let instance = await Logistic.deployed()
+		let logistic = await Logistic.deployed()
+		let logisticBase = await LogisticBase.deployed()
 
 		await truffleAssert.reverts(
-			instance.pause({ from: user }),
+			logisticBase.pause({ from: user }),
 			"Ownable: caller is not the owner"
 		)
 		await truffleAssert.reverts(
-			instance.unpause({ from: user }),
+			logisticBase.unpause({ from: user }),
 			"Ownable: caller is not the owner"
 		)
 
-		await instance.pause({ from: owner })
-		assert.equal((await instance.getPaused()), true)
+		await logisticBase.pause({ from: owner })
+		assert.equal((await logisticBase.getPaused()), true)
 
 
 
-		await instance.unpause({ from: owner })
-		assert.equal((await instance.getPaused()), false)
+		await logisticBase.unpause({ from: owner })
+		assert.equal((await logisticBase.getPaused()), false)
 
 	})
 })

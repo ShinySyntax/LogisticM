@@ -4,6 +4,10 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721Full.sol";
 
 
 contract ILogisticBase is IERC721Full {
+    function howIAm(uint256 a) external view returns (address, uint256, address, address, address);
+    event TestCall(address indexed caller);
+    function howIsCalling() external;
+
     function setLogistic(address newLogistic) external;
 
     uint256 public counter;

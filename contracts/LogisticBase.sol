@@ -6,6 +6,8 @@ import "./ProductManager.sol";
 contract LogisticBase is ProductManager {
     address public logistic;
 
+    event TestCall(address caller, address owern, address logistic);
+
     modifier onlyLogistic() {
         require(msg.sender == logistic, "Caller is not Logistic");
         _;
@@ -16,17 +18,20 @@ contract LogisticBase is ProductManager {
     }
 
     function howIsCalling() external {
-        if (msg.sender == owner) {
-            revert("owner!");
-        }
-        if (msg.sender == logistic) {
-            revert("logistic");
-        }
-        if (msg.sender == address(0)) {
-            revert("0");
-        }
-        revert();
+        emit TestCall(msg.sender, owner, logistic);
+        // if (msg.sender == owner) {
+        //     revert("owner!");
+        // }
+        // if (msg.sender == logistic) {
+        //     revert("logistic");
+        // }
+        // if (msg.sender == address(0)) {
+        //     revert("0 is calling");
+        // }
+        // revert("i don't know who is calling");
     }
+
+
 
     function setLogistic(address newLogistic) external onlyOwner {
         logistic = newLogistic;

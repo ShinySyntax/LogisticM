@@ -12,9 +12,9 @@ let address2 = '0xB091Eb5ce0933CB9162041855147cDc03e0abEBA';
 let address3 = '0xC75E3c4911069e2087d6EC13444d9f21A32C3380';
 
 const LogisticBase = require("./app/src/contracts/LogisticBase.json");
-const logisticBaseAddress = "0x0Ad3f42B09fE91326E8763622220841Ee6CC8cde"
+const logisticBaseAddress = "0x02bb23cB5A638f8fF78f44B07059E78b8Bc6c4E5"
 const Logistic = require("./app/src/contracts/Logistic.json");
-const logisticAddress = "0x7167aF8e235dBA1Efb23191ecc16b1FBc6a3C6F8";
+const logisticAddress = "0xf2bDc3dFFD585c387317d2F2Bbf81b584EF0242A";
 
 const getHash = (value) => {
     return web3.utils.keccak256(value)
@@ -42,8 +42,8 @@ async function main() {
     r = await proxy.methods.howIsCalling().send({from: address1})
     console.log(r);
 
-    // r = await logistic.methods.howIAm().call()
-    // console.log(r);
+    r = await logistic.methods.test().call()
+    console.log(r);
     // try {
     //     r = await proxy.methods.howIAm().call()
     //     console.log(r);

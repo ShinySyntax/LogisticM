@@ -1,10 +1,10 @@
 pragma solidity ^0.5.0;
 
-import "./LogisticBase/ILogisticBase.sol";
-import "./ERC721/ILogisticToken.sol";
+import "./ILogisticBase.sol";
+import "./Proxy.sol";
 
 
-contract Logistic {
+contract Logistic is Proxy {
     // Naming convention:
     //    uint256 tokenId (ERC721)
     //    bytes32 productHash
@@ -38,19 +38,7 @@ contract Logistic {
         string productName
     );
 
-    address private _productManager;
     ILogisticBase private logisticBase;
-    ILogisticToken private logisticToken;
-
-    constructor(
-        address productManager,
-        address logisticBaseAddress,
-        address logisticTokenAddress
-    ) public {
-        _productManager = productManager;
-        logisticBase = ILogisticBase(logisticBaseAddress);
-        logisticToken = ILogisticToken(logisticTokenAddress);
-    }
 
     modifier onlySupplier {
         require(
@@ -68,8 +56,16 @@ contract Logistic {
 
     modifier supplierOrDeliveryMan {
         require(
-            logisticBase._isSupplierOrDeliveryMan(msg.sender),
+            logisticBase.isSupplier(msg.sender)
+                || logisticBase.isDeliveryMan(msg.sender),
             "Logistic: caller is not supplier nor delivery man");
+        _;
+    }
+
+    modifier onlyOwner {
+        require(
+            logisticBase.owner() == msg.sender,
+            "Logistic: caller is not owner");
         _;
     }
 
@@ -78,6 +74,22 @@ contract Logistic {
             logisticBase.owner() != msg.sender,
             "Logistic: caller is owner");
         _;
+    }
+
+    constructor (address logisticBaseAddress) public {
+        logisticBase = ILogisticBase(logisticBaseAddress);
+    }
+
+    function test() public returns (address, uint256, address, address, address) {
+        return logisticBase.howIAm(66);
+    }
+
+    function implementation() public view returns (address) {
+        return address(logisticBase);
+    }
+
+    function setLogisticBaseAddress(address logisticBaseAddress) public onlyOwner {
+        logisticBase = ILogisticBase(logisticBaseAddress);
     }
 
     function createProductWithName(
@@ -89,7 +101,7 @@ contract Logistic {
         external
         onlySupplier
     {
-        logisticBase._setName(purchaser, purchaserName);
+        logisticBase.setName(purchaser, purchaserName);
         createProduct(purchaser, productHash, productName);
     }
 
@@ -101,25 +113,18 @@ contract Logistic {
         public
         onlySupplier
     {
-        require(
-            logisticBase.owner() != purchaser
-                && !logisticBase._isSupplierOrDeliveryMan(purchaser),
+        require(logisticBase.owner() != purchaser
+            // && !logisticBase.isSupplier(purchaser)
+            && !logisticBase.isDeliveryMan(purchaser),
             "Logistic: Can't create for supplier nor owner nor delivery man");
-        (bool success, bytes memory result) = _productManager.call(
-            abi.encodeWithSignature("productExists(bytes32)", productHash)
-        );
+        (address purchaser_, uint256 tokenId, string memory productName_) = logisticBase.getProductInfo(productHash);
         require(
-            !abi.decode(result, (bool)),
+            tokenId == 0,
             "Logistic: This product already exists"
         );
 
-        uint256 tokenId = logisticToken.getCounter();
-        _productManager.call(
-            abi.encodeWithSignature(
-                "_createProduct(bytes32,uint256,address,string)"
-            , productHash, tokenId, purchaser, productName)
-        );
-        logisticToken.mint(msg.sender);
+        tokenId = logisticBase.counter();
+        logisticBase.newProduct(msg.sender, productHash, purchaser, tokenId, productName);
 
         emit NewProduct(msg.sender, purchaser, productHash, productName);
     }
@@ -128,70 +133,38 @@ contract Logistic {
         external
         supplierOrDeliveryMan
     {
-        send(logisticBase.getAddress(receiverName), productHash);
+        send(logisticBase.addresses(receiverName), productHash);
     }
 
     function send(address receiver, bytes32 productHash) public
         supplierOrDeliveryMan
     {
-        (bool success, bytes memory result) = _productManager.call(
-            abi.encodeWithSignature(
-                "productsSentFrom(bytes32)",
-                productHash, msg.sender)
-        );
-        require(abi.decode(result, (address)) == address(0),
+        require(logisticBase.productsSentFrom(productHash, msg.sender) == address(0),
             "Logistic: Can't send a product in pending delivery");
-        require(
-            logisticBase.owner() != receiver
-                && !logisticBase.isSupplier(receiver),
+        require(logisticBase.owner() != receiver && !logisticBase.isSupplier(receiver),
             "Logistic: Can't send to supplier nor owner");
+        (address purchaser, uint256 tokenId, string memory productName) = logisticBase.getProductInfo(productHash);
         if (!logisticBase.isDeliveryMan(receiver)) {
             // the receiver is a purchaser
-            (success, result) = _productManager.call(
-                abi.encodeWithSignature("productsOrders(bytes32", productHash)
-            );
-            require(abi.decode(result, (address)) == receiver,
+            require(purchaser == receiver,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        (success, result) = _productManager.call(
-            abi.encodeWithSignature(
-                "productsReceivedFrom(bytes32)",
-                productHash, msg.sender
-            )
-        );
-
-        if (abi.decode(result, (address)) == receiver) {
+        if (logisticBase.productsReceivedFrom(productHash, msg.sender) == receiver) {
             _handoverToken(msg.sender, receiver, productHash);
         } else {
-            logisticToken._setRestricted(false);
-            (success, result) = _productManager.call(
-                abi.encodeWithSignature("getTokenId(butes32)", productHash)
-            );
-            logisticToken.approve(receiver, abi.decode(result, (uint256)));
-            logisticToken._setRestricted(true);
+            logisticBase.approve(receiver, tokenId);
         }
-        _productManager.call(abi.encodeWithSignature(
-            "_setProductSent(bytes32,address, address)",
-            productHash, msg.sender, receiver
-        ));
+        logisticBase.setProductSent(productHash, msg.sender, receiver);
 
-        (success, result) = _productManager.call(
-            abi.encodeWithSignature("getProductName(bytes32)", productHash)
-        );
-        emit ProductShipped(
-            msg.sender,
-            receiver,
-            productHash,
-            abi.decode(result, (string))
-        );
+        emit ProductShipped(msg.sender, receiver, productHash, productName);
     }
 
     function receiveWithName(string calldata senderName, bytes32 productHash)
         external
         notOwner
     {
-        receive(logisticBase.getAddress(senderName), productHash);
+        receive(logisticBase.addresses(senderName), productHash);
     }
 
     function receive(address sender, bytes32 productHash)
@@ -199,62 +172,31 @@ contract Logistic {
         notOwner
         notSupplier
     {
-        (bool success, bytes memory result) = _productManager.call(
-            abi.encodeWithSignature(
-                "productsReceivedFrom(bytes32)", productHash, sender
-            )
-        );
-        require(abi.decode(result, (address)) == address(0),
+        require(logisticBase.productsReceivedFrom(productHash, sender) == address(0),
             "Logistic: Already received");
-        require(logisticBase._isSupplierOrDeliveryMan(sender),
+        require(logisticBase.isSupplier(sender)
+                || logisticBase.isDeliveryMan(sender),
             "Logistic: sender is not delivery man nor supplier");
+        (address purchaser, uint256 tokenId_, string memory productName) = logisticBase.getProductInfo(productHash);
         if (!logisticBase.isDeliveryMan(msg.sender)) {
             // the caller is a purchaser
-            (success, result) = _productManager.call(
-                abi.encodeWithSignature("productsOrders(bytes32", productHash)
-            );
-            require(abi.decode(result, (address)) == msg.sender,
+            require(purchaser == msg.sender,
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        (success, result) = _productManager.call(
-            abi.encodeWithSignature(
-                "productsSentFrom(bytes32)", productHash, sender
-            )
-        );
-        if (abi.decode(result, (address)) == msg.sender) {
+        if (logisticBase.productsSentFrom(productHash, sender) == msg.sender) {
             _handoverToken(sender, msg.sender, productHash);
         }
-        _productManager.call(abi.encodeWithSignature("_setProductReceived(bytes32)", productHash, sender, msg.sender));
+        logisticBase.setProductReceived(productHash, sender, msg.sender);
 
-        (success, result) = _productManager.call(
-            abi.encodeWithSignature("getProductName(bytes32)", productHash)
-        );
-        emit ProductReceived(
-            sender,
-            msg.sender,
-            productHash,
-            abi.decode(result, (string))
-        );
+        emit ProductReceived(sender, msg.sender, productHash, productName);
     }
 
     function _handoverToken(address from, address to, bytes32 productHash)
         internal
     {
-        (bool success, bytes memory result) = _productManager.call(
-            abi.encodeWithSignature("getTokenId(bytes32)", productHash)
-        );
-        logisticToken._setRestricted(false);
-        logisticToken.transferFrom(from, to, abi.decode(result, (uint256)));
-        logisticToken._setRestricted(true);
-        (success, result) = _productManager.call(
-            abi.encodeWithSignature("getProductName(bytes32)", productHash)
-        );
-        emit Handover(
-            from,
-            to,
-            productHash,
-            abi.decode(result, (string))
-        );
+        (address purchaser_, uint256 tokenId, string memory productName) = logisticBase.getProductInfo(productHash);
+        logisticBase.transferFrom(from, to, tokenId);
+        emit Handover(from, to, productHash, productName);
     }
 }

@@ -45,8 +45,7 @@ contract Pausable is AccessManager {
      * @dev Called by a pauser to unpause, returns to normal state.
      */
     function unpause() public onlyOwner whenPaused {
-        paused = false;
-        emit Unpaused(msg.sender);
+        _unpause();
     }
 
     function _pause() internal whenNotPaused {

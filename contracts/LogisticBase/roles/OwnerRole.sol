@@ -31,12 +31,12 @@ contract OwnerRole {
      * @dev Throws if called by any account other than the owner.
      */
     modifier onlyOwner() {
-        require(owner == msg.sender, "OwnerRole: caller is not the owner");
+        require(owner == msg.sender, "Ownable: caller is not the owner");
         _;
     }
 
     modifier notOwner() {
-        require(owner != msg.sender, "OwnerRole: caller is the owner");
+        require(owner != msg.sender, "Ownable: caller is the owner");
         _;
     }
 
@@ -46,7 +46,7 @@ contract OwnerRole {
      */
     function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0),
-            "OwnerRole: new owner is the zero address");
+            "Ownable: new owner is the zero address");
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
     }

@@ -14,27 +14,22 @@ contract ProductManager {
     mapping (bytes32 => Product) public _products;
 
     // Mapping from tokenId to productHash
-    mapping (uint256 => bytes32) public _tokenToProductHash;
+    mapping (uint256 => bytes32) public tokenToProductHash;
 
-    address private _owner;
-    address private _logistic;
-
-    modifier onlyLogistic() {
-        require(msg.sender == _logistic);
-        _;
-    }
-
-    constructor() public {
-        _owner = msg.sender;
-    }
-
-    function setLogisticAddress(address logistic) public {
-        require(msg.sender == _owner);
-        _logistic = logistic;
-    }
-
-    function productsOrders(bytes32 productHash) public view returns (address) {
-        return _getProduct(productHash).purchaser;
+    function getProductInfo(bytes32 productHash)
+        public
+        view
+        returns (
+            address purchaser,
+            uint256 tokenId,
+            string memory productName
+        )
+    {
+        return (
+            _getProduct(productHash).purchaser,
+            _getProduct(productHash).tokenId,
+            _getProduct(productHash).productName
+        );
     }
 
     function productsSentFrom(bytes32 productHash, address from)
@@ -53,16 +48,19 @@ contract ProductManager {
         return _getProduct(productHash).received[from];
     }
 
-    function getProductHash(uint256 tokenId) public view returns (bytes32) {
-        return _tokenToProductHash[tokenId];
-    }
-
-    function getProductName(uint256 tokenId)
-        public
-        view
-        returns (string memory)
+    function _newProduct(
+        address supplier,
+        bytes32 productHash,
+        address purchaser,
+        uint256 tokenId,
+        string memory productName
+    )
+        internal
+        onlySupplier(supplier)
     {
-        return _getProduct(_tokenToProductHash[tokenId]).productName;
+        tokenToProductHash[tokenId] = productHash;
+        _products[productHash] = Product(purchaser, tokenId, productName);
+        _mint(supplier);
     }
 
     function productExists(bytes32 productHash) public view returns (bool) {
@@ -73,47 +71,8 @@ contract ProductManager {
         return _products[productHash].tokenId;
     }
 
-    function getProductName(bytes32 productHash) public view
-    returns (string memory) {
-        return _products[productHash].productName;
-    }
-
-    function _setProductSent(bytes32 productHash, address from, address to)
-        public
-        onlyLogistic
-    {
-        _getProduct(productHash).sent[from] = to;
-    }
-
-    function _setProductReceived(
-        bytes32 productHash,
-        address from,
-        address by
-    )
-        public
-        onlyLogistic
-    {
-        _getProduct(productHash).received[from] = by;
-    }
-
-    function _createProduct(
-        bytes32 productHash,
-        uint256 tokenId,
-        address purchaser,
-        string memory productName
-    )
-        public
-        onlyLogistic
-    {
-        _tokenToProductHash[tokenId] = productHash;
-        _products[productHash] = Product(purchaser, tokenId, productName);
-    }
-
-    function _getProduct(bytes32 productHash)
-        internal
-        view
-        returns (Product storage)
-    {
+    function _getProduct(bytes32 productHash) internal view
+    returns (Product storage) {
         return _products[productHash];
     }
 }

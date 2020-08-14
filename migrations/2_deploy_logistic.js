@@ -1,3 +1,4 @@
+const RolesLibrary = artifacts.require('./RolesLibrary.sol')
 const OwnerImplementation = artifacts.require('./OwnerImplementation.sol')
 const AccessImplementation = artifacts.require('./AccessImplementation.sol')
 const ERC721LogisticImplementation = artifacts.require('./ERC721LogisticImplementation.sol')
@@ -8,6 +9,9 @@ const ProductImplementation = artifacts.require('./ProductImplementation.sol')
 const Registry = artifacts.require('./Registry.sol')
 
 module.exports = async (deployer) => {
+	await deployer.deploy(RolesLibrary)
+	await deployer.link(RolesLibrary, AccessImplementation);
+
 	await deployer.deploy(OwnerImplementation)
 	await deployer.deploy(AccessImplementation)
 	await deployer.deploy(ERC721LogisticImplementation)

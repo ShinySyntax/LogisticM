@@ -22,7 +22,6 @@ contract LogisticProxy is UpgradeabilityProxy,
     constructor(string memory _version) public UpgradeabilityProxy(_version) {}
 
     function initialize(address sender) public {
-        require(msg.sender == sender);
         require(msg.sender == address(registry));
         owner = msg.sender;
         dCall(abi.encodeWithSignature("initializeERC721()"));

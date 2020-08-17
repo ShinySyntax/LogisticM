@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
+import "../access/owner/OwnerStorage.sol";
 
-contract Ownable {
-    address public owner;
 
+contract Ownable is OwnerStorage {
     modifier onlyOwner() {
         require(
             owner == msg.sender,

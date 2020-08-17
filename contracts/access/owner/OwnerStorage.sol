@@ -1,9 +1,8 @@
 pragma solidity ^0.5.0;
 
-import "./OwnerEvents.sol";
 import "../../proxy/Upgradeable.sol";
 
 
-contract OwnerStorage is Upgradeable, OwnerEvents {
+contract OwnerStorage {
     address internal owner;
 }

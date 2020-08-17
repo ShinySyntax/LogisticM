@@ -24,6 +24,7 @@ module.exports = async (deployer) => {
 
 	// Register V0 implementations
 	await registry.addVersionFromName('0', 'transferOwnership(address)', OwnerImplementation.address)
+	await registry.addVersionFromName('0', 'initializeOwner(address)', OwnerImplementation.address)
 	await registry.addVersionFromName('0', 'getOwner()', OwnerImplementation.address)
 
 	await registry.addVersionFromName('0', 'addSupplier(address)', AccessImplementation.address)
@@ -74,5 +75,8 @@ module.exports = async (deployer) => {
 	await registry.addVersionFromName('0', 'productExists(bytes32,address)', ProductImplementation.address)
 
 	// Create proxy
-    await registry.createProxy('0')
+	await registry.createProxy('0')
+    // const { logs } = await registry.createProxy('0')
+	// const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+	// console.log(proxy);
 }

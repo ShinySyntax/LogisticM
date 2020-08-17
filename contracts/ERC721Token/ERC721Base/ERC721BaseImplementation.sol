@@ -110,10 +110,10 @@ contract ERC721BaseImplementation is Context, ERC721BaseStorage {
      * @return address currently marked as the owner of the given token ID
      */
     function ownerOf(uint256 tokenId) public view returns (address) {
-        address owner = _tokenOwner[tokenId];
-        require(owner != address(0), "ERC721: owner query for nonexistent token");
+        address owner_ = _tokenOwner[tokenId];
+        require(owner_ != address(0), "ERC721: owner query for nonexistent token");
 
-        return owner;
+        return owner_;
     }
 
     /**
@@ -125,15 +125,15 @@ contract ERC721BaseImplementation is Context, ERC721BaseStorage {
      * @param tokenId uint256 ID of the token to be approved
      */
     function approve(address to, uint256 tokenId) public {
-        address owner = ownerOf(tokenId);
-        require(to != owner, "ERC721: approval to current owner");
+        address owner_ = ownerOf(tokenId);
+        require(to != owner_, "ERC721: approval to current owner");
 
-        require(_msgSender() == owner || isApprovedForAll(owner, _msgSender()),
+        require(_msgSender() == owner_ || isApprovedForAll(owner_, _msgSender()),
             "ERC721: approve caller is not owner nor approved for all"
         );
 
         _tokenApprovals[tokenId] = to;
-        emit Approval(owner, to, tokenId);
+        emit Approval(owner_, to, tokenId);
     }
 
     /**
@@ -241,8 +241,8 @@ contract ERC721BaseImplementation is Context, ERC721BaseStorage {
      * @return bool whether the token exists
      */
     function _exists(uint256 tokenId) internal view returns (bool) {
-        address owner = _tokenOwner[tokenId];
-        return owner != address(0);
+        address owner_ = _tokenOwner[tokenId];
+        return owner_ != address(0);
     }
 
     /**
@@ -278,8 +278,8 @@ contract ERC721BaseImplementation is Context, ERC721BaseStorage {
      */
     function _isApprovedOrOwner(address spender, uint256 tokenId) internal view returns (bool) {
         require(_exists(tokenId), "ERC721: operator query for nonexistent token");
-        address owner = ownerOf(tokenId);
-        return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
+        address owner_ = ownerOf(tokenId);
+        return (spender == owner_ || getApproved(tokenId) == spender || isApprovedForAll(owner_, spender));
     }
 
     /**

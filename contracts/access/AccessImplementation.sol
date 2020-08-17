@@ -1,18 +1,21 @@
 pragma solidity ^0.5.5;
 
 import "./AccessStorage.sol";
+import "./owner/OwnerStorage.sol";
 import "../commons/Ownable.sol";
 
-// TODO: link the library
 
 contract AccessImplementation is AccessStorage, Ownable {
-    function addSupplier(address account) external onlyOwner {
+    function addSupplier(address account) external {
+        emit SupplierAdded(owner);
         require(account != owner, "Access: Owner can't be supplier");
         logisticRoles.addSupplier(account);
+        emit SupplierAdded(account);
     }
 
     function removeSupplier(address account) external onlyOwner {
         logisticRoles.removeSupplier(account);
+        emit SupplierRemoved(account);
     }
 
     function renounceSupplier() external {
@@ -21,15 +24,18 @@ contract AccessImplementation is AccessStorage, Ownable {
             "Access: caller is not supplier"
         );
         logisticRoles.removeSupplier(msg.sender);
+        emit SupplierRemoved(msg.sender);
     }
 
     function addDeliveryMan(address account) external onlyOwner {
         require(account != owner, "Access: Owner can't be delivery man");
         logisticRoles.addDeliveryMan(account);
+        emit DeliveryManAdded(account);
     }
 
     function removeDeliveryMan(address account) external onlyOwner {
         logisticRoles.removeDeliveryMan(account);
+        emit DeliveryManRemoved(account);
     }
 
     function renounceDeliveryMan() external {
@@ -38,6 +44,7 @@ contract AccessImplementation is AccessStorage, Ownable {
             "Access: caller is not delivery man"
         );
         logisticRoles.removeDeliveryMan(msg.sender);
+        emit DeliveryManRemoved(msg.sender);
     }
 
     function getRole(address account)

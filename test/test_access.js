@@ -34,15 +34,15 @@ contract("Access", async accounts => {
 
 	it("Owner", async () => {
 		let actualOwner = await instance.getOwner()
-		console.log(actualOwner);
+		console.log("actualOwner ", actualOwner);
 		assert.equal(actualOwner, owner)
 	})
 
-	// it("transferOwnership", async () => {
-	// 	await instance.transferOwnership(other, { from: owner })
-	// 	let actualOwner = await instance.getOwner()
-	// 	assert.equal(actualOwner, other)
-	// })
+	it("transferOwnership", async () => {
+		await instance.transferOwnership(other, { from: owner })
+		let actualOwner = await instance.getOwner()
+		assert.equal(actualOwner, other)
+	})
 
 	it("Add a supplier", async () => {
 		// await truffleAssert.reverts(
@@ -53,8 +53,7 @@ contract("Access", async accounts => {
 		assert.isFalse((await instance.isSupplier(supplier)))
 		const result = await instance.addSupplier(supplier, { from: other })
 		truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
-			ev.account === supplier &&
-			ev.name === "supplier"
+			ev.account === supplier
 		);
 		assert.isTrue((await instance.isSupplier(supplier)))
 

@@ -96,7 +96,7 @@ contract Registry is IRegistry {
     */
     function createProxy(string memory version) public returns (LogisticProxy) {
         LogisticProxy proxy = new LogisticProxy(version);
-        proxy.initialize(msg.sender);
+        proxy.initializeLogistic(msg.sender);
         emit ProxyCreated(address(proxy));
         return proxy;
     }

@@ -1,5 +1,6 @@
 pragma solidity ^0.5.0;
 
+import "./LogisticEvents.sol";
 import "../ERC721Token/ERC721Logistic/ERC721LogisticInterface.sol";
 import "../name/NameInterface.sol";
 import "../access/AccessInterface.sol";
@@ -9,6 +10,7 @@ import "../pause/PauseInterface.sol";
 
 
 contract LogisticInterface is
+    LogisticEvents,
     ERC721LogisticInterface,
     NameInterface,
     AccessInterface,

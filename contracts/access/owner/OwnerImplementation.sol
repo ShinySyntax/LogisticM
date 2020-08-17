@@ -1,12 +1,12 @@
 pragma solidity ^0.5.0;
 
-import "./OwnerStorage.sol";
-import "./OwnerEvents.sol";
+import "../../logistic/LogisticSharedStorage.sol";
+import "./OwnerInterface.sol";
 import "../../commons/Pausable.sol";
 import "../../proxy/Upgradeable.sol";
 
 
-contract OwnerImplementation is OwnerEvents, OwnerStorage, Pausable, Upgradeable {
+contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable, Pausable {
     function getOwner() external view returns (address) {
         return owner;
     }
@@ -17,19 +17,19 @@ contract OwnerImplementation is OwnerEvents, OwnerStorage, Pausable, Upgradeable
     }
 
     function transferOwnership(address newOwner) public {
-        // require(owner == msg.sender, "Owner: caller is not the owner");
-        //
-        // // DEBUG --------------------
-        // if (newOwner == address(0)) {
-        //     paused = true;
-        // }
-        // // END DEBUG --------------------
-        // require(
-        //     newOwner != address(0),
-        //     "Ownable: new owner is the zero address"
-        // );
-        //
-        // emit OwnershipTransferred(owner, newOwner);
-        // owner = newOwner;
+        require(owner == msg.sender, "Owner: caller is not the owner");
+
+        // DEBUG --------------------
+        if (newOwner == address(0)) {
+            paused = true;
+        }
+        // END DEBUG --------------------
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
+
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
     }
 }

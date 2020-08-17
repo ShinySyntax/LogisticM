@@ -1,5 +1,6 @@
 pragma solidity ^0.5.0;
 
+import "./LogisticSharedStorage.sol";
 import "./LogisticEvents.sol";
 import "../proxy/UpgradeabilityProxy.sol";
 import "../commons/Restricted.sol";
@@ -8,7 +9,7 @@ import "../commons/Ownable.sol";
 import "../commons/Bytes4Lib.sol";
 
 
-contract LogisticProxy is UpgradeabilityProxy,
+contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     LogisticEvents,
     Restricted,
     Pausable,
@@ -23,8 +24,8 @@ contract LogisticProxy is UpgradeabilityProxy,
 
     function initializeLogistic(address sender) public {
         require(msg.sender == address(registry));
-        owner = sender;
-        // dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
+        dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
+        dCall(abi.encodeWithSignature("initializeERC721()"));
     }
 
     function createProduct(
@@ -35,7 +36,7 @@ contract LogisticProxy is UpgradeabilityProxy,
     )
         external
         restrictedMode
-        whenNotPaused
+        whenNotPaused(paused)
     {
         require(
             abi.decode(dCall(abi.encodeWithSignature(
@@ -73,7 +74,7 @@ contract LogisticProxy is UpgradeabilityProxy,
 
     function send(address to, bytes32 productHash)
         external
-        whenNotPaused
+        whenNotPaused(paused)
         restrictedMode
     {
         uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
@@ -133,7 +134,7 @@ contract LogisticProxy is UpgradeabilityProxy,
 
     function receive(address from, bytes32 productHash)
         external
-        whenNotPaused
+        whenNotPaused(paused)
         restrictedMode
     {
         uint256 msgSenderRole = abi.decode(dCall(abi.encodeWithSignature(

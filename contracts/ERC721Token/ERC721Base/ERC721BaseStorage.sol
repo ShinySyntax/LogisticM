@@ -4,11 +4,8 @@ import "openzeppelin-solidity/contracts/drafts/Counters.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/utils/Address.sol";
 
-import "./ERC721BaseEvents.sol";
-import "../../proxy/Upgradeable.sol";
 
-
-contract ERC721BaseStorage is Upgradeable, ERC721BaseEvents {
+contract ERC721BaseStorage {
     using SafeMath for uint256;
     using Address for address;
     using Counters for Counters.Counter;

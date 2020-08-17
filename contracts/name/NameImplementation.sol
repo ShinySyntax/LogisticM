@@ -1,10 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "./NameStorage.sol";
+import "../logistic/LogisticSharedStorage.sol";
+import "./NameInterface.sol";
 import "../commons/Restricted.sol";
 
 
-contract NameImplementation is NameStorage, Restricted {
+contract NameImplementation is NameInterface, LogisticSharedStorage, Restricted {
     function setName(address account, string calldata name)
         external
         restricted

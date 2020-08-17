@@ -1,10 +1,8 @@
 pragma solidity ^0.5.0;
 
-import "../access/owner/OwnerStorage.sol";
 
-
-contract Ownable is OwnerStorage {
-    modifier onlyOwner() {
+contract Ownable {
+    modifier onlyOwner(address owner) {
         require(
             owner == msg.sender,
             "Ownable: caller is not the owner"
@@ -12,7 +10,7 @@ contract Ownable is OwnerStorage {
         _;
     }
 
-    modifier notOwner() {
+    modifier notOwner(address owner) {
         require(msg.sender != owner);
         _;
     }

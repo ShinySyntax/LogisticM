@@ -1,21 +1,17 @@
 pragma solidity ^0.5.0;
 
 import "../ERC721Base/ERC721BaseImplementation.sol";
-import "./ERC721LogisticStorage.sol";
+import "./ERC721LogisticInterface.sol";
 import "../../commons/Restricted.sol";
 import "../../commons/Ownable.sol";
 
 
-contract ERC721LogisticImplementation is ERC721BaseImplementation,
-    ERC721LogisticStorage,
-    Restricted,
-    Ownable {
-
+contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Restricted, Ownable {
     function getCounter() public view returns (uint256) {
         return counter;
     }
 
-    function initializeERC721() public onlyOwner {
+    function initializeERC721() public onlyOwner(owner) {
         _name = "LogisticM";
         _symbol = "LM";
 

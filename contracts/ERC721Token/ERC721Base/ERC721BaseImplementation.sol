@@ -1,19 +1,16 @@
 pragma solidity ^0.5.0;
 
+import "../../logistic/LogisticSharedStorage.sol";
+import "./ERC721BaseInterface.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
-
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
-
-
-
-import "./ERC721BaseStorage.sol";
 
 
 /**
  * @title ERC721 Non-Fungible Token Standard basic implementation
  * @dev see https://eips.ethereum.org/EIPS/eip-721
  */
-contract ERC721BaseImplementation is Context, ERC721BaseStorage {
+contract ERC721BaseImplementation is ERC721BaseInterface, LogisticSharedStorage, Context {
     /**
      * @dev Gets the token name.
      * @return string representing the token name
@@ -61,6 +58,15 @@ contract ERC721BaseImplementation is Context, ERC721BaseStorage {
     */
     function baseURI() external view returns (string memory) {
         return _baseURI;
+    }
+
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     *
+     * Time complexity O(1), guaranteed to always use less than 30 000 gas.
+     */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool) {
+        return _supportedInterfaces[interfaceId];
     }
 
     /**

@@ -1,10 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "./NameEvents.sol";
-import "../proxy/Upgradeable.sol";
 
-
-contract NameStorage is Upgradeable, NameEvents {
+contract NameStorage {
     // User (address) is named (string)
     mapping (address => string) internal names;
 

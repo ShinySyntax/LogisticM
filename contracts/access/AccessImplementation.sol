@@ -1,19 +1,18 @@
 pragma solidity ^0.5.5;
 
-import "./AccessStorage.sol";
-import "./owner/OwnerStorage.sol";
+import "../logistic/LogisticSharedStorage.sol";
+import "./AccessInterface.sol";
 import "../commons/Ownable.sol";
 
 
-contract AccessImplementation is AccessStorage, Ownable {
-    function addSupplier(address account) external {
-        emit SupplierAdded(owner);
+contract AccessImplementation is AccessInterface, LogisticSharedStorage, Ownable {
+    function addSupplier(address account) external onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be supplier");
         logisticRoles.addSupplier(account);
         emit SupplierAdded(account);
     }
 
-    function removeSupplier(address account) external onlyOwner {
+    function removeSupplier(address account) external onlyOwner(owner) {
         logisticRoles.removeSupplier(account);
         emit SupplierRemoved(account);
     }
@@ -27,13 +26,13 @@ contract AccessImplementation is AccessStorage, Ownable {
         emit SupplierRemoved(msg.sender);
     }
 
-    function addDeliveryMan(address account) external onlyOwner {
+    function addDeliveryMan(address account) external onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be delivery man");
         logisticRoles.addDeliveryMan(account);
         emit DeliveryManAdded(account);
     }
 
-    function removeDeliveryMan(address account) external onlyOwner {
+    function removeDeliveryMan(address account) external onlyOwner(owner) {
         logisticRoles.removeDeliveryMan(account);
         emit DeliveryManRemoved(account);
     }
@@ -50,18 +49,18 @@ contract AccessImplementation is AccessStorage, Ownable {
     function getRole(address account)
         external
         view
-        returns (RolesLibrary.RoleNames)
+        returns (uint256)
     {
         if (account == owner) {
-            return RolesLibrary.RoleNames.Owner;
+            return uint256(RolesLibrary.RoleNames.Owner);
         }
         if (isSupplier(account)) {
-            return RolesLibrary.RoleNames.Supplier;
+            return uint256(RolesLibrary.RoleNames.Supplier);
         }
         if (isDeliveryMan(account)) {
-            return RolesLibrary.RoleNames.DeliveryMan;
+            return uint256(RolesLibrary.RoleNames.DeliveryMan);
         }
-        return RolesLibrary.RoleNames.Nobody;
+        return uint256(RolesLibrary.RoleNames.Nobody);
     }
 
     function isSupplier(address account) public view returns (bool) {

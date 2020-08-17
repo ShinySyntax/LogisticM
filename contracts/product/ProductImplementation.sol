@@ -1,10 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "./ProductStorage.sol";
+import "../logistic/LogisticSharedStorage.sol";
+import "./ProductInterface.sol";
 import "../commons/Restricted.sol";
 
 
-contract ProductImplementation is ProductStorage, Restricted {
+contract ProductImplementation is ProductInterface, LogisticSharedStorage, Restricted {
     function newProduct(
         bytes32 productHash,
         address purchaser,

@@ -42,8 +42,9 @@ contract ERC721BaseInterface is ERC721BaseEvents {
     function setApprovalForAll(address operator, bool _approved) public;
     function isApprovedForAll(address owner, address operator) public view returns (bool);
 
-
     function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public;
+
+    function baseURI() external view returns (string memory);
 
     // Metadata
     function name() external view returns (string memory);

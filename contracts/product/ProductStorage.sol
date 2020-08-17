@@ -1,10 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "./ProductEvents.sol";
-import "../proxy/Upgradeable.sol";
 
-
-contract ProductStorage is Upgradeable, ProductEvents {
+contract ProductStorage {
     struct Product {
         address purchaser;
         uint256 tokenId;

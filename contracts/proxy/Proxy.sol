@@ -18,7 +18,7 @@ contract Proxy {
     */
     function () external {
         address _impl = implementation(msg.sig);
-        require(_impl != address(0));
+        require(_impl != address(0), "Proxy: implementation not found");
 
         assembly {
             let ptr := mload(0x40)

@@ -15,6 +15,6 @@ contract Upgradeable is UpgradeabilityStorage {
     * @param sender representing the address deploying the initial behavior of the contract
     */
     function initialize(address sender) public {
-        require(msg.sender == address(registry));
+        require(msg.sender == address(registry), "Upgradeable: bad caller");
     }
 }

@@ -2,10 +2,10 @@ pragma solidity ^0.5.0;
 
 import "../logistic/LogisticSharedStorage.sol";
 import "./ProductInterface.sol";
-import "../commons/Restricted.sol";
+import "../commons/Lock.sol";
 
 
-contract ProductImplementation is ProductInterface, LogisticSharedStorage, Restricted {
+contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock {
     function newProduct(
         bytes32 productHash,
         address purchaser,
@@ -13,7 +13,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Restr
         string memory productName
     )
         public
-        restricted
+        locked(lock)
     {
         tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);
@@ -23,26 +23,40 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Restr
     function setProductSent(
         bytes32 productHash,
         address from,
-        address to,
-        string memory productName
+        address to
     )
         public
-        restricted
+        locked(lock)
     {
+        require(from != address(0), "Product: from is the zero address");
+        require(to != address(0), "Product: to is the zero address");
+
         _getProduct(productHash).sent[from] = to;
+        (
+            address purchaser,
+            uint256 tokenId,
+            string memory productName
+        ) = getProductInfo(productHash);
         emit ProductShipped(msg.sender, to, productHash, productName);
     }
 
     function setProductReceived(
         bytes32 productHash,
         address from,
-        address by,
-        string memory productName
+        address by
     )
         public
-        restricted
+        locked(lock)
     {
+        require(from != address(0), "Product: from is the zero address");
+        require(by != address(0), "Product: by is the zero address");
+
         _getProduct(productHash).received[from] = by;
+        (
+            address purchaser,
+            uint256 tokenId,
+            string memory productName
+        ) = getProductInfo(productHash);
         emit ProductReceived(from, msg.sender, productHash, productName);
     }
 
@@ -76,6 +90,10 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Restr
         returns (address)
     {
         return _getProduct(productHash).received[from];
+    }
+
+    function getHashFromTokenId(uint256 tokenId) public view returns (bytes32) {
+        return tokenToProductHash[tokenId];
     }
 
     function productExists(bytes32 productHash) public view returns (bool) {

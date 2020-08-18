@@ -15,16 +15,14 @@ contract ProductInterface is ProductEvents {
     function setProductSent(
         bytes32 productHash,
         address from,
-        address to,
-        string memory productName
+        address to
     )
         public;
 
     function setProductReceived(
         bytes32 productHash,
         address from,
-        address by,
-        string memory productName
+        address by
     )
         public;
 
@@ -47,5 +45,6 @@ contract ProductInterface is ProductEvents {
         view
         returns (address);
 
+    function getHashFromTokenId(uint256 tokenId) public view returns (bytes32);
     function productExists(bytes32 productHash) public view returns (bool);
 }

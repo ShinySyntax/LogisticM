@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./LogisticSharedStorage.sol";
 import "./LogisticEvents.sol";
 import "../proxy/UpgradeabilityProxy.sol";
-import "../commons/Restricted.sol";
+import "../commons/Lock.sol";
 import "../commons/Pausable.sol";
 import "../commons/Ownable.sol";
 import "../commons/Bytes4Lib.sol";
@@ -11,21 +11,19 @@ import "../commons/Bytes4Lib.sol";
 
 contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     LogisticEvents,
-    Restricted,
+    Lock,
     Pausable,
     Ownable {
-    modifier restrictedMode() {
-        lock = false;
-        _;
-        lock = true;
-    }
-
     constructor(string memory _version) public UpgradeabilityProxy(_version) {}
 
-    function initializeLogistic(address sender) public {
+    function initializeLogistic(address sender) external {
         require(msg.sender == address(registry));
         dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
         dCall(abi.encodeWithSignature("initializeERC721()"));
+    }
+
+    function setLock(bool lock_) external {
+        lock = lock_;
     }
 
     function createProduct(
@@ -35,22 +33,23 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         string calldata purchaserName
     )
         external
-        restrictedMode
         whenNotPaused(paused)
+        unlock(lock)
     {
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "isSupplier(address)", msg.sender)), (bool)),
-            "Logistic: Invalid purchaser"
+            "Logistic: Caller is not Supplier"
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "getRole(address)", purchaser)), (uint)) == 0,
             "Logistic: Invalid purchaser"
         );
+        bool productExists = abi.decode(dCall(abi.encodeWithSignature(
+            "productExists(bytes32)", productHash)), (bool));
         require(
-            abi.decode(dCall(abi.encodeWithSignature(
-                "productExists(bytes32)", productHash)), (bool)),
+            productExists == false,
             "Logistic: This product already exists"
         );
 
@@ -75,7 +74,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     function send(address to, bytes32 productHash)
         external
         whenNotPaused(paused)
-        restrictedMode
+        unlock(lock)
     {
         uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", msg.sender)), (uint));
@@ -135,7 +134,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     function receive(address from, bytes32 productHash)
         external
         whenNotPaused(paused)
-        restrictedMode
+        unlock(lock)
     {
         uint256 msgSenderRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", msg.sender)), (uint));

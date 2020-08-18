@@ -20,14 +20,11 @@ contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeab
         require(owner == msg.sender, "Owner: caller is not the owner");
 
         // DEBUG --------------------
-        if (newOwner == address(0)) {
-            paused = true;
-        }
+        // if (newOwner == address(0)) {
+        //     paused = true;
+        // }
         // END DEBUG --------------------
-        require(
-            newOwner != address(0),
-            "Ownable: new owner is the zero address"
-        );
+        require(newOwner != address(0), "Owner: new owner is the zero address");
 
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;

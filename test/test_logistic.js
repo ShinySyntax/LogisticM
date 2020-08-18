@@ -11,6 +11,8 @@ const { productTestSuite }  = require('./test_product')
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
+const Ownable = artifacts.require("Ownable")
+
 const Registry = artifacts.require("Registry")
 const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
@@ -22,6 +24,7 @@ contract("Logistic", async accounts => {
 	before(async function () {
 		// Create proxy
 		const registry = await Registry.deployed()
+		await registry.addVersionFromName('0', 'setOwner(address)', Ownable.address)
 	    const { logs } = await registry.createProxy('0')
 		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 		instance = await LogisticInterface.at(proxy)
@@ -34,112 +37,117 @@ contract("Logistic", async accounts => {
 	// 	productTestSuite(instance, accounts)
 	// })
 
+	it("Ownable debug", async () => {
+		await instance.setOwner(other)
+		await instance.setOwnerD(other)
+	})
+
 	it("Investigate", async () => {
 		let result = await instance.investigate(products[1].hash)
 		truffleAssert.eventEmitted(result, 'DCall', ev =>
-			ev.addr === "0xAa308F5DBd5664d5e5c47974e1A0df7FbDF2E539"
+			ev.addr === "0xf1A08b4A0EAE9F278ae315d4349Cdc9DF7474484"
 		);
 		// assert.isFalse(true);
 	})
-	//
-	// describe("Logistic", async function () {
-	// 	before(async function () {
-	// 		await instance.addSupplier(supplier, { from: owner })
-	// 		await instance.addDeliveryMan(deliveryMan1, { from: owner })
-	// 		await instance.addDeliveryMan(deliveryMan2, { from: owner })
-	// 	})
-	//
-	// 	it("Create product", async () => {
-	// 		await truffleAssert.reverts(
-	// 			instance.createProduct(purchaser, products[1].hash,
-	// 				products[1].name, "John",
-	// 				{ from: other }),
-	// 			"Logistic: Caller is not Supplier"
-	// 		);
-	// 		await truffleAssert.reverts(
-	// 			instance.createProduct(deliveryMan1, products[1].hash,
-	// 				products[1].name, "John",
-	// 				{ from: supplier }),
-	// 			"Logistic: Invalid purchaser"
-	// 		);
-	// 		await instance.setLock(false, { from: owner })
-	// 		await instance.newProduct(getHash("99"), purchaser,
-	// 			products[0].tokenId, products[0].name, { from: supplier });
-	// 		await instance.setLock(true, { from: owner })
-	// 		await truffleAssert.reverts(
-	// 			instance.createProduct(purchaser, getHash("99"),
-	// 				products[1].name, "John",
-	// 				{ from: supplier }),
-	// 			"Logistic: This product already exists"
-	// 		);
-	// 		// console.log(await instance.getCounter()); // BN 0
-	//
-	// 		let result = await instance.createProduct(
-	// 			purchaser, products[1].hash, products[1].name, "John",
-	// 			{ from: supplier })
-	// 		assert.equal(await instance.getHashFromTokenId(products[1].tokenId),
-	// 		products[1].hash);
-	// 		let info = await instance.getProductInfo(products[1].hash)
-	// 		assert.equal(info.purchaser, purchaser)
-	// 		assert.equal(info.productName, products[1].name)
-	// 		assert.equal(info.tokenId.words[1], products[1].tokenId)
-	// 		assert.isTrue(await instance.productExists(products[1].hash));
-	// 	})
-	//
-	// 	describe("Handover supplier -> deliveryMan1", async function () {
-	// 		it("Send product", async () => {
-	// 			let result = await instance.send(deliveryMan1, products[1].hash,
-	// 				{ from: supplier })
-	// 			})
-	// 		it("Receive product", async () => {
-	// 			let result = await instance.receive(supplier, products[1].hash,
-	// 				{ from: deliveryMan1 })
-	// 			truffleAssert.eventEmitted(result, 'Handover', ev =>
-	// 				ev.from === supplier &&
-	// 				ev.to === deliveryMan1 &&
-	// 				ev.productHash === products[1].hash &&
-	// 				ev.productName === products[1].name
-	// 			);
-	// 		})
-	// 	})
-	//
-	// 	describe("Handover deliveryMan1 -> deliveryMan2", async function () {
-	// 		it("Receive product", async () => {
-	// 			let result = await instance.receive(deliveryMan1, products[1].hash,
-	// 				{ from: deliveryMan2 })
-	// 		})
-	// 		it("Send product", async () => {
-	// 			let result = await instance.send(deliveryMan2, products[1].hash,
-	// 				{ from: deliveryMan1 })
-	// 			truffleAssert.eventEmitted(result, 'Handover', ev =>
-	// 				ev.from === supplier &&
-	// 				ev.to === deliveryMan1 &&
-	// 				ev.productHash === products[1].hash &&
-	// 				ev.productName === products[1].name
-	// 			);
-	// 		})
-	// 	})
-	//
-	// 	describe("When paused", async function() {
-	// 		before(async function() {
-	// 			await instance.pause({ from: owner })
-	// 		})
-	//
-	// 		it("Create product", async () => {
-	// 			await truffleAssert.reverts(
-	// 				instance.createProduct(
-	// 					purchaser, products[1].hash, products[1].name, "John",
-	// 					{ from: supplier }),
-	// 				"Pausable: paused"
-	// 			)
-	// 		})
-	// 		it("Send product", async () => {
-	// 			await truffleAssert.reverts(
-	// 				instance.send(deliveryMan1, products[1].hash,
-	// 					{ from: supplier }),
-	// 				"Pausable: paused"
-	// 			)
-	// 		})
-	// 	})
-	// })
+
+	describe("Logistic", async function () {
+		before(async function () {
+			await instance.addSupplier(supplier, { from: owner })
+			await instance.addDeliveryMan(deliveryMan1, { from: owner })
+			await instance.addDeliveryMan(deliveryMan2, { from: owner })
+		})
+
+		it("Create product", async () => {
+			await truffleAssert.reverts(
+				instance.createProduct(purchaser, products[1].hash,
+					products[1].name, "John",
+					{ from: other }),
+				"Logistic: Caller is not Supplier"
+			);
+			await truffleAssert.reverts(
+				instance.createProduct(deliveryMan1, products[1].hash,
+					products[1].name, "John",
+					{ from: supplier }),
+				"Logistic: Invalid purchaser"
+			);
+			await instance.setLock(false, { from: owner })
+			await instance.newProduct(getHash("99"), purchaser,
+				products[0].tokenId, products[0].name, { from: supplier });
+			await instance.setLock(true, { from: owner })
+			await truffleAssert.reverts(
+				instance.createProduct(purchaser, getHash("99"),
+					products[1].name, "John",
+					{ from: supplier }),
+				"Logistic: This product already exists"
+			);
+			// console.log(await instance.getCounter()); // BN 0
+
+			let result = await instance.createProduct(
+				purchaser, products[1].hash, products[1].name, "John",
+				{ from: supplier })
+			assert.equal(await instance.getHashFromTokenId(products[1].tokenId),
+			products[1].hash);
+			let info = await instance.getProductInfo(products[1].hash)
+			assert.equal(info.purchaser, purchaser)
+			assert.equal(info.productName, products[1].name)
+			assert.equal(info.tokenId.words[1], products[1].tokenId)
+			assert.isTrue(await instance.productExists(products[1].hash));
+		})
+
+		describe("Handover supplier -> deliveryMan1", async function () {
+			it("Send product", async () => {
+				let result = await instance.send(deliveryMan1, products[1].hash,
+					{ from: supplier })
+				})
+			it("Receive product", async () => {
+				let result = await instance.receive(supplier, products[1].hash,
+					{ from: deliveryMan1 })
+				truffleAssert.eventEmitted(result, 'Handover', ev =>
+					ev.from === supplier &&
+					ev.to === deliveryMan1 &&
+					ev.productHash === products[1].hash &&
+					ev.productName === products[1].name
+				);
+			})
+		})
+
+		describe("Handover deliveryMan1 -> deliveryMan2", async function () {
+			it("Receive product", async () => {
+				let result = await instance.receive(deliveryMan1, products[1].hash,
+					{ from: deliveryMan2 })
+			})
+			it("Send product", async () => {
+				let result = await instance.send(deliveryMan2, products[1].hash,
+					{ from: deliveryMan1 })
+				truffleAssert.eventEmitted(result, 'Handover', ev =>
+					ev.from === supplier &&
+					ev.to === deliveryMan1 &&
+					ev.productHash === products[1].hash &&
+					ev.productName === products[1].name
+				);
+			})
+		})
+
+		describe("When paused", async function() {
+			before(async function() {
+				await instance.pause({ from: owner })
+			})
+
+			it("Create product", async () => {
+				await truffleAssert.reverts(
+					instance.createProduct(
+						purchaser, products[1].hash, products[1].name, "John",
+						{ from: supplier }),
+					"Pausable: paused"
+				)
+			})
+			it("Send product", async () => {
+				await truffleAssert.reverts(
+					instance.send(deliveryMan1, products[1].hash,
+						{ from: supplier }),
+					"Pausable: paused"
+				)
+			})
+		})
+	})
 })

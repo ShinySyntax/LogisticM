@@ -8,4 +8,6 @@ contract LogisticEvents {
         bytes32 indexed productHash,
         string productName
     );
+
+    event DCall(address addr);
 }

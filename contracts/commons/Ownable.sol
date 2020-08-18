@@ -2,16 +2,22 @@ pragma solidity ^0.5.0;
 
 
 contract Ownable {
-    modifier onlyOwner(address owner) {
+    address internal owner;
+
+    function setOwner(address newOwner) public {
+        owner = newOwner;
+    }
+
+    modifier onlyOwner(address owner_) {
         require(
-            owner == msg.sender,
+            owner_ == msg.sender,
             "Ownable: caller is not the owner"
         );
         _;
     }
 
-    modifier notOwner(address owner) {
-        require(msg.sender != owner, "Ownable: caller is owner");
+    modifier notOwner(address owner_) {
+        require(msg.sender != owner_, "Ownable: caller is owner");
         _;
     }
 }

@@ -1,18 +1,20 @@
 pragma solidity ^0.5.5;
 
 import "../logistic/LogisticSharedStorage.sol";
-import "./AccessInterface.sol";
-import "../commons/Ownable.sol";
+import "./AccessEvents.sol";
+import "./AccessStorage.sol";
 
 
-contract AccessImplementation is AccessInterface, LogisticSharedStorage, Ownable {
-    function addSupplier(address account) external onlyOwner(owner) {
-        require(account != owner, "Access: Owner can't be supplier");
+contract AccessImplementation is
+    AccessEvents,
+    LogisticSharedStorage {
+    function addSupplier(address account) external {
+        // require(account != owner, "Access: Owner can't be supplier");
         logisticRoles.addSupplier(account);
         emit SupplierAdded(account);
     }
 
-    function removeSupplier(address account) external onlyOwner(owner) {
+    function removeSupplier(address account) external {
         logisticRoles.removeSupplier(account);
         emit SupplierRemoved(account);
     }
@@ -26,13 +28,13 @@ contract AccessImplementation is AccessInterface, LogisticSharedStorage, Ownable
         emit SupplierRemoved(msg.sender);
     }
 
-    function addDeliveryMan(address account) external onlyOwner(owner) {
-        require(account != owner, "Access: Owner can't be delivery man");
+    function addDeliveryMan(address account) external {
+        // require(account != owner, "Access: Owner can't be delivery man");
         logisticRoles.addDeliveryMan(account);
         emit DeliveryManAdded(account);
     }
 
-    function removeDeliveryMan(address account) external onlyOwner(owner) {
+    function removeDeliveryMan(address account) external {
         logisticRoles.removeDeliveryMan(account);
         emit DeliveryManRemoved(account);
     }
@@ -51,9 +53,9 @@ contract AccessImplementation is AccessInterface, LogisticSharedStorage, Ownable
         view
         returns (uint256)
     {
-        if (account == owner) {
-            return uint256(RolesLibrary.RoleNames.Owner);
-        }
+        // if (account == owner) {
+        //     return uint256(RolesLibrary.RoleNames.Owner);
+        // }
         if (isSupplier(account)) {
             return uint256(RolesLibrary.RoleNames.Supplier);
         }

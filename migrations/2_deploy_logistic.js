@@ -8,6 +8,8 @@ const NameImplementation = artifacts.require('./NameImplementation.sol')
 const PauseImplementation = artifacts.require('./PauseImplementation.sol')
 const ProductImplementation = artifacts.require('./ProductImplementation.sol')
 
+const Ownable = artifacts.require('./Ownable.sol')
+
 const Registry = artifacts.require('./Registry.sol')
 
 module.exports = async (deployer) => {
@@ -20,6 +22,8 @@ module.exports = async (deployer) => {
 	await deployer.deploy(NameImplementation)
 	await deployer.deploy(PauseImplementation)
 	await deployer.deploy(ProductImplementation)
+
+	await deployer.deploy(Ownable)
 
 	const registry = await deployer.deploy(Registry)
 

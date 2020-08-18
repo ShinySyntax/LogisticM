@@ -18,6 +18,10 @@ contract LogisticInterface is
     ProductInterface,
     PauseInterface {
 
+    function investigate(bytes32 productHash) external;
+    function setOwner(address newOwner) public;
+    function setOwnerD(address newOwner) public;
+
     function createProduct(
         address purchaser,
         bytes32 productHash,

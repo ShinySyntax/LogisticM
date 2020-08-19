@@ -6,7 +6,7 @@ import "../proxy/UpgradeabilityProxy.sol";
 import "../commons/Lock.sol";
 import "../commons/Pausable.sol";
 import "../commons/Ownable.sol";
-import "../commons/Bytes4Lib.sol";
+import "../commons/BytesLib.sol";
 
 
 contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
@@ -23,6 +23,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     }
 
     function setLock(bool lock_) external {
+        require(msg.sender == owner);
         lock = lock_;
     }
 
@@ -58,15 +59,15 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         dCall(
             abi.encodeWithSignature(
                 "newProduct(bytes32,address,uint256,string)",
-                productHash, purchaser, tokenId, productName
+                productHash, purchaser, tokenId, BytesLib.stringToBytes32(productName)
             )
         );
         dCall(abi.encodeWithSignature("mint(address)", msg.sender));
         dCall(
             abi.encodeWithSignature(
-                "setName(address, string)",
+                "setName(address,string)",
                 msg.sender,
-                purchaserName
+                BytesLib.stringToBytes32(purchaserName)
             )
         );
     }
@@ -127,7 +128,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
 
         dCall(abi.encodeWithSignature(
             "setProductSent(bytes32,address,address,string)",
-            productHash, msg.sender, to, productName
+            productHash, msg.sender, to, BytesLib.stringToBytes32(productName)
         ));
     }
 
@@ -177,7 +178,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
 
         dCall(abi.encodeWithSignature(
             "setProductReceived(bytes32,address,address,string)",
-            productHash, from, msg.sender, productName
+            productHash, from, msg.sender, BytesLib.stringToBytes32(productName)
         ));
     }
 
@@ -200,7 +201,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     function dCall(bytes memory encoded) internal returns (bytes memory) {
         // Delegate call to the contract implementation of the given encoded
         // signature
-        bytes4 func = Bytes4Lib.convertBytesToBytes4(encoded);
+        bytes4 func = BytesLib.convertBytesToBytes4(encoded);
         address imp = registry.getFunction(version_, func);
         (bool success, bytes memory result) = imp.delegatecall(encoded);
         require(success, "LogisticProxy: delegate call failed");

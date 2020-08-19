@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "./IRegistry.sol";
 import "./Upgradeable.sol";
 import "../logistic/LogisticProxy.sol";
-import "../commons/Bytes4Lib.sol";
+import "../commons/BytesLib.sol";
 
 
 /**
@@ -64,7 +64,7 @@ contract Registry is IRegistry {
     )
         public
     {
-        return addVersion(version, Bytes4Lib.convertBytesToBytes4(abi.encodeWithSignature(func)), implementation);
+        return addVersion(version, BytesLib.convertBytesToBytes4(abi.encodeWithSignature(func)), implementation);
     }
 
     // TODO: add OnlyProxyOwner

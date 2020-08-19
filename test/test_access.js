@@ -22,15 +22,11 @@ const accessTestSuite = async (instance, accounts) => {
 
 		it("transferOwnership", async () => {
 			await instance.transferOwnership(other, { from: owner })
-			let actualOwner = await instance.getOwner()
-			assert.equal(actualOwner, other)
+			assert.equal((await instance.getOwner()), other)
 			await instance.transferOwnership(owner, { from: other })
 		})
 
 		it("Add a supplier", async () => {
-			let actualOwner = await instance.getOwner()
-			console.log("actualOwner ", actualOwner);
-			assert.equal(actualOwner, owner)
 			await truffleAssert.reverts(
 				instance.addSupplier(owner, { from: owner }),
 				"Access: Owner can't be supplier"

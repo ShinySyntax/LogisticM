@@ -11,7 +11,7 @@ contract Ownable {
     }
 
     modifier notOwner(address owner) {
-        require(msg.sender != owner);
+        require(msg.sender != owner, "Ownable: caller is owner");
         _;
     }
 }

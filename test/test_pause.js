@@ -9,32 +9,38 @@ const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
+const pauseTestSuite = async (instance, accounts) => {
+	const [owner, other] = accounts
 
-contract("Pausable test", async ([owner, other]) => {
-	// Create proxy
-	registry = Registry.deployed()
-	instance = new web3.eth.Contract(Registry.abi, Registry.address)
-	let events = await instance.getPastEvents('ProxyCreated', {fromBlock: 0})
-	const proxyAddress = events[0].returnValues.proxy
-	proxy = await LogisticProxy.at(proxyAddress)
-	instance = await LogisticInterface.at(proxy.address)
+	describe("PauseImplementation", async () => {
+		it("Pause and unpause", async () => {
 
-	it("Pause", async () => {
+			await truffleAssert.reverts(
+				instance.pause({ from: other }),
+				"Ownable: caller is not the owner"
+			)
+			await truffleAssert.reverts(
+				instance.unpause({ from: other }),
+				"Ownable: caller is not the owner"
+			)
 
-		await truffleAssert.reverts(
-			proxy.pause({ from: other }),
-			"Ownable: caller is not the owner"
-		)
-		await truffleAssert.reverts(
-			proxy.unpause({ from: other }),
-			"Ownable: caller is not the owner"
-		)
+			await instance.pause({ from: owner })
+			assert.equal((await instance.getPaused()), true)
 
-		await proxy.pause({ from: owner })
-		assert.equal((await proxy.getPaused()), true)
+			await instance.unpause({ from: owner })
+			assert.equal((await instance.getPaused()), false)
 
-		await proxy.unpause({ from: owner })
-		assert.equal((await proxy.getPaused()), false)
+		})
 
+		// it("Pause when incorrect state", async () => {
+		// 	await instance.transferOwnership(ZERO_ADDRESS, { from: owner })
+		// 	await truffleAssert.reverts(
+		// 			instance.transferOwnership(ZERO_ADDRESS, { from: owner }),
+		// 			"Owner: new owner is the zero address"
+		// 	)
+		// 	assert.equal((await instance.getPaused()), true)
+		// })
 	})
-})
+}
+
+module.exports.pauseTestSuite = pauseTestSuite

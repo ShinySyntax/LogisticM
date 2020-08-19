@@ -27,6 +27,6 @@ contract LogisticInterface is
 
     function send(address to, bytes32 productHash) external;
     function receive(address from, bytes32 productHash) external;
-
-    function initialize(address sender) public;
+    function setLock(bool lock_) external;
+    function initializeLogistic(address sender) external;
 }

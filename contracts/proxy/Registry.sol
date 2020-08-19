@@ -46,7 +46,7 @@ contract Registry is IRegistry {
      * @dev Registers a fallback function implementation for a version
      */
     function addFallback(string memory version, address implementation) public {
-        require(fallbacks[version] == address(0));
+        require(fallbacks[version] == address(0), "Registry: fallback already defined");
         fallbacks[version] = implementation;
         emit FallbackAdded(version, implementation);
     }
@@ -67,6 +67,8 @@ contract Registry is IRegistry {
         return addVersion(version, Bytes4Lib.convertBytesToBytes4(abi.encodeWithSignature(func)), implementation);
     }
 
+    // TODO: add OnlyProxyOwner
+
     /**
     * @dev Registers a new version of a function with its implementation address
     * @param version representing the version name of the new function implementation to be registered
@@ -74,7 +76,7 @@ contract Registry is IRegistry {
     * @param implementation representing the address of the new function implementation to be registered
     */
     function addVersion(string memory version, bytes4 func, address implementation) public {
-        require(versions[version][func] == address(0));
+        require(versions[version][func] == address(0), "Registry: func already defined");
         versions[version][func] = implementation;
         funcs[version].push(func);
         emit VersionAdded(version, func, implementation);

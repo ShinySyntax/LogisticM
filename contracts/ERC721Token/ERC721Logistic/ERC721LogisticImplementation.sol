@@ -2,16 +2,17 @@ pragma solidity ^0.5.0;
 
 import "../ERC721Base/ERC721BaseImplementation.sol";
 import "./ERC721LogisticInterface.sol";
-import "../../commons/Restricted.sol";
-import "../../commons/Ownable.sol";
+import "../../commons/Lock.sol";
+import "../../proxy/Upgradeable.sol";
 
 
-contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Restricted, Ownable {
+contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {
     function getCounter() public view returns (uint256) {
         return counter;
     }
 
-    function initializeERC721() public onlyOwner(owner) {
+    function initializeERC721() public {
+        super.initialize(msg.sender);
         _name = "LogisticM";
         _symbol = "LM";
 
@@ -22,12 +23,12 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
         _supportedInterfaces[interfaceId] = true;
     }
 
-    function mint(address to) public restricted {
+    function mint(address to) public locked(lock) {
         _mint(to, counter);
-        counter += 1;
+        counter = counter.add(11);
     }
 
-    function approve(address to, uint256 tokenId) public restricted {
+    function approve(address to, uint256 tokenId) public locked(lock) {
         super.approve(to, tokenId);
     }
 
@@ -37,7 +38,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
 
     function transferFrom(address from, address to, uint256 tokenId)
         public
-        restricted
+        locked(lock)
     {
         super.transferFrom(from, to, tokenId);
     }

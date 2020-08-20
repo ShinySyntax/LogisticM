@@ -13,14 +13,14 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
 
     function initializeERC721() public {
         super.initialize(msg.sender);
-        _name = "LogisticM";
-        _symbol = "LM";
-
-        // register the supported interfaces to conform to ERC721 via ERC165
-        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/introspection/ERC165.sol
-        bytes4 interfaceId = _INTERFACE_ID_ERC721_METADATA;
-        require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
-        _supportedInterfaces[interfaceId] = true;
+        // _name = "LogisticM";
+        // _symbol = "LM";
+        //
+        // // register the supported interfaces to conform to ERC721 via ERC165
+        // // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/introspection/ERC165.sol
+        // bytes4 interfaceId = _INTERFACE_ID_ERC721_METADATA;
+        // require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
+        // _supportedInterfaces[interfaceId] = true;
     }
 
     function mint(address to) public locked(lock) {

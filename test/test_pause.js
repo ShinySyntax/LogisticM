@@ -9,10 +9,18 @@ const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-const pauseTestSuite = async (instance, accounts) => {
+const pauseTestSuite = async (accounts) => {
 	const [owner, other] = accounts
 
 	describe("PauseImplementation", async () => {
+		before(async function () {
+			// Create proxy
+			const registry = await Registry.deployed()
+		    const { logs } = await registry.createProxy('0')
+			const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+			instance = await LogisticInterface.at(proxy)
+	    });
+
 		it("Pause and unpause", async () => {
 
 			await truffleAssert.reverts(

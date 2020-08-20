@@ -6,10 +6,4 @@ contract Lock {
         require(lock == false, "Lock: locked");
         _;
     }
-
-    modifier unlock(bool lock) {
-        lock = false;
-        _;
-        lock = true;
-    }
 }

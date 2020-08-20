@@ -11,10 +11,18 @@ const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 
-const productTestSuite = async (instance, accounts) => {
+const productTestSuite = async (accounts) => {
 	const [owner, supplier, deliveryMan, purchaser, other] = accounts
 
 	describe("ProductImplementation", async () =>{
+		before(async function () {
+			// Create proxy
+			const registry = await Registry.deployed()
+		    const { logs } = await registry.createProxy('0')
+			const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+			instance = await LogisticInterface.at(proxy)
+	    });
+
 		describe("When unlocked (i.e. called by the proxy)", async function () {
 			beforeEach(async function () {
 				await instance.setLock(false, { from: owner })

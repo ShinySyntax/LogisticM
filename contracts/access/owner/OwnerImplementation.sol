@@ -13,7 +13,7 @@ contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeab
 
     function initializeOwner(address sender) public {
         super.initialize(msg.sender);
-        owner = sender;
+        // owner = sender;
     }
 
     function transferOwnership(address newOwner) public {

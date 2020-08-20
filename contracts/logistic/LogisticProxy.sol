@@ -18,8 +18,22 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
 
     function initializeLogistic(address sender) external {
         require(msg.sender == address(registry), "LogisticProxy: bad sender");
-        dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
-        dCall(abi.encodeWithSignature("initializeERC721()"));
+
+        // initialize Owner implementation
+        owner = sender;
+
+        // initialize ERC721 implementation
+        _name = "LogisticM";
+        _symbol = "LM";
+        // register the supported interfaces to conform to ERC721 via ERC165
+        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/introspection/ERC165.sol
+        bytes4 interfaceId = _INTERFACE_ID_ERC721_METADATA;
+        require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
+        _supportedInterfaces[interfaceId] = true;
+
+
+        // dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
+        // dCall(abi.encodeWithSignature("initializeERC721()"));
     }
 
     function setLock(bool lock_) external {
@@ -35,8 +49,8 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
     )
         external
         whenNotPaused(paused)
-        unlock(lock)
     {
+        lock = false;
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "isSupplier(address)", msg.sender)), (bool)),
@@ -70,13 +84,14 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
                 BytesLib.stringToBytes32(purchaserName)
             )
         );
+        lock = true;
     }
 
     function send(address to, bytes32 productHash)
         external
         whenNotPaused(paused)
-        unlock(lock)
     {
+        lock = false;
         uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", msg.sender)), (uint));
         require(
@@ -91,7 +106,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
-                "productsSentFrom(bytes32, address)", productHash, msg.sender)
+                "productsSentFrom(bytes32,address)", productHash, msg.sender)
             ), (address)) == address(0),
             "Logistic: Can't send a product in pending delivery"
         );
@@ -110,7 +125,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         }
 
         address sender = abi.decode(dCall(abi.encodeWithSignature(
-            "productsReceivedFrom(bytes32, address)", productHash, msg.sender)
+            "productsReceivedFrom(bytes32,address)", productHash, msg.sender)
         ), (address));
 
         if (sender == to) {
@@ -120,23 +135,20 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
                 "approve(address,uint256)",
                 to, tokenId
             ));
-            dCall(abi.encodeWithSignature(
-                "approve(address,uint256)",
-                to, tokenId
-            ));
         }
 
         dCall(abi.encodeWithSignature(
-            "setProductSent(bytes32,address,address,bytes32)",
-            productHash, msg.sender, to, BytesLib.stringToBytes32(productName)
+            "setProductSent(bytes32,address,address)",
+            productHash, msg.sender, to
         ));
+        lock = true;
     }
 
     function receive(address from, bytes32 productHash)
         external
         whenNotPaused(paused)
-        unlock(lock)
     {
+        lock = false;
         uint256 msgSenderRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", msg.sender)), (uint));
         require(
@@ -145,7 +157,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
-                "productsReceivedFrom(bytes32, address)", productHash, from)
+                "productsReceivedFrom(bytes32,address)", productHash, from)
             ), (address)) == address(0),
             "Logistic: Already received"
         );
@@ -170,16 +182,17 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         }
 
         address receiver = abi.decode(dCall(abi.encodeWithSignature(
-            "productsSentFrom(bytes32, address)", productHash, from)
+            "productsSentFrom(bytes32,address)", productHash, from)
         ), (address));
         if (receiver == msg.sender) {
             _handoverToken(tokenId, from, msg.sender, productHash, productName);
         }
 
         dCall(abi.encodeWithSignature(
-            "setProductReceived(bytes32,address,address,bytes32)",
-            productHash, from, msg.sender, BytesLib.stringToBytes32(productName)
+            "setProductReceived(bytes32,address,address)",
+            productHash, from, msg.sender
         ));
+        lock = true;
     }
 
     function _handoverToken(

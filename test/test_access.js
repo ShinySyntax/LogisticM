@@ -10,10 +10,18 @@ const Registry = artifacts.require("Registry")
 const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
-const accessTestSuite = async (instance, accounts) => {
+const accessTestSuite = async (accounts) => {
 	const [owner, supplier, deliveryMan, other] = accounts
 
 	describe("AccessImplementation & OwnerImplementation", async () => {
+		before(async function () {
+			// Create proxy
+			const registry = await Registry.deployed()
+		    const { logs } = await registry.createProxy('0')
+			const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+			instance = await LogisticInterface.at(proxy)
+	    });
+
 		it("Owner", async () => {
 			let actualOwner = await instance.getOwner()
 			console.log("actualOwner ", actualOwner);

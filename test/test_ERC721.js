@@ -8,10 +8,18 @@ const Registry = artifacts.require("Registry")
 const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
-const ERC721TestSuite = async (instance, accounts) => {
+const ERC721TestSuite = async (accounts) => {
 	const [owner, other] = accounts
 
 	describe("ERC721", async () => {
+		before(async function () {
+			// Create proxy
+			const registry = await Registry.deployed()
+		    const { logs } = await registry.createProxy('0')
+			const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+			instance = await LogisticInterface.at(proxy)
+	    });
+
 		beforeEach(async function () {
 			await instance.setLock(false, { from: owner })
 		})

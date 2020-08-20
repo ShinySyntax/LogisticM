@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "../logistic/LogisticSharedStorage.sol";
 import "./ProductInterface.sol";
 import "../commons/Lock.sol";
+import "../commons/BytesLib.sol";
 
 
 contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock {
@@ -10,11 +11,12 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
         bytes32 productHash,
         address purchaser,
         uint256 tokenId,
-        string memory productName
+        bytes32 productNameBytes32
     )
         public
         locked(lock)
     {
+        string memory productName = BytesLib.bytes32ToString(productNameBytes32);
         tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);
         emit NewProduct(msg.sender, purchaser, productHash, productName);

@@ -1,5 +1,6 @@
 const truffleAssert = require('truffle-assertions')
 var Web3 = require('web3')
+const ethersUtils = require('ethers').utils
 
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
@@ -22,9 +23,10 @@ const nameTestSuite = async (instance, accounts) => {
 
 		it("Set name", async () => {
 			let name = "John Doe"
-			await instance.setName(other, name, { from: owner })
+			let nameBytes = ethersUtils.formatBytes32String(name)
+			await instance.setName(other, nameBytes, { from: owner })
 			assert.equal(await instance.getName(other), name)
-			assert.equal(await instance.getAddress(name), other)
+			assert.equal(await instance.getAddress(nameBytes), other)
 		})
 	})
 }

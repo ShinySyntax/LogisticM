@@ -8,7 +8,7 @@ contract ProductInterface is ProductEvents {
         bytes32 productHash,
         address purchaser,
         uint256 tokenId,
-        string memory productName
+        bytes32 productNameBytes32
     )
         public;
 

@@ -58,14 +58,14 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
             abi.encodeWithSignature("getCounter()")), (uint256));
         dCall(
             abi.encodeWithSignature(
-                "newProduct(bytes32,address,uint256,string)",
+                "newProduct(bytes32,address,uint256,bytes32)",
                 productHash, purchaser, tokenId, BytesLib.stringToBytes32(productName)
             )
         );
         dCall(abi.encodeWithSignature("mint(address)", msg.sender));
         dCall(
             abi.encodeWithSignature(
-                "setName(address,string)",
+                "setName(address,bytes32)",
                 msg.sender,
                 BytesLib.stringToBytes32(purchaserName)
             )
@@ -127,7 +127,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         }
 
         dCall(abi.encodeWithSignature(
-            "setProductSent(bytes32,address,address,string)",
+            "setProductSent(bytes32,address,address,bytes32)",
             productHash, msg.sender, to, BytesLib.stringToBytes32(productName)
         ));
     }
@@ -177,7 +177,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         }
 
         dCall(abi.encodeWithSignature(
-            "setProductReceived(bytes32,address,address,string)",
+            "setProductReceived(bytes32,address,address,bytes32)",
             productHash, from, msg.sender, BytesLib.stringToBytes32(productName)
         ));
     }
@@ -202,9 +202,8 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         // Delegate call to the contract implementation of the given encoded
         // signature
         bytes4 func = BytesLib.convertBytesToBytes4(encoded);
-        address imp = registry.getFunction(version_, func);
-        (bool success, bytes memory result) = imp.delegatecall(encoded);
-        require(success, "LogisticProxy: delegate call failed");
+        address _impl = registry.getFunction(version_, func);
+        bytes memory result = degelateCallWithRevert(_impl, encoded);
         return result;
     }
 }

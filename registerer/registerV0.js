@@ -46,15 +46,15 @@ ProductAddress]) => {
 	await registry.addVersionFromName('0', 'tokenByIndex(uint256)', ERC721LogisticAddress)
 	await registry.addVersionFromName('0', 'supportsInterface(bytes4)', ERC721LogisticAddress)
 
-	await registry.addVersionFromName('0', 'setName(address,string)', NameAddress)
+	await registry.addVersionFromName('0', 'setName(address,bytes32)', NameAddress)
 	await registry.addVersionFromName('0', 'getName(address)', NameAddress)
-	await registry.addVersionFromName('0', 'getAddress(string)', NameAddress)
+	await registry.addVersionFromName('0', 'getAddress(bytes32)', NameAddress)
 
 	await registry.addVersionFromName('0', 'getPaused()', PauseAddress)
 	await registry.addVersionFromName('0', 'pause()', PauseAddress)
 	await registry.addVersionFromName('0', 'unpause()', PauseAddress)
 
-	await registry.addVersionFromName('0', 'newProduct(bytes32,address,uint256,string)', ProductAddress)
+	await registry.addVersionFromName('0', 'newProduct(bytes32,address,uint256,bytes32)', ProductAddress)
 	await registry.addVersionFromName('0', 'setProductSent(bytes32,address,address)', ProductAddress)
 	await registry.addVersionFromName('0', 'setProductReceived(bytes32,address,address)', ProductAddress)
 	await registry.addVersionFromName('0', 'getProductInfo(bytes32)', ProductAddress)

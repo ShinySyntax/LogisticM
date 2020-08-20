@@ -26,7 +26,7 @@ const productTestSuite = async (instance, accounts) => {
 
 			it("New product", async () => {
 				let result = await instance.newProduct(products[0].hash, purchaser,
-					products[0].tokenId, products[0].name, { from: supplier });
+					products[0].tokenId, products[0].nameBytes32, { from: supplier });
 
 					truffleAssert.eventEmitted(result, 'NewProduct', ev =>
 					ev.by === supplier &&
@@ -73,7 +73,7 @@ const productTestSuite = async (instance, accounts) => {
 		it("Should revert if locked", async () => {
 			await truffleAssert.reverts(
 				instance.newProduct(products[0].hash, purchaser,
-					products[0].tokenId, products[0].name, { from: supplier }),
+					products[0].tokenId, products[0].nameBytes32, { from: supplier }),
 				"Lock: locked"
 			)
 			await truffleAssert.reverts(

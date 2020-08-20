@@ -4,8 +4,8 @@ import "./NameEvents.sol";
 
 
 contract NameInterface is NameEvents {
-    function setName(address account, string calldata name) external;
+    function setName(address account, bytes32 nameBytes32) external;
 
     function getName(address account) external view returns (string memory);
-    function getAddress(string calldata name) external view returns (address);
+    function getAddress(bytes32 nameBytes32) external view returns (address);
 }

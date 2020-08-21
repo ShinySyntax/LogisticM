@@ -2,32 +2,26 @@ pragma solidity ^0.5.0;
 
 
 contract Delegater {
+    event RevertLog(string reason);
+
     function degelateCallWithRevert(address _impl, bytes memory signature)
         internal
-        returns (bytes memory result)
+        returns (bytes memory)
     {
-        (bool success, bytes memory result) = address(this).delegatecall(signature);
-        require(success, "Delegater: logic contract call failed");
+        (bool success, bytes memory result) = address(_impl).delegatecall(signature);
+        if (success == false) {
+            assembly {
+                let ptr := mload(0x40)
+                let size := returndatasize
+                returndatacopy(ptr, 0, size)
+                revert(ptr, size)
+            }
+        }
         return result;
-
-
-        // assembly {
-        //     let success := delegatecall(sub(gas, 10000), _impl, add(signature, 0x20), mload(signature), 0, 0)
-        //     let size := returndatasize
-        //     let ptr := mload(0x40)
-        //     returndatacopy(ptr, 0, size)
-        //
-        //     // revert instead of invalid() bc if the underlying call failed with invalid() it already wasted gas.
-        //     // if the call returned error data, forward it
-        //     switch success
-        //     case 0 { revert(ptr, size) }
-        //     // default { mstore(ptr, result) }
-        //     default { let result := mload(ptr) }
-        // }
-        // return result;
     }
 
     function delegateCallProxy(address _impl) internal {
+        // revert("proxy closed");
         assembly {
             let ptr := mload(0x40)
             calldatacopy(ptr, 0, calldatasize)

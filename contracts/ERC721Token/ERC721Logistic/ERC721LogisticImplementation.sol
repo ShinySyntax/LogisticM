@@ -33,7 +33,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
     }
 
     function setApprovalForAll(address, bool) public {
-        revert("LogisticBase: can not approve for all");
+        revert("ERC721Logistic: can not approve for all");
     }
 
     function transferFrom(address from, address to, uint256 tokenId)
@@ -44,10 +44,10 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
     }
 
     function safeTransferFrom(address, address, uint256) public {
-        revert("LogisticBase: can not transfer");
+        revert("ERC721Logistic: can not transfer");
     }
 
     function safeTransferFrom(address, address, uint256, bytes memory) public {
-        revert("LogisticBase: can not transfer");
+        revert("ERC721Logistic: can not transfer");
     }
 }

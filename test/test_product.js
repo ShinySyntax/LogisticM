@@ -1,15 +1,13 @@
 const truffleAssert = require('truffle-assertions')
 var Web3 = require('web3')
 
-const { products, getHash } = require('./utils')
+const { products, getHash, ZERO_ADDRESS } = require('./utils')
 
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
 const LogisticInterface = artifacts.require("LogisticInterface")
-
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 contract("Product", async accounts => {
 	const [owner, supplier, deliveryMan, purchaser, other] = accounts

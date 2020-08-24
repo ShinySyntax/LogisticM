@@ -7,6 +7,7 @@ import "../access/AccessInterface.sol";
 import "../access/owner/OwnerInterface.sol";
 import "../product/ProductInterface.sol";
 import "../pause/PauseInterface.sol";
+import "../proxy/IUpgradeabilityProxy.sol";
 
 
 contract LogisticInterface is
@@ -16,7 +17,8 @@ contract LogisticInterface is
     AccessInterface,
     OwnerInterface,
     ProductInterface,
-    PauseInterface {
+    PauseInterface,
+    IUpgradeabilityProxy {
 
     function createProduct(
         address purchaser,

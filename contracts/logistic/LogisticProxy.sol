@@ -36,8 +36,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         // dCall(abi.encodeWithSignature("initializeERC721()"));
     }
 
-    function setLock(bool lock_) external {
-        require(msg.sender == owner);
+    function setLock(bool lock_) external onlyOwner(owner) {
         lock = lock_;
     }
 
@@ -149,6 +148,7 @@ contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
         whenNotPaused(paused)
     {
         lock = false;
+        // only DeliveryMan or Purchaser can receive a product
         uint256 msgSenderRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", msg.sender)), (uint));
         require(

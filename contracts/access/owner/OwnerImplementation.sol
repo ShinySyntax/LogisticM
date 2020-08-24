@@ -2,11 +2,10 @@ pragma solidity ^0.5.0;
 
 import "../../logistic/LogisticSharedStorage.sol";
 import "./OwnerInterface.sol";
-import "../../commons/Pausable.sol";
 import "../../proxy/Upgradeable.sol";
 
 
-contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable, Pausable {
+contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable {
     function getOwner() external view returns (address) {
         return owner;
     }
@@ -23,6 +22,7 @@ contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeab
         // if (newOwner == address(0)) {
         //     paused = true;
         // }
+        // Comment the following require statement
         // END DEBUG --------------------
         require(newOwner != address(0), "Owner: new owner is the zero address");
 

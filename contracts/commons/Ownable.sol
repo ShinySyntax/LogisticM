@@ -9,9 +9,4 @@ contract Ownable {
         );
         _;
     }
-
-    modifier notOwner(address owner_) {
-        require(msg.sender != owner_, "Ownable: caller is owner");
-        _;
-    }
 }

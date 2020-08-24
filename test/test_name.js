@@ -6,11 +6,18 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
-const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
-const nameTestSuite = async (accounts) => {
+contract("Name", async accounts => {
 	const [owner, other] = accounts
+
+	before(async function () {
+		// Create proxy
+		const registry = await Registry.deployed()
+	    const { logs } = await registry.createProxy('0')
+		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+		instance = await LogisticInterface.at(proxy)
+	});
 
 	describe("NameImplementation", async () => {
 		before(async function () {
@@ -35,8 +42,15 @@ const nameTestSuite = async (accounts) => {
 			await instance.setName(other, nameBytes, { from: owner })
 			assert.equal(await instance.getName(other), name)
 			assert.equal(await instance.getAddress(nameBytes), other)
+
+			await truffleAssert.reverts(
+				instance.setName(other, ethersUtils.formatBytes32String("Jack S."), { from: owner }),
+				"Name: invalid name"
+			)
+			await truffleAssert.reverts(
+				instance.setName(owner, nameBytes, { from: owner }),
+				"Name: invalid address"
+			)
 		})
 	})
-}
-
-module.exports.nameTestSuite = nameTestSuite
+})

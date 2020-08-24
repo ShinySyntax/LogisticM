@@ -13,20 +13,11 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
-const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 contract("Logistic", async accounts => {
 	const [owner, supplier, deliveryMan1, deliveryMan2, purchaser, other] = accounts
 	let instance;
-
-	it("Implementations", async () => {
-		await accessTestSuite(accounts)
-		await nameTestSuite(accounts)
-		await pauseTestSuite(accounts)
-		await productTestSuite(accounts)
-		await ERC721TestSuite(accounts)
-	})
 
 	describe("Logistic", async function () {
 		before(async function () {

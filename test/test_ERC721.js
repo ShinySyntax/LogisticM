@@ -5,11 +5,18 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
-const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
-const ERC721TestSuite = async (accounts) => {
+contract("ERC721 Token", async (accounts) => {
 	const [owner, other] = accounts
+
+	before(async function () {
+		// Create proxy
+		const registry = await Registry.deployed()
+	    const { logs } = await registry.createProxy('0')
+		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
+		instance = await LogisticInterface.at(proxy)
+	});
 
 	describe("ERC721", async () => {
 		before(async function () {
@@ -47,6 +54,4 @@ const ERC721TestSuite = async (accounts) => {
 			assert.equal((await instance.ownerOf(0)), owner)
 		})
 	})
-}
-
-module.exports.ERC721TestSuite = ERC721TestSuite
+})

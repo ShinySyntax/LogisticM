@@ -7,11 +7,11 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
-const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-const productTestSuite = async (accounts) => {
+contract("Product", async accounts => {
 	const [owner, supplier, deliveryMan, purchaser, other] = accounts
 
 	describe("ProductImplementation", async () =>{
@@ -62,6 +62,16 @@ const productTestSuite = async (accounts) => {
 				);
 				assert.equal(await instance.productsSentFrom(products[0].hash,
 					supplier), deliveryMan);
+				await truffleAssert.reverts(
+					instance.setProductSent(products[0].hash,
+						ZERO_ADDRESS, deliveryMan, { from: deliveryMan }),
+					"Product: from is the zero address"
+				)
+				await truffleAssert.reverts(
+					instance.setProductSent(products[0].hash,
+						supplier, ZERO_ADDRESS, { from: deliveryMan }),
+					"Product: to is the zero address"
+				)
 			})
 
 			it("Set product received", async () => {
@@ -75,6 +85,16 @@ const productTestSuite = async (accounts) => {
 				);
 				assert.equal(await instance.productsReceivedFrom(products[0].hash,
 					supplier), deliveryMan);
+				await truffleAssert.reverts(
+					instance.setProductReceived(products[0].hash,
+						ZERO_ADDRESS, deliveryMan, { from: deliveryMan }),
+					"Product: from is the zero address"
+				)
+				await truffleAssert.reverts(
+					instance.setProductReceived(products[0].hash,
+						supplier, ZERO_ADDRESS, { from: deliveryMan }),
+					"Product: by is the zero address"
+				)
 			})
 		})
 
@@ -88,7 +108,7 @@ const productTestSuite = async (accounts) => {
 				instance.setProductReceived(products[0].hash,
 					supplier, deliveryMan, { from: deliveryMan }),
 				"Lock: locked"
-				)
+			)
 			await truffleAssert.reverts(
 				instance.setProductSent(products[0].hash,
 					supplier, deliveryMan, { from: supplier }),
@@ -101,6 +121,4 @@ const productTestSuite = async (accounts) => {
 			assert.isFalse(await instance.productExists(getHash("0")))
 		})
 	})
-}
-
-module.exports.productTestSuite = productTestSuite
+})

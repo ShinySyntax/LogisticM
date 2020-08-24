@@ -5,11 +5,10 @@ const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
 const Registry = artifacts.require("Registry")
-const LogisticProxy = artifacts.require("LogisticProxy")
 const LogisticInterface = artifacts.require("LogisticInterface")
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
-const pauseTestSuite = async (accounts) => {
+contract("Pause", async accounts => {
 	const [owner, other] = accounts
 
 	describe("PauseImplementation", async () => {
@@ -49,6 +48,4 @@ const pauseTestSuite = async (accounts) => {
 		// 	assert.equal((await instance.getPaused()), true)
 		// })
 	})
-}
-
-module.exports.pauseTestSuite = pauseTestSuite
+})

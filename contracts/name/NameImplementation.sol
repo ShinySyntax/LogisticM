@@ -16,9 +16,9 @@ contract NameImplementation is NameInterface, LogisticSharedStorage, Lock {
 
         // Can't rename
         require(keccak256(bytes(names[account])) == keccak256(bytes(empty)),
-            "NamedAccount: invalid name");
+            "Name: invalid name");
         require(addresses[name] == address(0),
-            "NamedAccount: invalid address");
+            "Name: invalid address");
 
         names[account] = name;
         addresses[name] = account;

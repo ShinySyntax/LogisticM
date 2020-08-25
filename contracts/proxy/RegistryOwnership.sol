@@ -28,7 +28,10 @@ contract RegistryOwnership {
     * @dev Throws if called by any account other than the owner.
     */
     modifier onlyRegistryOwner() {
-        require(msg.sender == registryOwner());
+        require(
+            msg.sender == registryOwner(),
+            "RegistryOwnership: Caller is not the registry owner"
+        );
         _;
     }
 
@@ -45,7 +48,10 @@ contract RegistryOwnership {
     * @param newRegistryOwner The address to transfer ownership to.
     */
     function transferRegistryOwnership(address newRegistryOwner) public onlyRegistryOwner {
-        require(newRegistryOwner != address(0));
+        require(
+            newRegistryOwner != address(0),
+            "RegistryOwnership: Can't transfer ownership to the zero address"
+        );
         emit RegistryOwnershipTransferred(registryOwner(), newRegistryOwner);
         setRegistryOwner(newRegistryOwner);
     }

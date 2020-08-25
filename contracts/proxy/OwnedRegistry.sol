@@ -10,7 +10,10 @@ import "./RegistryOwnership.sol";
  * @dev Methods that change state are access-restricted: only the creator of the registry can call them.
  */
 contract OwnedRegistry is Registry, RegistryOwnership {
-    function addFallback(string memory version, address implementation) public {
+    function addFallback(string memory version, address implementation)
+        public
+        onlyRegistryOwner
+    {
         _addFallback(version, implementation);
     }
 

@@ -47,7 +47,10 @@ contract OwnedUpgradeabilityProxy is UpgradeabilityProxy, OwnedUpgradeabilitySto
      * @param newOwner The address to transfer ownership to.
      */
     function transferProxyOwnership(address newOwner) public onlyProxyOwner {
-        require(newOwner != address(0));
+        require(
+            newOwner != address(0),
+            "OwnedUpgradeabilityProxy: Can't transfer proxy ownership to the zero address"
+        );
         emit ProxyOwnershipTransferred(proxyOwner(), newOwner);
         setUpgradeabilityOwner(newOwner);
     }
@@ -67,9 +70,9 @@ contract OwnedUpgradeabilityProxy is UpgradeabilityProxy, OwnedUpgradeabilitySto
      * @param data represents the msg.data to bet sent in the low level call. This parameter may include the function
      * signature of the implementation to be called with the needed payload
      */
-    function upgradeToAndCall(string memory version, bytes memory data) public onlyProxyOwner {
-        upgradeTo(version);
-        (bool success, bytes memory result) = address(this).call(data);
-        require(success, "OwnedUpgradeabilityProxy: call failed");
-    }
+    // function upgradeToAndCall(string memory version, bytes memory data) public onlyProxyOwner {
+    //     upgradeTo(version);
+    //     (bool success, bytes memory result) = address(this).call(data);
+    //     require(success, "OwnedUpgradeabilityProxy: call failed");
+    // }
 }

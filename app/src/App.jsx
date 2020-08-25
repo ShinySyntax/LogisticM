@@ -12,6 +12,7 @@ import Home from "./components/Home";
 import HeaderBar from "./components/HeaderBar";
 import ProductDetail from './components/product/product-page/ProductDetail'
 import LoadingContainer from "./components/LoadingContainer";
+import ContractLoader from "./components/ContractLoader";
 import "./App.css";
 
 const drizzle = new Drizzle(drizzleOptions, drizzleStore);
@@ -39,24 +40,30 @@ const App = () => {
           return (
             <LoadingContainer
               drizzleState={drizzleState}
+              drizzle={drizzle}
               initialized={initialized}
             >
-
-              <Router>
-                <HeaderBar drizzle={drizzle} drizzleState={drizzleState} />
-                <Route exact path="/">
-                  <Home drizzle={drizzle} drizzleState={drizzleState} />
-                </Route>
-                <Route exact path="/product/:productName" render={(props) => {
-                    return (
-                      <ProductDetail {...props}
-                        drizzle={drizzle}
-                        drizzleState={drizzleState}
-                      />
-                    )}
-                  }
-                />
-              </Router>
+              <ContractLoader
+                drizzleState={drizzleState}
+                drizzle={drizzle}
+                initialized={initialized}
+              >
+                <Router>
+                  <HeaderBar drizzle={drizzle} drizzleState={drizzleState} />
+                  <Route exact path="/">
+                    <Home drizzle={drizzle} drizzleState={drizzleState} />
+                  </Route>
+                  <Route exact path="/product/:productName" render={(props) => {
+                      return (
+                        <ProductDetail {...props}
+                          drizzle={drizzle}
+                          drizzleState={drizzleState}
+                          />
+                      )}
+                    }
+                    />
+                </Router>
+              </ContractLoader>
             </LoadingContainer>
           )
         }}

@@ -16,7 +16,7 @@ class Home extends React.Component {
   componentDidMount() {
     const { drizzle, drizzleState } = this.props;
 
-    const dataKeyOwner = drizzle.contracts.Logistic.methods.owner.cacheCall();
+    const dataKeyOwner = drizzle.contracts.Logistic.methods.getOwner.cacheCall();
     this.setState({ dataKeyOwner });
 
     const dataKeySupplier = drizzle.contracts.Logistic.methods.isSupplier
@@ -32,7 +32,7 @@ class Home extends React.Component {
     const { drizzle, drizzleState } = this.props;
     const { Logistic } = drizzleState.contracts;
 
-    const owner = Logistic.owner[this.state.dataKeyOwner];
+    const owner = Logistic.getOwner[this.state.dataKeyOwner];
     const isSupplier = Logistic.isSupplier[this.state.dataKeySupplier];
     const isDeliveryMan = Logistic.isDeliveryMan[this.state.dataKeyDeliveryMan];
 

@@ -6,11 +6,11 @@ export default function Address({ drizzle, drizzleState, address, useAddress }) 
 	const [dataKey, setDataKey] = useState();
 
   useEffect(() => {
-		setDataKey(drizzle.contracts.Logistic.methods.names
+		setDataKey(drizzle.contracts.Logistic.methods.getName
 			.cacheCall(address))
 	}, [setDataKey, drizzle, address]);
 
-	const nameObject = drizzleState.contracts.Logistic.names[dataKey]
+	const nameObject = drizzleState.contracts.Logistic.getName[dataKey]
 
 	let account = address;
 

@@ -3,7 +3,6 @@ pragma solidity ^0.5.0;
 import "./LogisticSharedStorage.sol";
 import "./LogisticEvents.sol";
 import "../proxy/OwnedUpgradeabilityProxy.sol";
-import "../commons/Lock.sol";
 import "../commons/Pausable.sol";
 import "../commons/Ownable.sol";
 import "../commons/BytesLib.sol";
@@ -11,27 +10,13 @@ import "../commons/BytesLib.sol";
 
 contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
     LogisticEvents,
-    Lock,
     Pausable,
     Ownable {
     constructor(string memory _version, address sender) public OwnedUpgradeabilityProxy(_version, sender) {
         require(msg.sender == address(registry), "LogisticProxy: bad sender");
 
-        // initialize Owner implementation
-        owner = sender;
-
-        // initialize ERC721 implementation
-        _name = "LogisticM";
-        _symbol = "LM";
-        // register the supported interfaces to conform to ERC721 via ERC165
-        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/introspection/ERC165.sol
-        bytes4 interfaceId = _INTERFACE_ID_ERC721_METADATA;
-        require(interfaceId != 0xffffffff, "ERC165: invalid interface id");
-        _supportedInterfaces[interfaceId] = true;
-
-
-        // dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
-        // dCall(abi.encodeWithSignature("initializeERC721()"));
+        dCall(abi.encodeWithSignature("initializeOwner(address)", sender));
+        dCall(abi.encodeWithSignature("initializeERC721()"));
     }
 
     function setLock(bool lock_) external onlyOwner(owner) {

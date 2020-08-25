@@ -193,13 +193,4 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         ));
         emit Handover(from, to, productHash, productName);
     }
-
-    function dCall(bytes memory encoded) internal returns (bytes memory) {
-        // Delegate call to the contract implementation of the given encoded
-        // signature
-        bytes4 func = BytesLib.convertBytesToBytes4(encoded);
-        address _impl = registry.getFunction(version_, func);
-        bytes memory result = degelateCallWithRevert(_impl, encoded);
-        return result;
-    }
 }

@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./Proxy.sol";
 import "./IRegistry.sol";
 import "./UpgradeabilityStorage.sol";
+import "../commons/BytesLib.sol";
 
 
 /**
@@ -60,5 +61,14 @@ contract UpgradeabilityProxy is Proxy, UpgradeabilityStorage {
         }
 
         fallback_ = registry.getFallback(version_);
+    }
+
+    function dCall(bytes memory encoded) internal returns (bytes memory) {
+        // Delegate call to the contract implementation of the given encoded
+        // signature
+        bytes4 func = BytesLib.convertBytesToBytes4(encoded);
+        address _impl = registry.getFunction(version_, func);
+        bytes memory result = degelateCallWithRevert(_impl, encoded);
+        return result;
     }
 }

@@ -8,7 +8,7 @@ const NameImplementation = artifacts.require('./NameImplementation.sol')
 const PauseImplementation = artifacts.require('./PauseImplementation.sol')
 const ProductImplementation = artifacts.require('./ProductImplementation.sol')
 
-const Registry = artifacts.require('./Registry.sol')
+const OwnedRegistry = artifacts.require('./OwnedRegistry.sol')
 
 module.exports = async (deployer) => {
 	await deployer.deploy(RolesLibrary)
@@ -21,9 +21,9 @@ module.exports = async (deployer) => {
 	await deployer.deploy(PauseImplementation)
 	await deployer.deploy(ProductImplementation)
 
-	const registry = await deployer.deploy(Registry)
+	const ownedRegistry = await deployer.deploy(OwnedRegistry)
 
-	await registerV0(registry, [
+	await registerV0(ownedRegistry, [
 		OwnerImplementation.address,
 		AccessImplementation.address,
 		ERC721LogisticImplementation.address,

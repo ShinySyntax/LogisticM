@@ -99,11 +99,4 @@ contract("Proxy", async accounts => {
 			"Proxy: implementation not found"
 		);
 	})
-
-	it("Delegater: delegate call with revert (assembly)", async () => {
-		await truffleAssert.reverts(
-			mockInstance.thisMethodReverts(),
-			"I reverts"
-		);
-	})
 })

@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import "./IRegistry.sol";
-import "./Upgradeable.sol";
 import "../logistic/LogisticProxy.sol";
 import "../commons/BytesLib.sol";
 
@@ -36,6 +35,20 @@ contract Registry is IRegistry {
     }
 
     /**
+    * @dev Tells the address of the function implementation for a given version
+    * @param version representing the version of the function implementation to be queried
+    * @param func representing the signature of the function to be queried
+    * @return address of the function implementation registered for the given version
+    */
+    function getFunction(string memory version, bytes4 func)
+        public
+        view
+        returns (address)
+    {
+        return versions[version][func];
+    }
+
+    /**
      * @dev Returns the the fallback function for a specific version, if registered
      */
     function getFallback(string memory version) public view returns (address) {
@@ -45,7 +58,7 @@ contract Registry is IRegistry {
     /**
      * @dev Registers a fallback function implementation for a version
      */
-    function addFallback(string memory version, address implementation) public {
+    function _addFallback(string memory version, address implementation) internal {
         require(fallbacks[version] == address(0), "Registry: fallback already defined");
         fallbacks[version] = implementation;
         emit FallbackAdded(version, implementation);
@@ -57,17 +70,19 @@ contract Registry is IRegistry {
     * @param func representing the name of the function to be registered
     * @param implementation representing the address of the new function implementation to be registered
     */
-    function addVersionFromName(
+    function _addVersionFromName(
         string memory version,
         string memory func,
         address implementation
     )
-        public
+        internal
     {
-        return addVersion(version, BytesLib.convertBytesToBytes4(abi.encodeWithSignature(func)), implementation);
+        return addVersion(
+            version,
+            BytesLib.convertBytesToBytes4(abi.encodeWithSignature(func)),
+            implementation
+        );
     }
-
-    // TODO: add OnlyProxyOwner
 
     /**
     * @dev Registers a new version of a function with its implementation address
@@ -75,28 +90,29 @@ contract Registry is IRegistry {
     * @param func representing the signature of the function to be registered
     * @param implementation representing the address of the new function implementation to be registered
     */
-    function addVersion(string memory version, bytes4 func, address implementation) public {
-        require(versions[version][func] == address(0), "Registry: func already defined");
+    function _addVersion(
+        string memory version,
+        bytes4 func,
+        address implementation
+    )
+        internal
+    {
+        require(
+            versions[version][func] == address(0),
+            "Registry: func already defined");
         versions[version][func] = implementation;
         funcs[version].push(func);
         emit VersionAdded(version, func, implementation);
     }
 
     /**
-    * @dev Tells the address of the function implementation for a given version
-    * @param version representing the version of the function implementation to be queried
-    * @param func representing the signature of the function to be queried
-    * @return address of the function implementation registered for the given version
-    */
-    function getFunction(string memory version, bytes4 func) public view returns (address) {
-        return versions[version][func];
-    }
-
-    /**
     * @dev Creates an upgradeable proxy
     * @return address of the new proxy created
     */
-    function createProxy(string memory version) public returns (LogisticProxy) {
+    function _createProxy(string memory version)
+        internal
+        returns (LogisticProxy)
+    {
         LogisticProxy proxy = new LogisticProxy(version);
         proxy.initializeLogistic(msg.sender);
         emit ProxyCreated(address(proxy));

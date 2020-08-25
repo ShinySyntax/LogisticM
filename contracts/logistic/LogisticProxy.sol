@@ -2,19 +2,19 @@ pragma solidity ^0.5.0;
 
 import "./LogisticSharedStorage.sol";
 import "./LogisticEvents.sol";
-import "../proxy/UpgradeabilityProxy.sol";
+import "../proxy/OwnedUpgradeabilityProxy.sol";
 import "../commons/Lock.sol";
 import "../commons/Pausable.sol";
 import "../commons/Ownable.sol";
 import "../commons/BytesLib.sol";
 
 
-contract LogisticProxy is LogisticSharedStorage, UpgradeabilityProxy,
+contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
     LogisticEvents,
     Lock,
     Pausable,
     Ownable {
-    constructor(string memory _version) public UpgradeabilityProxy(_version) {}
+    constructor(string memory _version) public OwnedUpgradeabilityProxy(_version) {}
 
     function initializeLogistic(address sender) external {
         require(msg.sender == address(registry), "LogisticProxy: bad sender");

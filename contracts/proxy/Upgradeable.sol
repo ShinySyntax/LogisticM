@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "./UpgradeabilityStorage.sol";
+import "./OwnedUpgradeabilityStorage.sol";
 
 
 /**
@@ -8,7 +8,7 @@ import "./UpgradeabilityStorage.sol";
  * @dev This contract holds all the minimum required functionality for a behavior to be upgradeable.
  * This means, required state variables for owned upgradeability purpose and simple initialization validation.
  */
-contract Upgradeable is UpgradeabilityStorage {
+contract Upgradeable is OwnedUpgradeabilityStorage {
     /**
     * @dev Validates the caller is the versions registry.
     * THIS FUNCTION SHOULD BE OVERRIDDEN CALLING SUPER

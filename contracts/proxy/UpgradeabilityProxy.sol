@@ -25,7 +25,7 @@ contract UpgradeabilityProxy is IUpgradeabilityProxy, Proxy, UpgradeabilityStora
      * @dev Upgrades the implementation of a given function to the requested version
      * @param targetVersion representing the version name of the new implementation to be set
      */
-    function upgradeTo(string memory targetVersion) public {
+    function _upgradeTo(string memory targetVersion) internal {
         clearVersion();
         version_ = targetVersion;
         loadVersion();

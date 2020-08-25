@@ -7,7 +7,7 @@ import "../access/AccessInterface.sol";
 import "../access/owner/OwnerInterface.sol";
 import "../product/ProductInterface.sol";
 import "../pause/PauseInterface.sol";
-import "../proxy/IUpgradeabilityProxy.sol";
+import "../proxy/IOwnedUpgradeabilityProxy.sol";
 
 
 contract LogisticInterface is
@@ -18,7 +18,7 @@ contract LogisticInterface is
     OwnerInterface,
     ProductInterface,
     PauseInterface,
-    IUpgradeabilityProxy {
+    IOwnedUpgradeabilityProxy {
 
     function createProduct(
         address purchaser,
@@ -30,5 +30,4 @@ contract LogisticInterface is
     function send(address to, bytes32 productHash) external;
     function receive(address from, bytes32 productHash) external;
     function setLock(bool lock_) external;
-    function initializeLogistic(address sender) external;
 }

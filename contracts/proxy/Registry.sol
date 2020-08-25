@@ -113,8 +113,7 @@ contract Registry is IRegistry {
         internal
         returns (LogisticProxy)
     {
-        LogisticProxy proxy = new LogisticProxy(version);
-        proxy.initializeLogistic(msg.sender);
+        LogisticProxy proxy = new LogisticProxy(version, msg.sender);
         emit ProxyCreated(address(proxy));
         return proxy;
     }

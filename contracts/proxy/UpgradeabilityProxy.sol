@@ -1,6 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "./IUpgradeabilityProxy.sol";
 import "./Proxy.sol";
 import "./IRegistry.sol";
 import "./UpgradeabilityStorage.sol";
@@ -10,7 +9,7 @@ import "./UpgradeabilityStorage.sol";
  * @title UpgradeabilityProxy
  * @dev This contract represents a proxy where the implementation address to which it will delegate can be upgraded
  */
-contract UpgradeabilityProxy is IUpgradeabilityProxy, Proxy, UpgradeabilityStorage {
+contract UpgradeabilityProxy is Proxy, UpgradeabilityStorage {
 
     /**
      * @dev Constructor function

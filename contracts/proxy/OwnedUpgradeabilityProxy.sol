@@ -19,15 +19,18 @@ contract OwnedUpgradeabilityProxy is UpgradeabilityProxy, OwnedUpgradeabilitySto
     /**
     * @dev the constructor sets the original owner of the contract to the sender account.
     */
-    constructor(string memory _version) internal UpgradeabilityProxy(_version) {
-        setUpgradeabilityOwner(msg.sender);
+    constructor(string memory _version, address sender) internal UpgradeabilityProxy(_version) {
+        setUpgradeabilityOwner(sender);
     }
 
     /**
     * @dev Throws if called by any account other than the owner.
     */
     modifier onlyProxyOwner() {
-        require(msg.sender == proxyOwner());
+        require(
+            msg.sender == proxyOwner(),
+            "OwnedUpgradeabilityProxy: Caller is the proxy owner"
+        );
         _;
     }
 

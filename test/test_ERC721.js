@@ -6,7 +6,7 @@ const { getHash } = require('./utils')
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
-const Registry = artifacts.require("Registry")
+const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 contract("ERC721 Token", async (accounts) => {
@@ -14,8 +14,8 @@ contract("ERC721 Token", async (accounts) => {
 
 	before(async function () {
 		// Create proxy
-		const registry = await Registry.deployed()
-	    const { logs } = await registry.createProxy('0')
+		const ownedRegistry = await OwnedRegistry.deployed()
+	    const { logs } = await ownedRegistry.createProxy('0')
 		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 		instance = await LogisticInterface.at(proxy)
 	});

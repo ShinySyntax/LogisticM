@@ -14,9 +14,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
     Lock,
     Pausable,
     Ownable {
-    constructor(string memory _version) public OwnedUpgradeabilityProxy(_version) {}
-
-    function initializeLogistic(address sender) external {
+    constructor(string memory _version, address sender) public OwnedUpgradeabilityProxy(_version, sender) {
         require(msg.sender == address(registry), "LogisticProxy: bad sender");
 
         // initialize Owner implementation

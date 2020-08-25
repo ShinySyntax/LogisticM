@@ -7,7 +7,7 @@ const { ZERO_ADDRESS } = require("./utils");
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
 
-const Registry = artifacts.require("Registry")
+const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 contract("AccessImplementation & OwnerImplementation", async (accounts) => {
@@ -15,8 +15,8 @@ contract("AccessImplementation & OwnerImplementation", async (accounts) => {
 
 	before(async function () {
 		// Create proxy
-		const registry = await Registry.deployed()
-	    const { logs } = await registry.createProxy('0')
+		const ownedRegistry = await OwnedRegistry.deployed()
+	    const { logs } = await ownedRegistry.createProxy('0')
 		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 		instance = await LogisticInterface.at(proxy)
 	});
@@ -27,7 +27,7 @@ contract("AccessImplementation & OwnerImplementation", async (accounts) => {
 
 		assert.equal(await instance.getRole(owner), 3)
 
-		// await instance.initializeOwner(owner, { from: Registry.address })
+		// await instance.initializeOwner(owner, { from: OwnedRegistry.address })
 		await truffleAssert.reverts(
 			instance.initializeOwner(owner, { from: owner }),
 			"Upgradeable: bad caller"

@@ -12,7 +12,20 @@ export const getEventsAboutUser = (events, account) => {
 	})
 }
 
-export const getEventsAboutProduct = (events, productName) => {
+export const getEventsAboutProductHash = (events, productHash) => {
+	return events.filter(event => {
+		let isAboutToken = false
+		for (let key in event.returnValues) {
+			if (event.returnValues.hasOwnProperty(key) &&
+				event.returnValues.productHash === productHash) {
+				isAboutToken = true
+			}
+		}
+		return isAboutToken
+	})
+}
+
+export const getEventsAboutProductName = (events, productName) => {
 	return events.filter(event => {
 		let isAboutToken = false
 		for (let key in event.returnValues) {

@@ -62,7 +62,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         dCall(
             abi.encodeWithSignature(
                 "setName(address,bytes32)",
-                msg.sender,
+                purchaser,
                 BytesLib.stringToBytes32(purchaserName)
             )
         );
@@ -88,7 +88,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
-                "productsSentFrom(bytes32,address)", productHash, msg.sender)
+                "productSentFrom(bytes32,address)", productHash, msg.sender)
             ), (address)) == address(0),
             "Logistic: Can't send a product in pending delivery"
         );
@@ -107,7 +107,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         }
 
         address sender = abi.decode(dCall(abi.encodeWithSignature(
-            "productsReceivedFrom(bytes32,address)", productHash, msg.sender)
+            "productReceivedFrom(bytes32,address)", productHash, msg.sender)
         ), (address));
 
         if (sender == to) {
@@ -140,7 +140,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
-                "productsReceivedFrom(bytes32,address)", productHash, from)
+                "productReceivedFrom(bytes32,address)", productHash, from)
             ), (address)) == address(0),
             "Logistic: Already received"
         );
@@ -165,7 +165,7 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
         }
 
         address receiver = abi.decode(dCall(abi.encodeWithSignature(
-            "productsSentFrom(bytes32,address)", productHash, from)
+            "productSentFrom(bytes32,address)", productHash, from)
         ), (address));
         if (receiver == msg.sender) {
             _handoverToken(tokenId, from, msg.sender, productHash, productName);

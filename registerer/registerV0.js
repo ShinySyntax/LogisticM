@@ -51,8 +51,8 @@ ProductAddress]) => {
 	await ownedRegistry.addVersionFromName('0', 'setProductSent(bytes32,address,address)', ProductAddress)
 	await ownedRegistry.addVersionFromName('0', 'setProductReceived(bytes32,address,address)', ProductAddress)
 	await ownedRegistry.addVersionFromName('0', 'getProductInfo(bytes32)', ProductAddress)
-	await ownedRegistry.addVersionFromName('0', 'productsSentFrom(bytes32,address)', ProductAddress)
-	await ownedRegistry.addVersionFromName('0', 'productsReceivedFrom(bytes32,address)', ProductAddress)
+	await ownedRegistry.addVersionFromName('0', 'productSentFrom(bytes32,address)', ProductAddress)
+	await ownedRegistry.addVersionFromName('0', 'productReceivedFrom(bytes32,address)', ProductAddress)
 	await ownedRegistry.addVersionFromName('0', 'getHashFromTokenId(uint256)', ProductAddress)
 	await ownedRegistry.addVersionFromName('0', 'productExists(bytes32)', ProductAddress)
 

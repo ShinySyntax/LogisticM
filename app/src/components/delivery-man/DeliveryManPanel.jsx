@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
+import Web3 from 'web3';
 
 import EventList from '../product/event/EventList';
 import ProductsOwned from '../product/ProductsOwned';
-import ProductList from '../product/ProductList'
-import WillReceiveProductItem from '../product/product-item/WillReceiveProductItem';
+import ProductWillReceive from '../product/product-list/ProductWillReceive'
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
 import { DELIVERY_MAN_EVENT_NAMES,
@@ -29,8 +29,9 @@ class DeliveryManPanel extends React.Component {
 		});
 	}
 
-	receiveToken = (productName, sender) => {
-		receive(this.props.drizzle, sender, productName)
+	receiveProduct = (productId, sender) => {
+		receive(this.props.drizzle, this.props.drizzleState, sender,
+			Web3.utils.keccak256(productId))
 	}
 
 	render () {
@@ -48,10 +49,10 @@ class DeliveryManPanel extends React.Component {
 			[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
 		}
 
-		const productIds = this.props.drizzleState.events.events
+		const productHashList = this.props.drizzleState.events.events
 			.filter(event => event.event === PRODUCT_SHIPPED)
 			.map(event => {
-				return event.returnValues.productName
+				return event.returnValues.productHash
 			})
 
 		return (
@@ -62,17 +63,16 @@ class DeliveryManPanel extends React.Component {
 						<p>Receive a product</p>
 						<ProductAccountForm
 							accountLabel="Sender"
-							handleSubmit={this.receiveToken}
+							handleSubmit={this.receiveProduct}
 						/>
 					</Card>
 
 					<Card className="m-2 p-2">
 						<p>Product(s) that you will receive</p>
-						<ProductList
+						<ProductWillReceive
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							productIds={productIds}
-							tokenItemComponent={WillReceiveProductItem}
+							productHashList={productHashList}
 						/>
 					</Card>
 

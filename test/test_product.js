@@ -58,7 +58,7 @@ contract("Product", async accounts => {
 					ev.productHash === products[0].hash &&
 					ev.productName === products[0].name
 				);
-				assert.equal(await instance.productsSentFrom(products[0].hash,
+				assert.equal(await instance.productSentFrom(products[0].hash,
 					supplier), deliveryMan);
 				await truffleAssert.reverts(
 					instance.setProductSent(products[0].hash,
@@ -81,7 +81,7 @@ contract("Product", async accounts => {
 					ev.productHash === products[0].hash &&
 					ev.productName === products[0].name
 				);
-				assert.equal(await instance.productsReceivedFrom(products[0].hash,
+				assert.equal(await instance.productReceivedFrom(products[0].hash,
 					supplier), deliveryMan);
 				await truffleAssert.reverts(
 					instance.setProductReceived(products[0].hash,

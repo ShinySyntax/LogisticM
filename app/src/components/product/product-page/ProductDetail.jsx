@@ -6,7 +6,7 @@ import EventList from '../event/EventList';
 import History from './History'
 import { getPastEvents,
 	getEventFilterProduct } from '../../../store/events-helpers'
-import { getEventsAboutProduct } from "../../../store/selectors"
+import { getEventsAboutProductName } from "../../../store/selectors"
 import Loading from '../../Loading';
 import ProductLink from './ProductLink'
 
@@ -24,7 +24,7 @@ class ProductDetail extends React.Component {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
 		const productName = this.props.match.params.productName
-		const events = getEventsAboutProduct(this.props.drizzleState.events.events,
+		const events = getEventsAboutProductName(this.props.drizzleState.events.events,
 			productName)
 		const handovers = events.filter(event => event.event === HANDOVER)
 

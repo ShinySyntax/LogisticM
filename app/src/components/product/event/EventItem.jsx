@@ -13,7 +13,7 @@ class EventItem extends React.Component {
 		time: null
 	}
 
-	getReturnValus = () => {
+	getReturnValue = () => {
 		let keys = [];
 		for (let key in this.props.event.returnValues) {
 			if (this.props.event.returnValues.hasOwnProperty(key)
@@ -35,7 +35,7 @@ class EventItem extends React.Component {
 		const idx = this.props.idx
 		const event = this.props.event;
 
-		let keys = this.getReturnValus()
+		let keys = this.getReturnValue()
 
 		return (
 			<Card>
@@ -45,7 +45,7 @@ class EventItem extends React.Component {
 				<Accordion.Collapse eventKey={idx+1}>
 					<Card.Body>
 						<Table bordered hover size="sm" striped={false}>
-						  <tbody>
+							<tbody>
 								{
 									keys.map((key, idx) => {
 										return this.renderReturnValue(

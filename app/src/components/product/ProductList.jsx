@@ -6,75 +6,59 @@ import ProductLink from "./product-page/ProductLink"
 
 class ProductList extends React.Component {
 	initialState = {
-		productNames: []
+		productNameList: []
 	}
 
 	state = this.initialState;
 
-	getTokens(totalSupply) {
-
-		if (!this.props.productNames) {
-			this.setState(this.initialState)
-			for (var i = 0; i < totalSupply; i++) {
-				this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
-				.call()
-				.then(tokenId => {
-					return this.props.drizzle.contracts.Logistic.methods
-					.getProductName(tokenId).call()
-				})
-				.then(productName => {
-					this.setState({ productNames: [productName, ...this.state.productNames]})
-				})
-			}
-		}
-		else {
-			this.setState({ productNames: this.props.productNames })
+	getProducts(totalSupply) {
+		this.setState(this.initialState)
+		for (var i = 0; i < totalSupply; i++) {
+			this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
+			.call()
+			.then(tokenId => {
+				return this.props.drizzle.contracts.Logistic.methods.getHashFromTokenId(tokenId).call()
+			})
+			.then(productHash => {
+				return this.props.drizzle.contracts.Logistic.methods.getProductInfo(productHash).call()
+			})
+			.then(productInfo => {
+				return productInfo.productName
+			})
+			.then(productName => {
+				this.setState({ productNameList: [productName, ...this.state.productNameList]})
+			})
 		}
 	}
 
 	componentDidMount() {
-		this.getTokens(this.props.totalSupply)
+		this.getProducts(this.props.totalSupply)
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.totalSupply !== prevProps.totalSupply ||
-			this.props.productNames !== prevProps.productNames ) {
-			this.getTokens(this.props.totalSupply)
+			this.props.productNameList !== prevProps.productNameList ) {
+			this.getProducts(this.props.totalSupply)
 		}
 	}
 
 	render () {
 		return (
 			<ListGroup>
-				{
-					this.state.productNames.map((productName, idx) => {
-						if (this.props.tokenItemComponent) {
-							return (
-								<this.props.tokenItemComponent
-									key={idx}
-									drizzle={this.props.drizzle}
-									drizzleState={this.props.drizzleState}
-									productName={productName}
-									idx={idx}
-								/>
-							)
-						}
-						return (
-							<ListGroup.Item key={idx}>
-								<ProductLink productName={productName} />
-							</ListGroup.Item>
-						)
-					})
-				}
+				{this.state.productNameList.map((productName, idx) => {
+					return (
+						<ListGroup.Item key={idx}>
+							<ProductLink productName={productName} />
+						</ListGroup.Item>
+					)
+				})}
 			</ListGroup>
 		)
 	}
 }
 
 ProductList.propTypes = {
-	totalSupply: PropTypes.number,
-	tokenItemComponent: PropTypes.any,
-	productNames: PropTypes.array
+	totalSupply: PropTypes.number
 };
 
 export default ProductList;

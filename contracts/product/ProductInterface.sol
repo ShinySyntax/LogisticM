@@ -35,12 +35,12 @@ contract ProductInterface is ProductEvents {
             string memory productName
         );
 
-    function productsSentFrom(bytes32 productHash, address from)
+    function productSentFrom(bytes32 productHash, address from)
         public
         view
         returns (address);
 
-    function productsReceivedFrom(bytes32 productHash, address from)
+    function productReceivedFrom(bytes32 productHash, address from)
         public
         view
         returns (address);

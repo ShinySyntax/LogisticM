@@ -34,12 +34,8 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
         require(to != address(0), "Product: to is the zero address");
 
         _getProduct(productHash).sent[from] = to;
-        (
-            address purchaser,
-            uint256 tokenId,
-            string memory productName
-        ) = getProductInfo(productHash);
-        emit ProductShipped(msg.sender, to, productHash, productName);
+        string memory productName = _getProduct(productHash).productName;
+        emit ProductShipped(from, to, productHash, productName);
     }
 
     function setProductReceived(
@@ -59,7 +55,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
             uint256 tokenId,
             string memory productName
         ) = getProductInfo(productHash);
-        emit ProductReceived(from, msg.sender, productHash, productName);
+        emit ProductReceived(from, by, productHash, productName);
     }
 
     function getProductInfo(bytes32 productHash)
@@ -78,7 +74,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
         );
     }
 
-    function productsSentFrom(bytes32 productHash, address from)
+    function productSentFrom(bytes32 productHash, address from)
         public
         view
         returns (address)
@@ -86,7 +82,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
         return _getProduct(productHash).sent[from];
     }
 
-    function productsReceivedFrom(bytes32 productHash, address from)
+    function productReceivedFrom(bytes32 productHash, address from)
         public
         view
         returns (address)

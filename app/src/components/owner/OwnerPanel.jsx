@@ -62,6 +62,7 @@ class OwnerPanel extends React.Component {
 								<em>Add a supplier</em>
 								<GrantAccess
 									drizzle={drizzle}
+									drizzleState={drizzleState}
 									grandAccessMethod="addSupplier"
 								/>
 							</Card>
@@ -69,6 +70,7 @@ class OwnerPanel extends React.Component {
 								<em>Add a delivery man</em>
 								<GrantAccess
 									drizzle={drizzle}
+									drizzleState={drizzleState}
 									grandAccessMethod="addDeliveryMan"
 								/>
 							</Card>

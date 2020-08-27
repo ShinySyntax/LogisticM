@@ -9,39 +9,51 @@ import { Container,
 import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import Address from '../Address'
-import Web3 from "web3";
 
 class InDeliveryProductItem extends React.Component {
 	state = {
-		dataKey: null
+		dataKeyProductsSentFrom: null,
+		dataKeyProductInfo: null
 	}
 
-	getPendingDelivery() {
-		const dataKey = this.props.drizzle.contracts.Logistic.methods
-		.productsSentFrom.cacheCall(
-			Web3.utils.keccak256(this.props.productName),
+	getProductsSentFrom() {
+		const dataKeyProductsSentFrom = this.props.drizzle.contracts.Logistic.methods
+		.productSentFrom.cacheCall(
+			this.props.productHash,
 			this.props.drizzleState.accounts[0]
 		);
-		this.setState({ dataKey });
+		this.setState({ dataKeyProductsSentFrom });
+	}
+
+	getProductInfo() {
+		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
+			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount() {
-		this.getPendingDelivery()
+		this.getProductsSentFrom()
+		this.getProductInfo()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.productName !== prevProps.productName) {
-			this.getPendingDelivery()
+		if (this.props.productHash !== prevProps.productHash) {
+			this.getProductsSentFrom()
+			this.getProductInfo()
 		}
 	}
 
 	render () {
 		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
-			.productsSentFrom[this.state.dataKey]
+			.productSentFrom[this.state.dataKeyProductsSentFrom]
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
 
 		if (tokenInDelivery === ZERO_ADDRESS) return null
+
+		const productInfoObject = this.props.drizzleState.contracts.Logistic
+			.getProductInfo[this.state.dataKeyProductInfo]
+		if (!productInfoObject) return null
+		const productName = productInfoObject.value.productName
 
 		return (
 			<ListGroup.Item>
@@ -49,7 +61,7 @@ class InDeliveryProductItem extends React.Component {
 				  <Row>
 				    <Col md="auto">
 							<span className="m-2">
-								<ProductLink productName={this.props.productName} />
+								<ProductLink productName={productName} />
 							</span>
 						</Col>
 						<Col>
@@ -70,7 +82,7 @@ class InDeliveryProductItem extends React.Component {
 }
 
 InDeliveryProductItem.propTypes = {
-	productName: PropTypes.string.isRequired
+	productHash: PropTypes.string.isRequired
 };
 
 export default InDeliveryProductItem;

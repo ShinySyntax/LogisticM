@@ -5,7 +5,6 @@ import ProductsOwned from '../product/ProductsOwned';
 import EventList from '../product/event/EventList';
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
-import CreateProductWithName from './CreateProductWithName'
 import CreateProduct from './CreateProduct'
 import { SUPPLIER_EVENT_NAMES,
 	SUPPLIER_ADDED,
@@ -22,7 +21,6 @@ class SupplierPanel extends React.Component {
 
 		const contract = drizzle.contracts.Logistic;
 
-		// let drizzle know we want to watch the `myString` method
 		const dataKey = contract.methods.balanceOf.cacheCall(
 			drizzleState.accounts[0]
 		);
@@ -67,9 +65,7 @@ class SupplierPanel extends React.Component {
 							<p>Add a product</p>
 							<CreateProduct
 								drizzle={drizzle}
-							/>
-							<CreateProductWithName
-								drizzle={drizzle}
+								drizzleState={drizzleState}
 							/>
 						</div>
 					</Card>

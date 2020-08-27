@@ -40,7 +40,7 @@ class Home extends React.Component {
       return <Loading/>
     }
 
-    if (owner && owner.value === drizzleState.accounts[0]) {
+    if (owner.value === drizzleState.accounts[0]) {
       return (
         <OwnerPanel
           drizzle={drizzle}
@@ -49,7 +49,7 @@ class Home extends React.Component {
       )
     }
 
-    if (isSupplier && isSupplier.value) {
+    if (isSupplier.value) {
       return (
         <SupplierPanel
           drizzle={drizzle}
@@ -58,7 +58,7 @@ class Home extends React.Component {
       )
     }
 
-    if (isDeliveryMan && isDeliveryMan.value) {
+    if (isDeliveryMan.value) {
       return (
         <DeliveryManPanel
           drizzle={drizzle}

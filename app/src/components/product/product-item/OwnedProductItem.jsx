@@ -14,30 +14,37 @@ import PropTypes from 'prop-types'
 import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS } from '../../../store/constants';
 import { send, sendToPurchaser } from '../../../contract-call'
-import Web3 from "web3";
 
 class OwnedProductItem extends React.Component {
 	state = {
-		dataKey: null,
+		dataKeyProductSentFrom: null,
+		dataKeyProductInfo: null,
 		account: null
 	}
 
 	getPendingDelivery() {
-		const dataKey = this.props.drizzle.contracts.Logistic.methods
-		.productsSentFrom.cacheCall(
-			Web3.utils.keccak256(this.props.productName),
+		const dataKeyProductSentFrom = this.props.drizzle.contracts.Logistic.methods
+		.productSentFrom.cacheCall(
+			this.props.productHash,
 			this.props.drizzleState.accounts[0]
 		);
-		this.setState({ dataKey });
+		this.setState({ dataKeyProductSentFrom })
+	}
+
+	getProductInfo() {
+		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
+			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount() {
 		this.getPendingDelivery()
+		this.getProductInfo()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (this.props.productName !== prevProps.productName) {
+		if (this.props.productHash !== prevProps.productHash) {
 			this.getPendingDelivery()
+			this.getProductInfo()
 		}
 	}
 
@@ -46,46 +53,50 @@ class OwnedProductItem extends React.Component {
 	}
 
 	handleSubmit = (event) => {
-		event.preventDefault();
-		send(this.props.drizzle, this.state.account, this.props.productName)
+		event.preventDefault()
+		send(this.props.drizzle, this.props.drizzleState, this.state.account, this.props.productHash)
 	}
 
 	sendToPurchaser = () => {
-		sendToPurchaser(this.props.drizzle, this.props.productName)
+		sendToPurchaser(this.props.drizzle, this.props.drizzleState, this.props.productHash)
 	}
 
 	render () {
 		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
-			.productsSentFrom[this.state.dataKey]
+			.productSentFrom[this.state.dataKeyProductSentFrom]
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
-
 		if (tokenInDelivery !== ZERO_ADDRESS) {
-			// The token is shipped
+			// The product is shipped
 			return null
 		}
 
+		const productInfoObject = this.props.drizzleState.contracts.Logistic
+			.getProductInfo[this.state.dataKeyProductInfo]
+		if (!productInfoObject) return null
+		const productName = productInfoObject.value.productName
+
 		return (
-		  <Card>
-		    <Card.Header>
-		      <Accordion.Toggle
+			<Card>
+				<Card.Header>
+					<Accordion.Toggle
 						as={Button}
 						variant="link"
 						eventKey={this.props.idx+1}
 					>
 						<span className="mr-2">
-							{this.props.productName}
+							{productName}
 						</span>
 						<BsChevronDoubleDown />
-		      </Accordion.Toggle>
-		    </Card.Header>
-		    <Accordion.Collapse eventKey={this.props.idx+1}>
-		      <Card.Body>
+					</Accordion.Toggle>
+				</Card.Header>
+				<Accordion.Collapse eventKey={this.props.idx+1}>
+					<Card.Body>
 						<Container fluid>
 							<Row>
 								<Col md={2}>
 									<ProductLink
-										productName={this.props.productName}
+										productName={productName}
 										as={Button}
 									/>
 								</Col>
@@ -114,14 +125,15 @@ class OwnedProductItem extends React.Component {
 							</Row>
 						</Container>
 					</Card.Body>
-		    </Accordion.Collapse>
-		  </Card>
+				</Accordion.Collapse>
+			</Card>
 		)
 	}
 }
 
 OwnedProductItem.propTypes = {
-	productName: PropTypes.string.isRequired
+	productHash: PropTypes.string.isRequired,
+	idx: PropTypes.number.isRequired
 };
 
 export default OwnedProductItem

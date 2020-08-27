@@ -6,7 +6,7 @@ import ProductLink from "./product-page/ProductLink"
 
 class ProductsOwned extends React.Component {
 	initialState = {
-		productIds: []
+		productHashList: []
 	}
 
 	state = this.initialState;
@@ -15,15 +15,13 @@ class ProductsOwned extends React.Component {
 		this.setState(this.initialState)
 		for (var i = 0; i < balance; i++) {
 			this.props.drizzle.contracts.Logistic.methods.tokenOfOwnerByIndex(
-				this.props.drizzleState.accounts[0], i)
-				.call()
-				.then(tokenId => {
-					return this.props.drizzle.contracts.Logistic.methods
-					.getProductName(tokenId).call()
-				})
-				.then(productName => {
-					this.setState({ productIds: [productName, ...this.state.productIds]})
-				})
+				this.props.drizzleState.accounts[0], i).call()
+			.then(tokenId => {
+				return this.props.drizzle.contracts.Logistic.methods.getHashFromTokenId(tokenId).call()
+			})
+			.then(productHash => {
+				this.setState({ productHashList: [productHash, ...this.state.productHashList]})
+			})
 		}
 	}
 
@@ -37,21 +35,21 @@ class ProductsOwned extends React.Component {
 		}
 	}
 
-	renderRow = (productName, idx) => {
+	renderRow = (productHash, idx) => {
 		if (this.props.tokenItemComponent) {
 			return (
 				<this.props.tokenItemComponent
 					key={idx}
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
-					productName={productName}
+					productHash={productHash}
 					idx={idx}
 				/>
 			)
 		}
 		return (
 			<ListGroup.Item key={idx}>
-				<ProductLink productName={productName} />
+				<ProductLink productHash={productHash} />
 			</ListGroup.Item>
 		)
 	}
@@ -60,8 +58,8 @@ class ProductsOwned extends React.Component {
 		return (
 			<Accordion>
 				{
-					this.state.productIds.map((productName, idx) => {
-						return this.renderRow(productName, idx)
+					this.state.productHashList.map((productHash, idx) => {
+						return this.renderRow(productHash, idx)
 					})
 				}
 			</Accordion>

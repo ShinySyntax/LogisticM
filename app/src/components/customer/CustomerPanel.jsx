@@ -21,12 +21,14 @@ class CustomerPanel extends React.Component {
 	render () {
 		if (!this.props.drizzleState.events.events) return <Loading/>
 
-		let productIds = getEventsAboutUser(
+		let productHashList = getEventsAboutUser(
 			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
-		).map(event => event.returnValues.productName)
+		).map(event => event.returnValues.productHash)
 
-		if (!productIds.length) {
+		productHashList = [...new Set(productHashList)];
+
+		if (!productHashList.length) {
 			return <NoUserPanel/>
 		}
 
@@ -35,7 +37,7 @@ class CustomerPanel extends React.Component {
 				drizzle={this.props.drizzle}
 				drizzleState={this.props.drizzleState}
 				events={this.props.drizzleState.events.events}
-				productIds={productIds}
+				productHashList={productHashList}
 			/>
 		)
 	}

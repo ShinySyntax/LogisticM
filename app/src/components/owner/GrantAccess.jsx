@@ -1,5 +1,6 @@
 import React from 'react'
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Button } from 'react-bootstrap'
+import { utils } from 'ethers'
 
 class GrantAccess extends React.Component {
 	state = {
@@ -18,10 +19,14 @@ class GrantAccess extends React.Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
 		const { drizzle } = this.props;
-    const contract = drizzle.contracts.Logistic;
+		const contract = drizzle.contracts.Logistic;
 
 		contract.methods[this.props.grandAccessMethod].cacheSend(
-			this.state.address, this.state.name
+			this.state.address, { from: this.props.drizzleState.accounts[0]}
+		)
+		let nameBytes32 =  utils.formatBytes32String(this.state.name)
+		contract.methods.setName.cacheSend(
+			this.state.address, nameBytes32, { from: this.props.drizzleState.accounts[0]}
 		)
 	}
 

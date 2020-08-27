@@ -20,7 +20,7 @@ class ProductLink extends React.Component {
 
 		return (
 			<Link to={path}>
-					<span>{this.props.productName}</span>
+				<span>{this.props.productName}</span>
 			</Link>
 		)
 	}

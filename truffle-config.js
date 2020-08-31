@@ -11,6 +11,12 @@ module.exports = {
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
     },
+    ropsten: {
+      provider: function() {
+        return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/v3/" + apiKey);
+      },
+      network_id: 3
+    },
     kovan: {
       provider: function() {
         return new HDWalletProvider(mnemonic, "https://kovan.infura.io/v3/" + apiKey);

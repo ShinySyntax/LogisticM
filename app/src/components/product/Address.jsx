@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
-import { Badge } from 'react-bootstrap';
+import QRCode from 'qrcode.react';
+import { Badge, Button, Overlay, Tooltip } from 'react-bootstrap';
 
 export default function Address({ drizzle, drizzleState, address, useAddress }) {
 	const [dataKey, setDataKey] = useState();
+	const [show, setShow] = useState(false);
+	const target = useRef(null);
 
-  useEffect(() => {
+	useEffect(() => {
 		setDataKey(drizzle.contracts.Logistic.methods.getName
 			.cacheCall(address))
 	}, [setDataKey, drizzle, address]);
@@ -28,7 +31,19 @@ export default function Address({ drizzle, drizzleState, address, useAddress }) 
 
 	return (
 		<React.Fragment>
-			<Badge variant={variant}>{account}</Badge>
+			<Badge
+				style={{cursor: 'pointer'}}
+				ref={target}
+				onClick={() => setShow(!show)}
+				variant={variant}>{account}
+			</Badge>
+			<Overlay target={target.current} show={show} placement="bottom">
+				{(props) => (
+					<Tooltip id="address-qr-code" {...props}>
+						<QRCode value={address} size={170} />
+					</Tooltip>
+				)}
+			</Overlay>
 		</React.Fragment>
 	)
 }

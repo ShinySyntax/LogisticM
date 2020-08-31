@@ -8,6 +8,7 @@
     "@drizzle/store": "^1.5.1",
     "bootstrap": "^4.5.0",
     "ethers": "^5.0.9",
+    "qrcode.react": "^1.0.0",
     "react": "^16.11.0",
     "react-bootstrap": "^1.1.1",
     "react-dom": "^16.11.0",

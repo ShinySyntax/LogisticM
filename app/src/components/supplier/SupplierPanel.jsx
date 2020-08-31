@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Alert } from 'react-bootstrap';
 
-import ProductsOwned from '../product/ProductsOwned';
+import ProductsOwned from '../product/product-list/ProductsOwned';
 import EventList from '../product/event/EventList';
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
@@ -12,6 +12,9 @@ import { SUPPLIER_EVENT_NAMES,
  	NEW_PRODUCT,
  	PRODUCT_SHIPPED,
 	PRODUCT_RECEIVED } from "../../store/constants"
+import { newContextComponents } from "@drizzle/react-components";
+
+const { ContractForm } = newContextComponents;
 
 class SupplierPanel extends React.Component {
 	state = { dataKey: null };
@@ -89,6 +92,15 @@ class SupplierPanel extends React.Component {
 							filters={filters}
 						/>
 					</Card>
+					<Alert variant="danger" className="m-2">
+						<h3>Danger zone</h3>
+						<em>Renounce Supplier</em>
+						<ContractForm
+							drizzle={drizzle}
+							contract="Logistic"
+							method="renounceSupplier"
+						/>
+					</Alert>
 				</div>
 			</div>
 		)

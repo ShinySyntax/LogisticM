@@ -24,7 +24,9 @@ class CustomerPanel extends React.Component {
 		let productHashList = getEventsAboutUser(
 			this.props.drizzleState.events.events,
 			this.props.drizzleState.accounts[0]
-		).map(event => event.returnValues.productHash)
+		)
+		.filter(event => event.returnValues.productHash)
+		.map(event => event.returnValues.productHash)
 
 		productHashList = [...new Set(productHashList)];
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Alert } from 'react-bootstrap';
 import Web3 from 'web3';
 
 import EventList from '../product/event/EventList';
-import ProductsOwned from '../product/ProductsOwned';
+import ProductsOwned from '../product/product-list/ProductsOwned';
 import ProductWillReceive from '../product/product-list/ProductWillReceive'
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
@@ -13,6 +13,9 @@ import { DELIVERY_MAN_EVENT_NAMES,
  	PRODUCT_SHIPPED } from "../../store/constants"
 import ProductAccountForm from '../product/ProductAccountForm'
 import { receive } from '../../contract-call'
+import { newContextComponents } from "@drizzle/react-components";
+
+const { ContractForm } = newContextComponents;
 
 class DeliveryManPanel extends React.Component {
 	state = {
@@ -105,6 +108,15 @@ class DeliveryManPanel extends React.Component {
 							filters={filters}
 						/>
 					</Card>
+					<Alert variant="danger" className="m-2">
+						<h3>Danger zone</h3>
+						<em>Renounce Delivery man</em>
+						<ContractForm
+							drizzle={drizzle}
+							contract="Logistic"
+							method="renounceDeliveryMan"
+						/>
+					</Alert>
 				</div>
 			</div>
 		)

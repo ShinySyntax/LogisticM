@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import ProductLink from "./product-page/ProductLink"
+import ProductLink from "../product-page/ProductLink"
 
 class ProductList extends React.Component {
 	initialState = {

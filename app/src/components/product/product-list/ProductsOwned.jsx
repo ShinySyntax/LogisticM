@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import ProductLink from "./product-page/ProductLink"
+import ProductLink from "../product-page/ProductLink"
 
 class ProductsOwned extends React.Component {
 	initialState = {
@@ -11,7 +11,7 @@ class ProductsOwned extends React.Component {
 
 	state = this.initialState;
 
-	getTokens(balance) {
+	getProducts(balance) {
 		this.setState(this.initialState)
 		for (var i = 0; i < balance; i++) {
 			this.props.drizzle.contracts.Logistic.methods.tokenOfOwnerByIndex(
@@ -26,12 +26,12 @@ class ProductsOwned extends React.Component {
 	}
 
 	componentDidMount() {
-		this.getTokens(this.props.balance)
+		this.getProducts(this.props.balance)
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		if (this.props.balance !== prevProps.balance) {
-			this.getTokens(this.props.balance)
+			this.getProducts(this.props.balance)
 		}
 	}
 

@@ -3,7 +3,7 @@ import { Alert, Card } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
-import ProductList from '../product/ProductList'
+import ProductList from '../product/product-list/ProductList'
 import EventList from '../product/event/EventList';
 
 const { ContractForm } = newContextComponents;
@@ -65,6 +65,13 @@ class OwnerPanel extends React.Component {
 									drizzleState={drizzleState}
 									grandAccessMethod="addSupplier"
 								/>
+								<br/>
+								<em>Remove a supplier</em>
+								<ContractForm
+									drizzle={drizzle}
+									contract="Logistic"
+									method="removeSupplier"
+								/>
 							</Card>
 							<Card className="m-2 p-2">
 								<em>Add a delivery man</em>
@@ -72,6 +79,13 @@ class OwnerPanel extends React.Component {
 									drizzle={drizzle}
 									drizzleState={drizzleState}
 									grandAccessMethod="addDeliveryMan"
+								/>
+								<br/>
+								<em>Remove a delivery man</em>
+								<ContractForm
+									drizzle={drizzle}
+									contract="Logistic"
+									method="removeDeliveryMan"
 								/>
 							</Card>
 						</div>

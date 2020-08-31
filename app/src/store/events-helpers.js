@@ -17,7 +17,7 @@ export const getPastEvents = (drizzle, eventNames, filters) => {
 
 	eventNames.forEach((eventName, i) => {
 		contract.getPastEvents(eventName, {
-			fromBlock: 0,
+			fromBlock: 0, // TODO: set the block of the creation of the contract
 			filter: filters[eventName]
 		}).then(events => {
 			store.dispatch(addAllEvents(events))

@@ -7,26 +7,28 @@ import CustomerPanel from './customer/CustomerPanel';
 import Loading from './Loading';
 
 class Home extends React.Component {
-  state = {
-    dataKeyOwner: null,
-    dataKeySupplier: null,
+	state = {
+		dataKeyOwner: null,
+		dataKeySupplier: null,
 		dataKeyDeliveryMan: null
-  };
+	};
 
-  componentDidMount() {
-    const { drizzle, drizzleState } = this.props;
+	componentDidMount() {
+		// this.props.drizzle.web3.eth.defaultAccount = this.props.drizzleState.accounts[0] //don't work
 
-    const dataKeyOwner = drizzle.contracts.Logistic.methods.getOwner.cacheCall();
-    this.setState({ dataKeyOwner });
+		const { drizzle, drizzleState } = this.props;
 
-    const dataKeySupplier = drizzle.contracts.Logistic.methods.isSupplier
-      .cacheCall(drizzleState.accounts[0]);
+		const dataKeyOwner = drizzle.contracts.Logistic.methods.getOwner.cacheCall();
+		this.setState({ dataKeyOwner });
+
+		const dataKeySupplier = drizzle.contracts.Logistic.methods.isSupplier
+		.cacheCall(drizzleState.accounts[0]);
 		this.setState({ dataKeySupplier });
 
 		const dataKeyDeliveryMan = drizzle.contracts.Logistic.methods.isDeliveryMan
-      .cacheCall(drizzleState.accounts[0]);
+		.cacheCall(drizzleState.accounts[0]);
 		this.setState({ dataKeyDeliveryMan });
-  }
+	}
 
   render () {
     const { drizzle, drizzleState } = this.props;

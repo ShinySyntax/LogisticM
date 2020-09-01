@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 import QRCode from 'qrcode.react';
-import { Badge, Button, Overlay, Tooltip } from 'react-bootstrap';
+import { Badge, Overlay, Tooltip } from 'react-bootstrap';
 
 export default function Address({ drizzle, drizzleState, address, useAddress }) {
 	const [dataKey, setDataKey] = useState();

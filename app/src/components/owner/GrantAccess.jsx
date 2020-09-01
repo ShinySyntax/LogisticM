@@ -2,6 +2,8 @@ import React from 'react'
 import { InputGroup, FormControl, Button } from 'react-bootstrap'
 import { utils } from 'ethers'
 
+import InputAddress from "../InputAddress"
+
 class GrantAccess extends React.Component {
 	state = {
 		address: null,
@@ -30,12 +32,15 @@ class GrantAccess extends React.Component {
 		)
 	}
 
+	setAddress = (address) => {
+		this.setState({ address })
+	}
+
 	render () {
 		return (
 			<InputGroup>
-				<FormControl
-					placeholder="Account address"
-					aria-label="Account address"
+				<InputAddress
+					setAddress={this.setAddress}
 					onChange={this.handleChangeAddress}
 				/>
 				<FormControl

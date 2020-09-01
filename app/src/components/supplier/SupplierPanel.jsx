@@ -46,9 +46,10 @@ class SupplierPanel extends React.Component {
 		const filters = {
 			[SUPPLIER_ADDED]: { account: drizzleState.accounts[0] },
 			[SUPPLIER_REMOVED]: { account: drizzleState.accounts[0] },
-			[NEW_PRODUCT]: { by: drizzleState.accounts[0] },
-			[PRODUCT_SHIPPED]: { from: drizzleState.accounts[0] },
-			[PRODUCT_RECEIVED]: { from: drizzleState.accounts[0] }
+			// when a purchaser become a supplier...
+			// [NEW_PRODUCT]: { by: drizzleState.accounts[0] },
+			// [PRODUCT_SHIPPED]: { from: drizzleState.accounts[0] },
+			// [PRODUCT_RECEIVED]: { from: drizzleState.accounts[0] }
 		}
 
 		return (

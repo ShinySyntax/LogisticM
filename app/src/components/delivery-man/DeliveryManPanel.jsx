@@ -49,7 +49,8 @@ class DeliveryManPanel extends React.Component {
 		const filters = {
 			[DELIVERY_MAN_ADDED]: { account: drizzleState.accounts[0] },
 			[DELIVERY_MAN_REMOVED]: { account: drizzleState.accounts[0] },
-			[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
+			// when a purchaser become a delivery man...
+			// [PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
 		}
 
 		let productHashList = this.props.drizzleState.events.events

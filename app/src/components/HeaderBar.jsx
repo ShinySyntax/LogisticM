@@ -44,6 +44,7 @@ export default function({ drizzle, drizzleState }) {
 										drizzle={drizzle}
 										drizzleState={drizzleState}
 										address={address}
+										useAddress={true}
 									/>
 									<br/>
 									<Badge variant="secondary">{balance}</Badge> {units} (Ξ)

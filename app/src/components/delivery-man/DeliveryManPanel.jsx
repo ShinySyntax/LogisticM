@@ -7,7 +7,7 @@ import ProductsOwned from '../product/product-list/ProductsOwned';
 import ProductWillReceive from '../product/product-list/ProductWillReceive'
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
-import { DELIVERY_MAN_EVENT_NAMES,
+import { EVENT_NAMES,
 	DELIVERY_MAN_ADDED,
 	DELIVERY_MAN_REMOVED,
  	PRODUCT_SHIPPED } from "../../store/constants"
@@ -52,11 +52,13 @@ class DeliveryManPanel extends React.Component {
 			[PRODUCT_SHIPPED]: { to: this.props.drizzleState.accounts[0] }
 		}
 
-		const productHashList = this.props.drizzleState.events.events
+		let productHashList = this.props.drizzleState.events.events
 			.filter(event => event.event === PRODUCT_SHIPPED)
 			.map(event => {
 				return event.returnValues.productHash
 			})
+
+		productHashList = [...new Set(productHashList)];
 
 		return (
 			<div>
@@ -104,7 +106,7 @@ class DeliveryManPanel extends React.Component {
 						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={DELIVERY_MAN_EVENT_NAMES}
+							eventNames={EVENT_NAMES}
 							filters={filters}
 						/>
 					</Card>

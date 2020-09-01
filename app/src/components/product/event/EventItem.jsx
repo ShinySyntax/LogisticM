@@ -31,6 +31,18 @@ class EventItem extends React.Component {
 		).then(time => this.setState({ time }))
 	}
 
+	/*
+	Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
+    in EventItem (at EventList.jsx:46)
+    in div (created by Accordion)
+    in Accordion (at EventList.jsx:43)
+    in EventList (at ProductDetail.jsx:59)
+    in div (created by Card)
+    in Card (at ProductDetail.jsx:57)
+    in div (at ProductDetail.jsx:43)
+    in ProductDetail (at App.jsx:58)
+	*/
+
 	render () {
 		const idx = this.props.idx
 		const event = this.props.event;

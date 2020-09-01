@@ -6,7 +6,7 @@ import EventList from '../product/event/EventList';
 import OwnedProductItem from '../product/product-item/OwnedProductItem';
 import InDeliveryProductItem from '../product/product-item/InDeliveryProductItem';
 import CreateProduct from './CreateProduct'
-import { SUPPLIER_EVENT_NAMES,
+import { EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
  	NEW_PRODUCT,
@@ -88,7 +88,7 @@ class SupplierPanel extends React.Component {
 						<EventList
 							drizzle={drizzle}
 							drizzleState={drizzleState}
-							eventNames={SUPPLIER_EVENT_NAMES}
+							eventNames={EVENT_NAMES}
 							filters={filters}
 						/>
 					</Card>

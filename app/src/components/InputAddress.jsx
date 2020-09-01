@@ -30,9 +30,9 @@ export default function InputAddress({ setAddress, onChange }) {
 	return (
 		<>
 			<FormControl
-				placeholder="Address"
-				aria-label="Address"
-				aria-describedby="Address"
+				placeholder="Account"
+				aria-label="Account"
+				aria-describedby="Account"
 				onChange={handleChange}
 				value={scannedAddress}
 			/>

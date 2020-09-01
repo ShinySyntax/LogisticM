@@ -3,6 +3,7 @@ import { Alert, Card } from 'react-bootstrap';
 import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
+import RevokeRole from './RevokeRole'
 import ProductList from '../product/product-list/ProductList'
 import EventList from '../product/event/EventList';
 
@@ -67,10 +68,10 @@ class OwnerPanel extends React.Component {
 								/>
 								<br/>
 								<em>Remove a supplier</em>
-								<ContractForm
+								<RevokeRole
 									drizzle={drizzle}
-									contract="Logistic"
-									method="removeSupplier"
+									drizzleState={drizzleState}
+									methodName="removeSupplier"
 								/>
 							</Card>
 							<Card className="m-2 p-2">
@@ -82,10 +83,10 @@ class OwnerPanel extends React.Component {
 								/>
 								<br/>
 								<em>Remove a delivery man</em>
-								<ContractForm
+								<RevokeRole
 									drizzle={drizzle}
-									contract="Logistic"
-									method="removeDeliveryMan"
+									drizzleState={drizzleState}
+									methodName="removeDeliveryMan"
 								/>
 							</Card>
 						</div>

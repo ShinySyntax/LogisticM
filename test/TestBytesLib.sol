@@ -7,8 +7,4 @@ contract TestBytesLib {
     function testConvertBytesToBytes4() public {
         BytesLib.convertBytesToBytes4(new bytes(0));
     }
-
-    function testStringToBytes32() public {
-        BytesLib.stringToBytes32(string(""));
-    }
 }

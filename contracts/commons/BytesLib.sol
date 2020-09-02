@@ -13,18 +13,6 @@ library BytesLib {
         }
     }
 
-    // https://ethereum.stackexchange.com/questions/9142/how-to-convert-a-string-to-bytes32/9152#9152
-    function stringToBytes32(string memory source) internal pure returns (bytes32 result) {
-        bytes memory tempEmptyStringTest = bytes(source);
-        if (tempEmptyStringTest.length == 0) {
-            return 0x0;
-        }
-
-        assembly {
-            result := mload(add(source, 32))
-        }
-    }
-
     // https://ethereum.stackexchange.com/questions/2519/how-to-convert-a-bytes32-to-string
     function bytes32ToString(bytes32 x) internal pure returns (string memory) {
         uint j;

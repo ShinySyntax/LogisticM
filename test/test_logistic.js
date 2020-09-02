@@ -187,16 +187,6 @@ contract("Logistic", async accounts => {
 					{ from: deliveryMan1 }),
 					"Logistic: Can't send to supplier nor owner"
 			);
-			await truffleAssert.reverts(
-				instance.receive(owner, products[0].hash,
-					{ from: deliveryMan1 }),
-					"Logistic: Sender is not delivery man nor supplier"
-			);
-			await truffleAssert.reverts(
-				instance.receive(other, products[0].hash,
-					{ from: deliveryMan1 }),
-					"Logistic: Sender is not delivery man nor supplier"
-			);
 		});
 	});
 

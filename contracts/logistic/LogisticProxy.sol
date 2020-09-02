@@ -144,12 +144,14 @@ contract LogisticProxy is LogisticSharedStorage, OwnedUpgradeabilityProxy,
             ), (address)) == address(0),
             "Logistic: Already received"
         );
-        uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
-            "getRole(address)", from)), (uint));
-        require(
-            senderRole == 1 || senderRole == 2,
-            "Logistic: Sender is not delivery man nor supplier"
-        );
+        // Comment these lines because if a supplier or a delivery man has his
+        // role revoked, nobody would be able to receive product that ihe sent.
+        // uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
+        //     "getRole(address)", from)), (uint));
+        // require(
+        //     senderRole == 1 || senderRole == 2,
+        //     "Logistic: Sender is not delivery man nor supplier"
+        // );
 
         (address purchaser, uint256 tokenId, string memory productName) =
             abi.decode(

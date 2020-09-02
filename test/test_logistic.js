@@ -37,19 +37,19 @@ contract("Logistic", async accounts => {
 	it("Create product", async () => {
 		await truffleAssert.reverts(
 			instance.createProduct(purchaser, products[1].hash,
-				products[1].name, "John",
+				products[1].nameBytes32, products[1].purchaserNameBytes32,
 				{ from: other }),
 			"Logistic: Caller is not Supplier"
 		);
 		await truffleAssert.reverts(
 			instance.createProduct(deliveryMan1, products[1].hash,
-				products[1].name, "John",
+				products[1].nameBytes32, products[1].purchaserNameBytes32,
 				{ from: supplier }),
 			"Logistic: Invalid purchaser"
 		);
 
 		let result = await instance.createProduct(
-			purchaser, products[0].hash, products[0].name, "John",
+			purchaser, products[0].hash, products[0].nameBytes32, products[0].purchaserNameBytes32,
 			{ from: supplier });
 		assert.equal(await instance.getHashFromTokenId(products[0].tokenId), products[0].hash);
 		assert.equal(await instance.ownerOf(products[0].tokenId), supplier);
@@ -61,7 +61,7 @@ contract("Logistic", async accounts => {
 
 		await truffleAssert.reverts(
 			instance.createProduct(
-				purchaser, products[0].hash, products[0].name, "John",
+				purchaser, products[0].hash, products[0].nameBytes32, products[0].purchaserNameBytes32,
 				{ from: supplier }),
 			"Logistic: This product already exists"
 		);
@@ -198,7 +198,7 @@ contract("Logistic", async accounts => {
 		it("Create product", async () => {
 			await truffleAssert.reverts(
 				instance.createProduct(
-					purchaser, products[0].hash, products[0].name, "John",
+					purchaser, products[0].hash, products[0].nameBytes32, products[0].purchaserNameBytes32,
 					{ from: supplier }),
 				"Pausable: paused"
 			);

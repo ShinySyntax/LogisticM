@@ -5,19 +5,23 @@ import "../commons/BytesLib.sol";
 
 
 contract ImplementationBase {
-    IRegistry internal registry;
-    string internal version_;
+    IRegistry private _registry;
+    string private _version;
 
-    constructor(address registryAddress, string memory _version) internal {
-        registry = IRegistry(registryAddress);
-        version_ = _version;
+    constructor(address registryAddress, string memory version) internal {
+        setRegistry(registryAddress);
+        _version = version;
+    }
+
+    function setRegistry(address registryAddress) internal {
+        _registry = IRegistry(registryAddress);
     }
 
     function dCall(bytes memory encoded) internal returns (bytes memory) {
         // Delegate call to the contract implementation of the given encoded
         // signature
         bytes4 func = BytesLib.convertBytesToBytes4(encoded);
-        address _impl = registry.getFunction(version_, func);
+        address _impl = _registry.getFunction(_version, func);
         bytes memory result = degelateCallWithRevert(_impl, encoded);
         return result;
     }

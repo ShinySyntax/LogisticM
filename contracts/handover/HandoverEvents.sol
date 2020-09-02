@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 
-contract LogisticEvents {
+contract HandoverEvents {
     event Handover(
         address indexed from,
         address indexed to,

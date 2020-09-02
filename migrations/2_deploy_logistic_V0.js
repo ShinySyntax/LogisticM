@@ -5,6 +5,7 @@ const ERC721LogisticImplementation = artifacts.require('./ERC721LogisticImplemen
 const NameImplementation = artifacts.require('./NameImplementation.sol')
 const PauseImplementation = artifacts.require('./PauseImplementation.sol')
 const ProductImplementation = artifacts.require('./ProductImplementation.sol')
+const HandoverImplementation = artifacts.require('./HandoverImplementation.sol')
 
 const OwnedRegistry = artifacts.require('./OwnedRegistry.sol')
 
@@ -22,8 +23,13 @@ module.exports = async (deployer) => {
 	await deployer.deploy(NameImplementation)
 	await deployer.deploy(PauseImplementation)
 	await deployer.deploy(ProductImplementation)
+	await deployer.deploy(HandoverImplementation, OwnedRegistry.address, version)
 
 	// Register Version 0
+	await ownedRegistry.addVersionFromName(version, 'createProduct(address,bytes32,bytes32,bytes32)', HandoverImplementation.address)
+	await ownedRegistry.addVersionFromName(version, 'send(address,bytes32)', HandoverImplementation.address)
+	await ownedRegistry.addVersionFromName(version, 'receive(address,bytes32)', HandoverImplementation.address)
+
 	await ownedRegistry.addVersionFromName(version, 'transferOwnership(address)', OwnerImplementation.address)
 	await ownedRegistry.addVersionFromName(version, 'initializeOwner(address)', OwnerImplementation.address)
 	await ownedRegistry.addVersionFromName(version, 'getOwner()', OwnerImplementation.address)
@@ -78,7 +84,6 @@ module.exports = async (deployer) => {
 	await ownedRegistry.addVersionFromName(version, 'productExists(bytes32)', ProductImplementation.address)
 
 	// Create proxy
-	await ownedRegistry.createProxy(version)
     const { logs } = await ownedRegistry.createProxy(version)
 	const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 	console.log(`Proxy created at ${proxy}`);

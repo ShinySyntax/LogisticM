@@ -21,8 +21,7 @@ contract("Pause", async accounts => {
 			instance = await LogisticInterface.at(proxy)
 	    });
 
-		it("Pause and unpause", async () => {
-
+		it("Only Owner", async () => {
 			await truffleAssert.reverts(
 				instance.pause({ from: other }),
 				"Ownable: caller is not the owner"
@@ -31,19 +30,33 @@ contract("Pause", async accounts => {
 				instance.unpause({ from: other }),
 				"Ownable: caller is not the owner"
 			)
+		})
 
+		it("Pause", async () => {
 			await instance.pause({ from: owner })
-			assert.equal((await instance.getPaused()), true)
+			assert.isTrue((await instance.getPaused()))
 			await truffleAssert.reverts(
 				instance.pause({ from: owner }),
 				"Pausable: paused"
 			)
+		})
 
+		it("UnPause", async () => {
 			await instance.unpause({ from: owner })
 			assert.equal((await instance.getPaused()), false)
 			await truffleAssert.reverts(
 				instance.unpause({ from: owner }),
 				"Pausable: not paused"
+			)
+		})
+
+		it("when unlock", async () => {
+			await instance.pause({ from: owner })
+			await instance.setLock(false, { from: owner })
+
+			await truffleAssert.reverts(
+				instance.unpause({ from: owner }),
+				"Pause: contract is unlock"
 			)
 		})
 

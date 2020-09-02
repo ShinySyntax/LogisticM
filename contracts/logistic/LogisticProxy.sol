@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./LogisticSharedStorage.sol";
 import "../proxy/OwnedUpgradeabilityProxy.sol";
 import "../commons/Ownable.sol";
+import "../commons/Pausable.sol";
 import "../proxy/ImplementationBase.sol";
 
 
@@ -10,7 +11,8 @@ contract LogisticProxy is
     LogisticSharedStorage,
     OwnedUpgradeabilityProxy,
     ImplementationBase,
-    Ownable {
+    Ownable,
+    Pausable {
 
     constructor(string memory _version, address sender)
         public
@@ -29,7 +31,7 @@ contract LogisticProxy is
     // Used mainly in the tests, but can be usefull for the owner to bypass
     // some check.
     // WARNING: always set lock to true after doing operations
-    function setLock(bool lock_) external onlyOwner(owner) {
+    function setLock(bool lock_) external whenPaused(paused) onlyOwner(owner) {
         lock = lock_;
     }
 }

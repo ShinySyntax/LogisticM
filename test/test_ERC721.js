@@ -21,11 +21,13 @@ contract("ERC721 Token", async (accounts) => {
 	});
 
 	beforeEach(async function () {
+		await instance.pause({ from: owner })
 		await instance.setLock(false, { from: owner })
 	})
 
 	afterEach(async function () {
 		await instance.setLock(true, { from: owner })
+		await instance.unpause({ from: owner })
 	})
 
 	it("Initialize", async () => {

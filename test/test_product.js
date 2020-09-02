@@ -23,11 +23,13 @@ contract("Product", async accounts => {
 
 		describe("When unlocked (i.e. called by the proxy)", async function () {
 			beforeEach(async function () {
+				await instance.pause({ from: owner })
 				await instance.setLock(false, { from: owner })
 			})
 
 			afterEach(async function () {
 				await instance.setLock(true, { from: owner })
+				await instance.unpause({ from: owner })
 			})
 
 			it("New product", async () => {

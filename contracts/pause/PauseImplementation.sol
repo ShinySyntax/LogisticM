@@ -29,6 +29,7 @@ contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, 
      * @dev Called by a pauser to unpause, returns to normal state.
      */
     function unpause() public onlyOwner(owner) whenPaused(paused) {
+        require(lock == true, "Pause: contract is unlock");
         paused = false;
         emit Unpaused(msg.sender);
     }

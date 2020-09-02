@@ -1,6 +1,8 @@
 # Logistic
 
 
+# Development
+
 Available Accounts
 	==================
 	(0) 0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B (100 ETH)
@@ -13,3 +15,20 @@ Available Accounts
 	(7) 0x9021d7DeE92CbddB3c155a64506EBE2f41fDE720 (100 ETH)
 	(8) 0x83b780c803540AEC28EeC888A7479723Ef340994 (100 ETH)
 	(9) 0xF2ACFe82a55418fFf2F4D7C335Ba78A53f9b7c06 (100 ETH)
+
+
+# Usage
+
+## How to use lock and pause?
+
+The contract is lock by default. This means some operation can only by done
+in a certain context: transfer a token is only doable trough send and receive
+methods (HandoverImplementation).
+
+To unlock the contract:
+ - call pause()
+ - call setLock(false)
+ - make operations
+ - call setLock(true)
+ - call unpause()
+

@@ -26,12 +26,14 @@ contract("Logistic", async accounts => {
 	})
 
 	it("Set lock", async () => {
+		await instance.pause({ from: owner })
 		await instance.setLock(false, { from: owner });
 		await truffleAssert.reverts(
 			instance.setLock(true, { from: other }),
 			"Ownable: caller is not the owner"
 		);
 		await instance.setLock(true, { from: owner });
+		await instance.unpause({ from: owner })
 	})
 
 	it("Create product", async () => {

@@ -9,9 +9,10 @@ import CreateProduct from './CreateProduct'
 import { EVENT_NAMES,
 	SUPPLIER_ADDED,
 	SUPPLIER_REMOVED,
- 	NEW_PRODUCT,
- 	PRODUCT_SHIPPED,
-	PRODUCT_RECEIVED } from "../../store/constants"
+ 	// NEW_PRODUCT,
+ 	// PRODUCT_SHIPPED,
+	// PRODUCT_RECEIVED
+} from "../../store/constants"
 import { newContextComponents } from "@drizzle/react-components";
 
 const { ContractForm } = newContextComponents;
@@ -81,7 +82,7 @@ class SupplierPanel extends React.Component {
 							drizzleState={drizzleState}
 							balance={balance}
 							tokenItemComponent={InDeliveryProductItem}
-							/>
+						/>
 					</Card>
 
 					<Card className="m-2 p-2">

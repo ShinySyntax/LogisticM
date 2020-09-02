@@ -3,8 +3,39 @@ import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 
 class ProductLink extends React.Component {
+	state = {
+		dataKeyProductInfo: null
+	}
+
+	getProductInfo() {
+		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
+			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
+	}
+
+	componentDidMount() {
+		if (!this.props.productName) {
+			this.getProductInfo()
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.productHash !== prevProps.productHash && !this.props.productName) {
+			this.getProductInfo()
+		}
+	}
+
 	render () {
-		const path = `/product/${this.props.productName}`
+		let productName;
+		if (!this.props.productName) {
+			const productInfoObject = this.props.drizzleState.contracts.Logistic
+			.getProductInfo[this.state.dataKeyProductInfo]
+			if (!productInfoObject) return null
+			productName = productInfoObject.value.productName
+		} else {
+			productName = this.props.productName
+		}
+
+		const path = `/product/${productName}`
 
 		if (this.props.as) {
 			return (
@@ -20,15 +51,15 @@ class ProductLink extends React.Component {
 
 		return (
 			<Link to={path}>
-				<span>{this.props.productName}</span>
+				<span>{productName}</span>
 			</Link>
 		)
 	}
 }
 
 ProductLink.propTypes = {
-	productName: PropTypes.string.isRequired,
-	label: PropTypes.string
+	productHash: PropTypes.string,
+	productName: PropTypes.string
 };
 
 export default ProductLink;

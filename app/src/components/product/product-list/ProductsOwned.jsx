@@ -49,7 +49,11 @@ class ProductsOwned extends React.Component {
 		}
 		return (
 			<ListGroup.Item key={idx}>
-				<ProductLink productHash={productHash} />
+				<ProductLink
+					drizzle={this.props.drizzle}
+					drizzleState={this.props.drizzleState}
+					productHash={productHash}
+				/>
 			</ListGroup.Item>
 		)
 	}

@@ -6,14 +6,16 @@ import { Container,
 	InputGroup,
 	FormControl,
 	Accordion,
-	Card
+	Card,
+	ListGroup
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
 
 import ProductLink from "../product-page/ProductLink";
-import { ZERO_ADDRESS } from '../../../store/constants';
+import { ZERO_ADDRESS, HANDOVER } from '../../../store/constants';
 import { send, sendToPurchaser } from '../../../contract-call'
+import { getEventsAboutProductHash } from '../../../store/selectors';
 
 class OwnedProductItem extends React.Component {
 	state = {
@@ -62,6 +64,26 @@ class OwnedProductItem extends React.Component {
 	}
 
 	render () {
+		let event = getEventsAboutProductHash(
+			this.props.drizzleState.events.events,
+			this.props.productHash
+		).find(event => {
+			return event.event === HANDOVER && event.returnValues.to === this.props.drizzleState.accounts[0]
+		})
+		if (event) {
+			// there is a handover with to is ourself, so just show the product link
+			// because if it show 'send to purchaser', as purchaser is ourself, transaction will fail
+			return (
+				<ListGroup.Item key={this.props.idx}>
+					<ProductLink
+						drizzle={this.props.drizzle}
+						drizzleState={this.props.drizzleState}
+						productHash={this.props.productHash}
+					/>
+				</ListGroup.Item>
+			)
+		}
+
 		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
 			.productSentFrom[this.state.dataKeyProductSentFrom]
 		if (!tokenInDeliveryObject) return null

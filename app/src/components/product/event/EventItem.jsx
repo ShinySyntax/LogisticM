@@ -85,6 +85,8 @@ class EventItem extends React.Component {
 					<td>{key}</td>
 					<td>
 						<ProductLink
+							drizzle={this.props.drizzle}
+							drizzleState={this.props.drizzleState}
 							productName={value}
 						/>
 					</td>

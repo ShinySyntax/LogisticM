@@ -3,10 +3,30 @@ pragma solidity ^0.5.5;
 import "../logistic/LogisticSharedStorage.sol";
 import "./AccessInterface.sol";
 import "../commons/Ownable.sol";
+import "../proxy/ImplementationBase.sol";
 
 
-contract AccessImplementation is AccessInterface, LogisticSharedStorage, Ownable {
-    function addSupplier(address account) external onlyOwner(owner) {
+contract AccessImplementation is
+    AccessInterface,
+    LogisticSharedStorage,
+    Ownable,
+    ImplementationBase {
+
+    constructor(address registry, string memory _version) public ImplementationBase(registry, _version) {}
+
+    function addSupplierWithName(address account, bytes32 nameBytes)
+        external
+        onlyOwner(owner)
+    {
+        addSupplier(account);
+        dCall(abi.encodeWithSignature(
+            "setName(address,bytes32)",
+            account,
+            nameBytes
+        ));
+    }
+
+    function addSupplier(address account) public onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be supplier");
         logisticRoles.addSupplier(account);
         emit SupplierAdded(account);

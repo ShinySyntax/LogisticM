@@ -14,14 +14,14 @@ module.exports = async (deployer) => {
 	await deployer.deploy(RolesLibrary)
 	await deployer.link(RolesLibrary, AccessImplementation);
 
+	const ownedRegistry = await deployer.deploy(OwnedRegistry)
+
 	await deployer.deploy(OwnerImplementation)
-	await deployer.deploy(AccessImplementation)
+	await deployer.deploy(AccessImplementation, OwnedRegistry.address, '0')
 	await deployer.deploy(ERC721LogisticImplementation)
 	await deployer.deploy(NameImplementation)
 	await deployer.deploy(PauseImplementation)
 	await deployer.deploy(ProductImplementation)
-
-	const ownedRegistry = await deployer.deploy(OwnedRegistry)
 
 	await registerV0(ownedRegistry, [
 		OwnerImplementation.address,

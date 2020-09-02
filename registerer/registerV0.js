@@ -10,6 +10,7 @@ ProductAddress]) => {
 	await ownedRegistry.addVersionFromName('0', 'getOwner()', OwnerAddress)
 
 	await ownedRegistry.addVersionFromName('0', 'addSupplier(address)', AccessAddress)
+	await ownedRegistry.addVersionFromName('0', 'addSupplierWithName(address,bytes32)', AccessAddress)
 	await ownedRegistry.addVersionFromName('0', 'removeSupplier(address)', AccessAddress)
 	await ownedRegistry.addVersionFromName('0', 'renounceSupplier()', AccessAddress)
 	await ownedRegistry.addVersionFromName('0', 'addDeliveryMan(address)', AccessAddress)

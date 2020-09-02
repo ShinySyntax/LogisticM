@@ -1,5 +1,6 @@
 const truffleAssert = require('truffle-assertions')
 var Web3 = require('web3')
+const ethersUtils = require('ethers').utils
 
 const { registerV0 } = require("../registerer/registerV0");
 const { ZERO_ADDRESS } = require("./utils");
@@ -11,7 +12,7 @@ const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 contract("AccessImplementation & OwnerImplementation", async (accounts) => {
-	const [owner, supplier, deliveryMan, other] = accounts
+	const [owner, supplier, deliveryMan, other, namedSupplier] = accounts
 
 	before(async function () {
 		// Create proxy
@@ -59,6 +60,18 @@ contract("AccessImplementation & OwnerImplementation", async (accounts) => {
 			instance.isDeliveryMan(ZERO_ADDRESS),
 			"RolesLibrary: account is the zero address"
 		)
+	})
+
+	it("Add a supplier with name", async () => {
+		let name = 'supplier'
+		let nameBytes = ethersUtils.formatBytes32String(name)
+		let result = await instance.addSupplierWithName(namedSupplier, nameBytes, { from: owner })
+		truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
+			ev.account === namedSupplier
+		);
+		assert.isTrue((await instance.isSupplier(namedSupplier)))
+		assert.equal(await instance.getName(namedSupplier), name)
+		assert.equal(await instance.getAddress(nameBytes), namedSupplier)
 	})
 
 	it("Add a supplier", async () => {

@@ -4,6 +4,7 @@ import "./AccessEvents.sol";
 
 
 contract AccessInterface is AccessEvents {
+    function addSupplierWithName(address account, bytes32 nameBytes) external;
     function addSupplier(address account) external;
     function removeSupplier(address account) external;
     function renounceSupplier() external;

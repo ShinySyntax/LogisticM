@@ -2,7 +2,6 @@ const truffleAssert = require('truffle-assertions')
 var Web3 = require('web3')
 const ethersUtils = require('ethers').utils
 
-const { registerV0 } = require("../registerer/registerV0");
 const { ZERO_ADDRESS } = require("./utils");
 
 const uri = "http://localhost:8545"

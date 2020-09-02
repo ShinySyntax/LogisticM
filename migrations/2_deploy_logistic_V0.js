@@ -9,7 +9,7 @@ const ProductImplementation = artifacts.require('./ProductImplementation.sol')
 const OwnedRegistry = artifacts.require('./OwnedRegistry.sol')
 
 module.exports = async (deployer) => {
-	const version = "0"
+	const version = "V0"
 
 	await deployer.deploy(RolesLibrary)
 

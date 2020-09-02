@@ -1,7 +1,7 @@
 const truffleAssert = require('truffle-assertions')
 var Web3 = require('web3')
 
-const { getHash } = require('./utils')
+const { version, getHash } = require('./utils')
 
 const uri = "http://localhost:8545"
 var web3 = new Web3(uri)
@@ -15,7 +15,7 @@ contract("ERC721 Token", async (accounts) => {
 	before(async function () {
 		// Create proxy
 		const ownedRegistry = await OwnedRegistry.deployed()
-	    const { logs } = await ownedRegistry.createProxy('0')
+	    const { logs } = await ownedRegistry.createProxy(version)
 		const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 		instance = await LogisticInterface.at(proxy)
 	});

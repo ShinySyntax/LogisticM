@@ -4,3 +4,5 @@ app/src/contracts
 .DS_Store
 coverage
 coverage.json
+.coverage_artifacts/
+.coverage_contracts/

@@ -12,7 +12,7 @@ const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
 contract("AccessImplementation & OwnerImplementation", async (accounts) => {
-	const [owner, supplier, deliveryMan, other, namedSupplier] = accounts
+	const [owner, supplier, deliveryMan, other, namedSupplier, namedDeliveryMan] = accounts
 
 	before(async function () {
 		// Create proxy
@@ -72,6 +72,18 @@ contract("AccessImplementation & OwnerImplementation", async (accounts) => {
 		assert.isTrue((await instance.isSupplier(namedSupplier)))
 		assert.equal(await instance.getName(namedSupplier), name)
 		assert.equal(await instance.getAddress(nameBytes), namedSupplier)
+	})
+
+	it("Add a delivery man with name", async () => {
+		let name = 'delivery man';
+		let nameBytes = ethersUtils.formatBytes32String(name);
+		let result = await instance.addDeliveryManWithName(namedDeliveryMan, nameBytes, { from: owner })
+		truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
+			ev.account === namedDeliveryMan
+		);
+		assert.isTrue((await instance.isDeliveryMan(namedDeliveryMan)));
+		assert.equal(await instance.getName(namedDeliveryMan), name);
+		assert.equal(await instance.getAddress(nameBytes), namedDeliveryMan);
 	})
 
 	it("Add a supplier", async () => {

@@ -26,12 +26,6 @@ contract AccessImplementation is
         ));
     }
 
-    function addSupplier(address account) public onlyOwner(owner) {
-        require(account != owner, "Access: Owner can't be supplier");
-        logisticRoles.addSupplier(account);
-        emit SupplierAdded(account);
-    }
-
     function removeSupplier(address account) external onlyOwner(owner) {
         logisticRoles.removeSupplier(account);
         emit SupplierRemoved(account);
@@ -46,10 +40,16 @@ contract AccessImplementation is
         emit SupplierRemoved(msg.sender);
     }
 
-    function addDeliveryMan(address account) external onlyOwner(owner) {
-        require(account != owner, "Access: Owner can't be delivery man");
-        logisticRoles.addDeliveryMan(account);
-        emit DeliveryManAdded(account);
+    function addDeliveryManWithName(address account, bytes32 nameBytes)
+        external
+        onlyOwner(owner)
+    {
+        addDeliveryMan(account);
+        dCall(abi.encodeWithSignature(
+            "setName(address,bytes32)",
+            account,
+            nameBytes
+        ));
     }
 
     function removeDeliveryMan(address account) external onlyOwner(owner) {
@@ -81,6 +81,18 @@ contract AccessImplementation is
             return uint256(RolesLibrary.RoleNames.DeliveryMan);
         }
         return uint256(RolesLibrary.RoleNames.Nobody);
+    }
+
+    function addSupplier(address account) public onlyOwner(owner) {
+        require(account != owner, "Access: Owner can't be supplier");
+        logisticRoles.addSupplier(account);
+        emit SupplierAdded(account);
+    }
+
+    function addDeliveryMan(address account) public onlyOwner(owner) {
+        require(account != owner, "Access: Owner can't be delivery man");
+        logisticRoles.addDeliveryMan(account);
+        emit DeliveryManAdded(account);
     }
 
     function isSupplier(address account) public view returns (bool) {

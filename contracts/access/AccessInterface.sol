@@ -9,6 +9,7 @@ contract AccessInterface is AccessEvents {
     function removeSupplier(address account) external;
     function renounceSupplier() external;
 
+    function addDeliveryManWithName(address account, bytes32 nameBytes) external;
     function addDeliveryMan(address account) external;
     function removeDeliveryMan(address account) external;
     function renounceDeliveryMan() external;

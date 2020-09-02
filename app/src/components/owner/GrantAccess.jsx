@@ -23,11 +23,8 @@ class GrantAccess extends React.Component {
 		const { drizzle } = this.props;
 		const contract = drizzle.contracts.Logistic;
 
-		contract.methods[this.props.grandAccessMethod].cacheSend(
-			this.state.address, { from: this.props.drizzleState.accounts[0]}
-		)
 		let nameBytes32 =  utils.formatBytes32String(this.state.name)
-		contract.methods.setName.cacheSend(
+		contract.methods[this.props.grandAccessMethod].cacheSend(
 			this.state.address, nameBytes32, { from: this.props.drizzleState.accounts[0]}
 		)
 	}

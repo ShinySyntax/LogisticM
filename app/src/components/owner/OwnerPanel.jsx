@@ -64,7 +64,7 @@ class OwnerPanel extends React.Component {
 								<GrantAccess
 									drizzle={drizzle}
 									drizzleState={drizzleState}
-									grandAccessMethod="addSupplier"
+									grandAccessMethod="addSupplierWithName"
 								/>
 								<br/>
 								<em>Remove a supplier</em>
@@ -79,7 +79,7 @@ class OwnerPanel extends React.Component {
 								<GrantAccess
 									drizzle={drizzle}
 									drizzleState={drizzleState}
-									grandAccessMethod="addDeliveryMan"
+									grandAccessMethod="addDeliveryManWithName"
 								/>
 								<br/>
 								<em>Remove a delivery man</em>

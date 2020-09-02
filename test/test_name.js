@@ -31,6 +31,7 @@ contract("Name", async accounts => {
 		let name = "John Doe"
 		let nameBytes = ethersUtils.formatBytes32String(name)
 		await instance.setName(other, nameBytes, { from: owner })
+		await instance.setName(other, nameBytes, { from: owner }) // "rename" but with same name
 		assert.equal(await instance.getName(other), name)
 		assert.equal(await instance.getAddress(nameBytes), other)
 

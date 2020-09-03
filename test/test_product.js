@@ -39,7 +39,8 @@ contract("Product", async accounts => {
 					truffleAssert.eventEmitted(result, 'NewProduct', ev =>
 					ev.by === supplier &&
 					ev.purchaser === purchaser &&
-					ev.productHash === products[0].hash
+					ev.productHash === products[0].hash &&
+					ev.productName === products[0].name
 				);
 
 				assert.equal(await instance.getHashFromTokenId(products[0].tokenId),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { createProduct } from '../../contract-call'
+import InputAddress from "../InputAddress"
 
 export default function({ drizzle, drizzleState }) {
 	const [productId, setProductId] = useState("");
@@ -28,9 +29,8 @@ export default function({ drizzle, drizzleState }) {
 				aria-label="Product name (id)"
 				onChange={event => setProductName(event.target.value)}
 			/>
-			<FormControl
-				placeholder="Purchaser address"
-				aria-label="Purchaser address"
+			<InputAddress
+				setAddress={ account => { setAccount(account) } }
 				onChange={event => setAccount(event.target.value)}
 			/>
 			<FormControl

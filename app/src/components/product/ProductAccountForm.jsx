@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import InputAddress from "../InputAddress"
 
 export default function({accountLabel, handleSubmit}) {
 	const [productId, setProductId] = useState("");
@@ -20,9 +21,8 @@ export default function({accountLabel, handleSubmit}) {
 				aria-label="Product barcode"
 				onChange={event => setProductId(event.target.value)}
 			/>
-			<FormControl
-				placeholder={accountLabel}
-				aria-label={accountLabel}
+			<InputAddress
+				setAddress={account => setAccount(account)}
 				onChange={event => setAccount(event.target.value)}
 			/>
 			<InputGroup.Append>

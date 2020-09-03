@@ -16,12 +16,13 @@ import ProductLink from "../product-page/ProductLink";
 import { ZERO_ADDRESS, HANDOVER } from '../../../store/constants';
 import { send, sendToPurchaser } from '../../../contract-call'
 import { getEventsAboutProductHash } from '../../../store/selectors';
+import InputAddress from "../../InputAddress"
 
 class OwnedProductItem extends React.Component {
 	state = {
 		dataKeyProductSentFrom: null,
 		dataKeyProductInfo: null,
-		account: null
+		account: ""
 	}
 
 	getPendingDelivery() {
@@ -56,7 +57,9 @@ class OwnedProductItem extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault()
-		send(this.props.drizzle, this.props.drizzleState, this.state.account, this.props.productHash)
+		if (this.state.account !== "") {
+			send(this.props.drizzle, this.props.drizzleState, this.state.account, this.props.productHash)
+		}
 	}
 
 	sendToPurchaser = () => {
@@ -129,10 +132,9 @@ class OwnedProductItem extends React.Component {
 								</Col>
 								<Col md={6}>
 									<InputGroup>
-										<FormControl
-											placeholder="Recipient"
-											aria-label="Recipient"
-											onChange={this.handleChange}
+										<InputAddress
+											setAddress={ account => { this.setState({account}) } }
+											onChange={event => { this.setState({ account: event.target.value }) } }
 										/>
 										<InputGroup.Append>
 											<Button

@@ -73,6 +73,11 @@ contract("Product", async accounts => {
 						supplier, ZERO_ADDRESS, { from: deliveryMan }),
 					"Product: to is the zero address"
 				)
+				await truffleAssert.reverts(
+					instance.setProductSent(products[2].hash,
+						supplier, deliveryMan, { from: deliveryMan }),
+					"Product: this product does not exist"
+				)
 			})
 
 			it("Set product received", async () => {
@@ -95,6 +100,11 @@ contract("Product", async accounts => {
 					instance.setProductReceived(products[0].hash,
 						supplier, ZERO_ADDRESS, { from: deliveryMan }),
 					"Product: by is the zero address"
+				)
+				await truffleAssert.reverts(
+					instance.setProductReceived(products[2].hash,
+						supplier, deliveryMan, { from: deliveryMan }),
+					"Product: this product does not exist"
 				)
 			})
 		})

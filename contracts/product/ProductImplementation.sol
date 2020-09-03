@@ -32,6 +32,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
     {
         require(from != address(0), "Product: from is the zero address");
         require(to != address(0), "Product: to is the zero address");
+        require(productExists(productHash), "Product: this product does not exist");
 
         _getProduct(productHash).sent[from] = to;
         string memory productName = _getProduct(productHash).productName;
@@ -48,6 +49,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
     {
         require(from != address(0), "Product: from is the zero address");
         require(by != address(0), "Product: by is the zero address");
+        require(productExists(productHash), "Product: this product does not exist");
 
         _getProduct(productHash).received[from] = by;
         (

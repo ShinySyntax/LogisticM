@@ -18,6 +18,13 @@ const products = [
 		name: "Hoodie",
 		nameBytes32: ethersUtils.formatBytes32String("Hoodie"),
 		purchaserNameBytes32: ethersUtils.formatBytes32String("John")
+	},
+	{
+		hash: getHash("not exist product"),
+		tokenId: 2,
+		name: "",
+		nameBytes32: ethersUtils.formatBytes32String(""),
+		purchaserNameBytes32: ethersUtils.formatBytes32String("")
 	}
 ]
 

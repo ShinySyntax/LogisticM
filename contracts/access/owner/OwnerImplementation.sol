@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import "../../logistic/LogisticSharedStorage.sol";
 import "./OwnerInterface.sol";
-import "../../proxy/Upgradeable.sol";
+import "../../upgradeability/Upgradeable.sol";
 
 
 contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable {

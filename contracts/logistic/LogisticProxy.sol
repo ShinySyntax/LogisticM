@@ -1,10 +1,10 @@
 pragma solidity ^0.5.0;
 
 import "./LogisticSharedStorage.sol";
-import "../proxy/OwnedUpgradeabilityProxy.sol";
+import "../upgradeability/proxy/OwnedUpgradeabilityProxy.sol";
 import "../commons/Ownable.sol";
 import "../commons/Pausable.sol";
-import "../proxy/ImplementationBase.sol";
+import "../upgradeability/ImplementationBase.sol";
 
 
 contract LogisticProxy is

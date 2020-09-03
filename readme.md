@@ -32,3 +32,7 @@ To unlock the contract:
  - call setLock(true)
  - call unpause()
 
+## Upgradeability
+
+Implementation is inspired by <https://github.com/OpenZeppelin/openzeppelin-labs/tree/master/upgradeability_with_vtable>.
+

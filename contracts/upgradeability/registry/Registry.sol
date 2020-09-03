@@ -1,8 +1,8 @@
 pragma solidity ^0.5.0;
 
 import "./IRegistry.sol";
-import "../logistic/LogisticProxy.sol";
-import "../commons/BytesLib.sol";
+import "../../logistic/LogisticProxy.sol";
+import "../../commons/BytesLib.sol";
 
 
 /**

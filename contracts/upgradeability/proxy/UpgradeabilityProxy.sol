@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
 import "./Proxy.sol";
-import "./IRegistry.sol";
-import "./UpgradeabilityStorage.sol";
-import "../commons/BytesLib.sol";
+import "../registry/IRegistry.sol";
+import "../UpgradeabilityStorage.sol";
+import "../../commons/BytesLib.sol";
 
 
 /**

@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "./UpgradeabilityProxy.sol";
-import "./OwnedUpgradeabilityStorage.sol";
+import "../OwnedUpgradeabilityStorage.sol";
 
 
 /**

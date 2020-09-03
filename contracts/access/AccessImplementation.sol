@@ -3,7 +3,7 @@ pragma solidity ^0.5.5;
 import "../logistic/LogisticSharedStorage.sol";
 import "./AccessInterface.sol";
 import "../commons/Ownable.sol";
-import "../proxy/ImplementationBase.sol";
+import "../upgradeability/ImplementationBase.sol";
 
 
 contract AccessImplementation is

@@ -7,7 +7,7 @@ import "../access/owner/OwnerInterface.sol";
 import "../product/ProductInterface.sol";
 import "../pause/PauseInterface.sol";
 import "../handover/HandoverInterface.sol";
-import "../proxy/IOwnedUpgradeabilityProxy.sol";
+import "../upgradeability/proxy/IOwnedUpgradeabilityProxy.sol";
 
 
 contract LogisticInterface is

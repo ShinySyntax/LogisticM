@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 import "./HandoverInterface.sol";
 import "../logistic/LogisticSharedStorage.sol";
-import "../proxy/ImplementationBase.sol";
+import "../upgradeability/ImplementationBase.sol";
 import "../commons/Pausable.sol";
 
 

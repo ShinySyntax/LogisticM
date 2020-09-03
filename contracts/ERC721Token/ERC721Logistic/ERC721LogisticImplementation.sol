@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "../ERC721Base/ERC721BaseImplementation.sol";
 import "./ERC721LogisticInterface.sol";
 import "../../commons/Lock.sol";
-import "../../proxy/Upgradeable.sol";
+import "../../upgradeability/Upgradeable.sol";
 
 
 contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {

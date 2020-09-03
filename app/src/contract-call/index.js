@@ -18,7 +18,10 @@ const getAddress = (account, drizzle) => {
 export const createProduct = (drizzle, drizzleState, purchaser, productId, productName,
 		purchaserName) => {
 	drizzle.contracts.Logistic.methods.createProduct.cacheSend(
-		purchaser, Web3.utils.keccak256(productId), productName, purchaserName,
+		purchaser,
+		Web3.utils.keccak256(productId),
+		utils.formatBytes32String(productName),
+		utils.formatBytes32String(purchaserName),
 		{ from: drizzleState.accounts[0] }
 	)
 }

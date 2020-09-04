@@ -9,7 +9,7 @@ var web3 = new Web3(uri)
 const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")
 
-contract("ERC721 Token", async (accounts) => {
+contract("ERC721LogisticImplementation", async (accounts) => {
 	const [owner, other] = accounts
 
 	before(async function () {
@@ -35,6 +35,10 @@ contract("ERC721 Token", async (accounts) => {
 			instance.initializeERC721({ from: owner }),
 			"Upgradeable: bad caller"
 		)
+	})
+
+	it("Name", async () => {
+		assert.equal(await instance.name(), "LogisticM")
 	})
 
 	it("Get counter", async () => {

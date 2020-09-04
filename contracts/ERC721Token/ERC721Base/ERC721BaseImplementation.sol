@@ -10,7 +10,11 @@ import "openzeppelin-solidity/contracts/GSN/Context.sol";
  * @title ERC721 Non-Fungible Token Standard basic implementation
  * @dev see https://eips.ethereum.org/EIPS/eip-721
  */
-contract ERC721BaseImplementation is ERC721BaseInterface, LogisticSharedStorage, Context {
+contract ERC721BaseImplementation is
+    ERC721BaseInterface,
+    LogisticSharedStorage,
+    Context {
+
     /**
      * @dev Gets the token name.
      * @return string representing the token name

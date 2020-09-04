@@ -6,13 +6,20 @@ import "../upgradeability/ImplementationBase.sol";
 import "../commons/Pausable.sol";
 
 
+/**
+ * @title HandoverImplementation
+ * @dev The Handover logic contract. This manage the way tokens that represent
+ * products are handing over to other users.
+ */
 contract HandoverImplementation is
     HandoverInterface,
     LogisticSharedStorage,
     Pausable,
     ImplementationBase {
 
-    constructor(address registry, string memory _version) public ImplementationBase(registry, _version) {}
+    constructor(address registry, string memory _version)
+        public
+        ImplementationBase(registry, _version) {}
 
     function createProduct(
         address purchaser,

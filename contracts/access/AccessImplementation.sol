@@ -6,6 +6,11 @@ import "../commons/Ownable.sol";
 import "../upgradeability/ImplementationBase.sol";
 
 
+/**
+ * @title AccessImplementation
+ * @dev The Access logic contract. This defines functions for user role
+ * management.
+ */
 contract AccessImplementation is
     AccessInterface,
     LogisticSharedStorage,

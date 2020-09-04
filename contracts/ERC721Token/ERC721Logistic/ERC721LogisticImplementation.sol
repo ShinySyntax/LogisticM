@@ -6,6 +6,13 @@ import "../../commons/Lock.sol";
 import "../../upgradeability/Upgradeable.sol";
 
 
+/**
+ * @title ERC721LogisticImplementation
+ * @dev The ERC721Logistic logic contract. It changes the behaviour of the ERC721
+ * Token defined in ERC721BaseImplementation: some functions are locked because
+ * users need to go through the handover process defined in the Handover logic
+ * contract.
+ */
 contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {
     function getCounter() public view returns (uint256) {
         return counter;

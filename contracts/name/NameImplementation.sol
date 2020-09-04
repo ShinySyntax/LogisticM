@@ -5,6 +5,11 @@ import "./NameInterface.sol";
 import "../commons/BytesLib.sol";
 
 
+/**
+ * @title NameImplementation
+ * @dev The Name logic contract. This allow to set a name to an account to be
+ * more user-friendly than using address when interacting with the contract.
+ */
 contract NameImplementation is NameInterface, LogisticSharedStorage {
     string internal constant EMPTY = "";
 

@@ -6,6 +6,11 @@ import "../commons/Lock.sol";
 import "../commons/BytesLib.sol";
 
 
+/**
+ * @title ProductImplementation
+ * @dev The Product logic contract. It is mainly used by the Handover logic
+ * contract because it defines some lower level methods to handle product state.
+ */
 contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock {
     function newProduct(
         bytes32 productHash,

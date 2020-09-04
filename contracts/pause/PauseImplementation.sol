@@ -9,6 +9,12 @@ import "../commons/Lock.sol";
 import "../commons/Pausable.sol";
 
 
+/**
+ * @title PauseImplementation
+ * @dev The Pause logic contract. This allow the owner of Logistic to pause the
+ * Logistic contract. This means that not handover can happen when the contract
+ * is paused.
+ */
 contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, Lock, Pausable {
     /**
      * @dev Returns true if the contract is paused, and false otherwise.

@@ -1,6 +1,11 @@
 pragma solidity ^0.5.0;
 
 
+/**
+ * @title RolesLibrary
+ * @dev The library that manage the roles.
+ * This is a external library, so it need to be linked in the during deployment.
+ */
 library RolesLibrary {
     enum RoleNames {
         Nobody,

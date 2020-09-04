@@ -5,6 +5,11 @@ import "./OwnerInterface.sol";
 import "../../upgradeability/Upgradeable.sol";
 
 
+/**
+ * @title OwnerImplementation
+ * @dev The Owner logic contract. The owner of the Logistic contract is the superuser.
+ * Only the superuser can perform the user role management.
+ */
 contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable {
     function getOwner() external view returns (address) {
         return owner;

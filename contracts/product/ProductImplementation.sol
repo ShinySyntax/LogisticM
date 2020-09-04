@@ -57,11 +57,7 @@ contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock 
         require(productExists(productHash), "Product: this product does not exist");
 
         _getProduct(productHash).received[from] = by;
-        (
-            address purchaser,
-            uint256 tokenId,
-            string memory productName
-        ) = getProductInfo(productHash);
+        string memory productName = _getProduct(productHash).productName;
         emit ProductReceived(from, by, productHash, productName);
     }
 

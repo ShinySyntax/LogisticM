@@ -1,6 +1,10 @@
 pragma solidity ^0.5.0;
 
 
+/**
+ * @title BytesLib for Logistic
+ * @dev Deinfes internal function for bytes conversion.
+ */
 library BytesLib {
     // https://ethereum.stackexchange.com/questions/37974/convert-bytes-memory-to-bytes8
     function convertBytesToBytes4(bytes memory inBytes) internal pure returns (bytes4 outBytes4) {

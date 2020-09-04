@@ -17,8 +17,15 @@ contract AccessImplementation is
     Ownable,
     ImplementationBase {
 
-    constructor(address registry, string memory _version) public ImplementationBase(registry, _version) {}
+    constructor(address registry, string memory _version)
+        public
+        ImplementationBase(registry, _version) {}
 
+    /**
+    * @dev This function grant supplier role to account and set its name to nameBytes.
+    * @param account representing the address of the new supplier
+    * @param nameBytes representing the name of the supplier
+    */
     function addSupplierWithName(address account, bytes32 nameBytes)
         external
         onlyOwner(owner)
@@ -31,11 +38,18 @@ contract AccessImplementation is
         ));
     }
 
+    /**
+    * @dev This function revoke supplier role.
+    * @param account representing the address of the supplier
+    */
     function removeSupplier(address account) external onlyOwner(owner) {
         logisticRoles.removeSupplier(account);
         emit SupplierRemoved(account);
     }
 
+    /**
+    * @dev This function revoke supplier role to the caller.
+    */
     function renounceSupplier() external {
         require(
             isSupplier(msg.sender),
@@ -45,6 +59,11 @@ contract AccessImplementation is
         emit SupplierRemoved(msg.sender);
     }
 
+    /**
+    * @dev This function grant delivery man role to account and set its name to nameBytes.
+    * @param account representing the address of the new delivery man
+    * @param nameBytes representing the name of the delivery man
+    */
     function addDeliveryManWithName(address account, bytes32 nameBytes)
         external
         onlyOwner(owner)
@@ -57,11 +76,18 @@ contract AccessImplementation is
         ));
     }
 
+    /**
+    * @dev This function revoke delivery man role.
+    * @param account representing the address of the delivery man
+    */
     function removeDeliveryMan(address account) external onlyOwner(owner) {
         logisticRoles.removeDeliveryMan(account);
         emit DeliveryManRemoved(account);
     }
 
+    /**
+    * @dev This function revoke delivery man role to the caller.
+    */
     function renounceDeliveryMan() external {
         require(
             isDeliveryMan(msg.sender),
@@ -71,6 +97,11 @@ contract AccessImplementation is
         emit DeliveryManRemoved(msg.sender);
     }
 
+    /**
+    * @dev This function return the role of the given account.
+    * Mapping from integer to role is describe in RolesLibrary.RoleNames
+    * @return An integer representing the role of account
+    */
     function getRole(address account)
         external
         view
@@ -88,22 +119,36 @@ contract AccessImplementation is
         return uint256(RolesLibrary.RoleNames.Nobody);
     }
 
+    /**
+    * @dev This function grant supplier role to account.
+    */
     function addSupplier(address account) public onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be supplier");
         logisticRoles.addSupplier(account);
         emit SupplierAdded(account);
     }
 
+    /**
+    * @dev This function grant delivery man role to account.
+    */
     function addDeliveryMan(address account) public onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be delivery man");
         logisticRoles.addDeliveryMan(account);
         emit DeliveryManAdded(account);
     }
 
+    /**
+    * @dev This function return true if the given account is a supplier.
+    * @return Whether or not account has the supplier role.
+    */
     function isSupplier(address account) public view returns (bool) {
         return logisticRoles.isSupplier(account);
     }
 
+    /**
+    * @dev This function return true if the given account is a delivery man.
+    * @return Whether or not account has the delivery man role.
+    */
     function isDeliveryMan(address account) public view returns (bool) {
         return logisticRoles.isDeliveryMan(account);
     }

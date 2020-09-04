@@ -15,11 +15,20 @@ contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeab
         return owner;
     }
 
+    /**
+    * @dev This function is called by the proxy at its creation.
+    * This initialize the owner.
+    * @param sender representing the address of the sender
+    */
     function initializeOwner(address sender) public {
         super.initialize(msg.sender);
         owner = sender;
     }
 
+    /**
+    * @dev This function allows to transfer the ownership of the Logistic Contract
+    * @param newOwner representing the address of the new owner
+    */
     function transferOwnership(address newOwner) public {
         require(owner == msg.sender, "Owner: caller is not the owner");
 

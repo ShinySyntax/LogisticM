@@ -1,6 +1,9 @@
 const path = require("path");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
+const mnemonic = ""
+const apiKey = ""
+
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!

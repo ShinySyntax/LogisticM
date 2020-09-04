@@ -22,6 +22,11 @@ contract Proxy {
     */
     function implementation(bytes4 func) public view returns (address);
 
+    /**
+    * @dev This function is called by the fallback funcion and performs a
+    * delegatecall to the given implementation.
+    * This function will return whatever the implementation call returns
+    */
     function delegateCallProxy(address _impl) internal {
         assembly {
             let ptr := mload(0x40)

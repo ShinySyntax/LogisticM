@@ -24,7 +24,7 @@ contract OwnedUpgradeabilityProxy is UpgradeabilityProxy, OwnedUpgradeabilitySto
     }
 
     /**
-    * @dev Throws if called by any account other than the owner.
+    * @dev Throws if called by any account other than the proxy owner.
     */
     modifier onlyProxyOwner() {
         require(

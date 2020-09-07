@@ -7,13 +7,13 @@ pragma solidity ^0.5.0;
  */
 contract RegistryOwnership {
 
-    // Owner of the contract
+    /// Owner of the registry contract
     address private _registryOwner;
 
     /**
     * @dev Event to show ownership has been transferred
-    * @param previousOwner representing the address of the previous owner
-    * @param newRegistryOwner representing the address of the new owner
+    * @param previousOwner representing the address of the previous registry owner
+    * @param newRegistryOwner representing the address of the new registry owner
     */
     event RegistryOwnershipTransferred(address previousOwner, address newRegistryOwner);
 
@@ -36,8 +36,8 @@ contract RegistryOwnership {
     }
 
     /**
-    * @dev Tells the address of the owner
-    * @return the address of the owner
+    * @dev Tells the address of the registry owner
+    * @return the address of the registry owner
     */
     function registryOwner() public view returns (address) {
         return _registryOwner;
@@ -57,7 +57,7 @@ contract RegistryOwnership {
     }
 
     /**
-    * @dev Sets a new owner address
+    * @dev Sets a new registry owner address
     */
     function setRegistryOwner(address newRegistryOwner) internal {
         _registryOwner = newRegistryOwner;

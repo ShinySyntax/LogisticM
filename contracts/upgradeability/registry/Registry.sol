@@ -10,13 +10,13 @@ import "../../commons/BytesLib.sol";
  * @dev This contract works as a registry of versions, it holds the implementations for the registered versions.
  */
 contract Registry is IRegistry {
-    // Mapping of versions to implementations of different functions
+    /// Mapping of versions to implementations of different functions
     mapping (string => mapping (bytes4 => address)) internal versions;
 
-    // Mapping of versions to list of identifiers of its functions
+    /// Mapping of versions to list of identifiers of its functions
     mapping (string => bytes4[]) internal funcs;
 
-    // Fallback function implementation for each version
+    /// Fallback function implementation for each version
     mapping (string => address) internal fallbacks;
 
     /**

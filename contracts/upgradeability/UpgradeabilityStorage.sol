@@ -8,16 +8,16 @@ import "./registry/IRegistry.sol";
  * @dev This contract holds all the necessary state variables to support the upgrade functionality
  */
 contract UpgradeabilityStorage {
-    // Registry of versions
+    /// Registry of versions
     IRegistry internal registry;
 
-    // Current version
+    /// Current version
     string internal version_;
 
-    // Optional fallback function
+    /// Optional fallback function
     address internal fallback_;
 
-    // Cache of functions to current implementations
+    /// Cache of functions to current implementations
     mapping (bytes4 => address) internal implementations_;
 
     /**

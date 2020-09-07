@@ -97,14 +97,6 @@ be the same. This is why all logic contract Implementation derive from
 `LogisticSharedStorage`. And this is also why `LogisticSharedStorage` derives
 from all the storage logic contract.
 
-
-### How to use the smart contract?
-
-To use the smart contract, you need to create a web3 Contract with the ABI of `LogisticInterface`
-and the address of `LogisticProxy`.
-
-The address of the proxy is accessible in the log event `ProxyCreated` of the registry that created the proxy.
-
 #### How does the proxy work?
 
 When sending a transaction to the proxy contract, the implementation of the
@@ -115,7 +107,24 @@ Because it is a delegate call, the storage used in the logic contract is the one
 of the proxy contract. So, all the storage resides in the proxy contract.
 
 
-### Deployment
+#### Upgrade to a new version
+
+##### Versionning
+
+Versions are like `V0.0`, where the first number is incremented each time the registry or the proxy are changed; and the second number is incremented each time a logic contract is updated through the upgradeability pattern.
+
+##### How to upgrade?
+
+
+### How to use the smart contract?
+
+To use the smart contract, you need to create a web3 Contract with the ABI of `LogisticInterface`
+and the address of `LogisticProxy`.
+
+The address of the proxy is accessible in the log event `ProxyCreated` of the registry that created the proxy.
+
+
+## Deployment
 
 You can look at the migration file `./migrations/2_deploy_logistic_V0.js`.
 You will see that we deploy the registry and all the logic contracts.
@@ -123,9 +132,9 @@ Then, we register all the functions implemented in the logic contracts.
 Finally, we create the proxy.
 
 
-### How to use lock and pause?
+## How to use lock and pause?
 The contract is lock by default. This means some operation can only be done
-in a certain context: transfer a token is only doable trough `send` and `receive`
+in a certain context: transfer a token is only doable through `send` and `receive`
 methods (`HandoverImplementation`).
 
 To unlock the contract:
@@ -161,7 +170,7 @@ can do is receive the product from the person who sends it to him.
 The owner can't manipulate products.
 
 
-**When a handover happens?**
+### When a handover happens?
 
 For a handover to happens, the two participants must agree on it.
  - the sender must declare that it sent the product to the receiver,

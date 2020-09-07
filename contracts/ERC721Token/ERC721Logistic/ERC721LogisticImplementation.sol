@@ -12,12 +12,20 @@ import "../../upgradeability/Upgradeable.sol";
  * Token defined in ERC721BaseImplementation: some functions are locked because
  * users need to go through the handover process defined in the Handover logic
  * contract.
+ * ERC721 tokens are minted incrementally.
  */
 contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {
+    /**
+     * @dev Return the counter
+     * @return The current value of counter
+     */
     function getCounter() public view returns (uint256) {
         return counter;
     }
 
+    /**
+     * @dev Initialize the logic contract.
+     */
     function initializeERC721() public {
         super.initialize(msg.sender);
         _name = "LogisticM";
@@ -30,19 +38,43 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
         _supportedInterfaces[interfaceId] = true;
     }
 
+    /**
+     * @dev Mint a token.
+     * The value of the token if the current value of the counter.
+     * Then, the counter is incremented.
+     * This function is locked.
+     * @param to The address that receive the minted token
+     */
     function mint(address to) public locked(lock) {
         _mint(to, counter);
         counter = counter.add(11);
     }
 
+    /**
+     * @dev The `approve` function of ERC721.
+     * This function is locked.
+     * @param to address to be approved for the given token ID
+     * @param tokenId uint256 ID of the token to be approved
+     */
     function approve(address to, uint256 tokenId) public locked(lock) {
         super.approve(to, tokenId);
     }
 
+    /**
+     * @dev The `setApprovalForAll` function of ERC721.
+     * This function always reverts.
+     */
     function setApprovalForAll(address, bool) public {
         revert("ERC721Logistic: can not approve for all");
     }
 
+    /**
+     * @dev The `transferFrom` function of ERC721.
+     * This function is locked.
+     * @param from current owner of the token
+     * @param to address to receive the ownership of the given token ID
+     * @param tokenId uint256 ID of the token to be transferred
+     */
     function transferFrom(address from, address to, uint256 tokenId)
         public
         locked(lock)
@@ -50,10 +82,18 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
         super.transferFrom(from, to, tokenId);
     }
 
+    /**
+     * @dev The `safeTransferFrom` function of ERC721.
+     * This function always reverts.
+     */
     function safeTransferFrom(address, address, uint256) public {
         revert("ERC721Logistic: can not transfer");
     }
 
+    /**
+     * @dev The `safeTransferFrom` function of ERC721 with data.
+     * This function always reverts.
+     */
     function safeTransferFrom(address, address, uint256, bytes memory) public {
         revert("ERC721Logistic: can not transfer");
     }

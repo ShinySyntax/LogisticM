@@ -3,6 +3,10 @@ pragma solidity ^0.5.0;
 import "../ERC721Token/ERC721Base/ERC721BaseImplementation.sol";
 
 
+/**
+ * @title ERC721Mock
+ * @dev This contract is used for the tests.
+ */
 contract ERC721Mock is ERC721BaseImplementation {
     constructor() public {
         _name = "MockToken";

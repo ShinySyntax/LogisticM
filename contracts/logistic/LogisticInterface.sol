@@ -10,6 +10,10 @@ import "../handover/HandoverInterface.sol";
 import "../upgradeability/proxy/IOwnedUpgradeabilityProxy.sol";
 
 
+/**
+ * @title LogisticInterface
+ * @dev The interface used to interact with the Logistic contract.
+ */
 contract LogisticInterface is
     ERC721LogisticInterface,
     NameInterface,

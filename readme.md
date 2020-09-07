@@ -83,6 +83,11 @@ constructor of `HandoverImplementation` requires the address of the registry.
 With this address, it can call `IRegistry.getFunction` to get the address of the
 logic contract implementation. With this address, it can perform a delegate call.
 
+Functions called by delegate call can only have value type parameters. This is
+why, for example, `HandoverImplementation.createProduct` receives the name of the
+product in bytes. Indeed, the function sends the name to `ProductImplementation.newProduct`.
+So, on the client side, the string is converted in bytes to reduce gas usage.
+
 #### LogisticSharedStorage
 
 `LogisticSharedStorage` is the contract that gathers all the storage of the
@@ -119,7 +124,7 @@ Finally, we create the proxy.
 
 
 ### How to use lock and pause?
-The contract is lock by default. This means some operation can only by done
+The contract is lock by default. This means some operation can only be done
 in a certain context: transfer a token is only doable trough `send` and `receive`
 methods (`HandoverImplementation`).
 
@@ -129,3 +134,49 @@ To unlock the contract:
  - make operations
  - call setLock(true)
  - call unpause()
+
+
+## The handover process
+
+### Roles
+
+The roles are:
+ - supplier: can create products and send them
+ - Delivery man: can receive and send products
+ - purchaser: can receive the product
+ - owner: grant and revoke roles
+
+The supplier creates a product and tells to which address the product will ultimately
+belong to. Then, it can either send this product to a delivery man or directly
+to the purchaser.
+
+The delivery man is an intermediary person. There can be as much as Delivery Men
+in the supply channel as it is needed. Ultimately, a Delivery Man will send the
+product to the purchaser.
+
+The Purchaser doesn't order a product through the app (at least for now). This
+is the supplier that creates a product for a purchaser. The only action a purchaser
+can do is receive the product from the person who sends it to him.
+
+The owner can't manipulate products.
+
+
+**When a handover happens?**
+
+For a handover to happens, the two participants must agree on it.
+ - the sender must declare that it sent the product to the receiver,
+ - the receiver must declare that it received the same product from the sender.
+
+### Data structure
+
+For each product:
+ - product ID: collected in the front-end app but not stored anywhere
+ - product hash: sha3 of the product ID, stored in the smart contract
+ - product name: collected in the front-end app and stored in the smart contract
+ - purchaser: the address of the person who purchased the product
+
+For each account
+ - name: a string representing the name of the user
+
+
+## Client side: front end application

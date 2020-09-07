@@ -7,6 +7,10 @@ import "../commons/Pausable.sol";
 import "../upgradeability/ImplementationBase.sol";
 
 
+/**
+ * @title LogisticProxy
+ * @dev The proxy deployed by the registry.
+ */
 contract LogisticProxy is
     LogisticSharedStorage,
     OwnedUpgradeabilityProxy,
@@ -28,9 +32,13 @@ contract LogisticProxy is
         dCall(abi.encodeWithSignature("initializeERC721()"));
     }
 
-    // Used mainly in the tests, but can be usefull for the owner to bypass
-    // some check.
-    // WARNING: always set lock to true after doing operations
+    /**
+     * @dev Set the lock to `true` or `false`.
+     * Used mainly in the tests, but can be usefull for the owner to bypass
+     * some check and perform operations manually.
+     * WARNING: always set lock to true after doing operations
+     * @param lock_ The lock variable of the proxy contract.
+     */
     function setLock(bool lock_) external whenPaused(paused) onlyOwner(owner) {
         lock = lock_;
     }

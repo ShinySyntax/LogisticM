@@ -8,6 +8,10 @@ import "../pause/PauseStorage.sol";
 import "../product/ProductStorage.sol";
 
 
+/**
+ * @title LogisticSharedStorage
+ * @dev This contract defines the storage layout of the proxy contract and all the logic contracts.
+ */
 contract LogisticSharedStorage is
     OwnerStorage,
     AccessStorage,

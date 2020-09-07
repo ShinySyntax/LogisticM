@@ -8,7 +8,7 @@ import "../commons/Pausable.sol";
 
 /**
  * @title HandoverImplementation
- * @dev The Handover logic contract. This manage the way tokens that represent
+ * @dev The Handover logic contract. This manages the way tokens that represent
  * products are handing over to other users.
  */
 contract HandoverImplementation is
@@ -21,6 +21,13 @@ contract HandoverImplementation is
         public
         ImplementationBase(registry, _version) {}
 
+    /**
+     * @dev Create a product. Mint a token corresponding to this product.
+     * @param purchaser The address of the person who purchased to product.
+     * @param productHash The product hash: sha3 of the product ID.
+     * @param productNameBytes The name of the product in bytes, sent to `ProductImplementation`.
+     * @param purchaserNameBytes The name of the purchaser, sent to `NameImplementation`.
+     */
     function createProduct(
         address purchaser,
         bytes32 productHash,
@@ -67,6 +74,12 @@ contract HandoverImplementation is
         lock = true;
     }
 
+    /**
+     * @dev Send a product. The user say: "I am shipping the product `productHash`
+     * to the address `to`."
+     * @param to The person that will receive the product.
+     * @param productHash The product hash: sha3 of the product ID.
+     */
     function send(address to, bytes32 productHash)
         external
         whenNotPaused(paused)
@@ -93,9 +106,13 @@ contract HandoverImplementation is
 
         (address purchaser, uint256 tokenId, string memory productName) =
             abi.decode(
-                dCall(abi.encodeWithSignature(
-                    "getProductInfo(bytes32)", productHash)),
-                (address, uint256, string)
+                dCall(
+                    abi.encodeWithSignature(
+                        "getProductInfo(bytes32)",
+                        productHash
+                    )
+                ),
+            (address, uint256, string)
         );
 
         if (receiverRole == 0) {
@@ -104,9 +121,16 @@ contract HandoverImplementation is
                 "Logistic: This purchaser has not ordered this product");
         }
 
-        address sender = abi.decode(dCall(abi.encodeWithSignature(
-            "productReceivedFrom(bytes32,address)", productHash, msg.sender)
-        ), (address));
+        address sender = abi.decode(
+            dCall(
+                abi.encodeWithSignature(
+                    "productReceivedFrom(bytes32,address)",
+                    productHash,
+                    msg.sender
+                )
+            ),
+            (address)
+        );
 
         if (sender == to) {
             _handoverToken(tokenId, msg.sender, to, productHash, productName);
@@ -124,6 +148,12 @@ contract HandoverImplementation is
         lock = true;
     }
 
+    /**
+     * @dev Receive a product. The user say: "The address `from` sent me the product
+     `productHash` and I have received it."
+     * @param from The person who has sent the product.
+     * @param productHash The product hash: sha3 of the product ID.
+     */
     function receive(address from, bytes32 productHash)
         external
         whenNotPaused(paused)
@@ -137,13 +167,17 @@ contract HandoverImplementation is
             "Logistic: Caller can't receive product"
         );
         require(
-            abi.decode(dCall(abi.encodeWithSignature(
-                "productReceivedFrom(bytes32,address)", productHash, from)
-            ), (address)) == address(0),
+            abi.decode(
+                dCall(abi.encodeWithSignature(
+                    "productReceivedFrom(bytes32,address)",
+                    productHash,
+                    from)),
+                (address)
+            ) == address(0),
             "Logistic: Already received"
         );
         // Comment these lines because if a supplier or a delivery man has his
-        // role revoked, nobody would be able to receive product that ihe sent.
+        // role revoked, nobody would be able to receive product that he sent.
         // uint256 senderRole = abi.decode(dCall(abi.encodeWithSignature(
         //     "getRole(address)", from)), (uint));
         // require(
@@ -154,7 +188,8 @@ contract HandoverImplementation is
         (address purchaser, uint256 tokenId, string memory productName) =
             abi.decode(
                 dCall(abi.encodeWithSignature(
-                    "getProductInfo(bytes32)", productHash)),
+                    "getProductInfo(bytes32)",
+                    productHash)),
                 (address, uint256, string)
         );
 
@@ -173,11 +208,23 @@ contract HandoverImplementation is
 
         dCall(abi.encodeWithSignature(
             "setProductReceived(bytes32,address,address)",
-            productHash, from, msg.sender
+            productHash,
+            from,
+            msg.sender
         ));
         lock = true;
     }
 
+    /**
+     * @dev Handover a product: call transferFrom ERC721 function.
+     * This function is called only when all the conditions are met to perform
+     * a handover.
+     * @param tokenId The person who has sent the product.
+     * @param from The person who has sent the product.
+     * @param to The person who has received the product.
+     * @param productHash The product hash: sha3 of the product ID.
+     * @param productName The name of the product.
+     */
     function _handoverToken(
         uint256 tokenId,
         address from,

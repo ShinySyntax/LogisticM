@@ -31,10 +31,10 @@ library BytesLib {
     /**
      * @dev Convert the given bytes to a string.
      * See https://ethereum.stackexchange.com/questions/2519/how-to-convert-a-bytes32-to-string
-     * @param inBytes The bytes array
+     * @param inBytes32 The bytes array
      * @return A `string`
      */
-    function bytes32ToString(bytes32 inBytes)
+    function bytes32ToString(bytes32 inBytes32)
         internal
         pure
         returns (string memory)
@@ -43,7 +43,7 @@ library BytesLib {
         bytes memory bytesString = new bytes(32);
         uint charCount = 0;
         for (j = 0; j < 32; j++) {
-            byte char = byte(bytes32(uint(inBytes) * 2 ** (8 * j)));
+            byte char = byte(bytes32(uint(inBytes32) * 2 ** (8 * j)));
             if (char != 0) {
                 bytesString[charCount] = char;
                 charCount++;

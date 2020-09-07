@@ -63,26 +63,26 @@ contract("AccessImplementation & OwnerImplementation", async (accounts) => {
 
 	it("Add a supplier with name", async () => {
 		let name = 'supplier'
-		let nameBytes = ethersUtils.formatBytes32String(name)
-		let result = await instance.addSupplierWithName(namedSupplier, nameBytes, { from: owner })
+		let nameBytes32 = ethersUtils.formatBytes32String(name)
+		let result = await instance.addSupplierWithName(namedSupplier, nameBytes32, { from: owner })
 		truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
 			ev.account === namedSupplier
 		);
 		assert.isTrue((await instance.isSupplier(namedSupplier)))
 		assert.equal(await instance.getName(namedSupplier), name)
-		assert.equal(await instance.getAddress(nameBytes), namedSupplier)
+		assert.equal(await instance.getAddress(nameBytes32), namedSupplier)
 	})
 
 	it("Add a delivery man with name", async () => {
 		let name = 'delivery man';
-		let nameBytes = ethersUtils.formatBytes32String(name);
-		let result = await instance.addDeliveryManWithName(namedDeliveryMan, nameBytes, { from: owner })
+		let nameBytes32 = ethersUtils.formatBytes32String(name);
+		let result = await instance.addDeliveryManWithName(namedDeliveryMan, nameBytes32, { from: owner })
 		truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
 			ev.account === namedDeliveryMan
 		);
 		assert.isTrue((await instance.isDeliveryMan(namedDeliveryMan)));
 		assert.equal(await instance.getName(namedDeliveryMan), name);
-		assert.equal(await instance.getAddress(nameBytes), namedDeliveryMan);
+		assert.equal(await instance.getAddress(nameBytes32), namedDeliveryMan);
 	})
 
 	it("Add a supplier", async () => {

@@ -25,14 +25,14 @@ contract HandoverImplementation is
      * @dev Create a product. Mint a token corresponding to this product.
      * @param purchaser The address of the person who purchased to product.
      * @param productHash The product hash: sha3 of the product ID.
-     * @param productNameBytes The name of the product in bytes, sent to `ProductImplementation`.
-     * @param purchaserNameBytes The name of the purchaser, sent to `NameImplementation`.
+     * @param productNameBytes32 The name of the product in bytes, sent to `ProductImplementation`.
+     * @param purchaserNameBytes32 The name of the purchaser, sent to `NameImplementation`.
      */
     function createProduct(
         address purchaser,
         bytes32 productHash,
-        bytes32 productNameBytes,
-        bytes32 purchaserNameBytes
+        bytes32 productNameBytes32,
+        bytes32 purchaserNameBytes32
     )
         external
         whenNotPaused(paused)
@@ -60,7 +60,7 @@ contract HandoverImplementation is
         dCall(
             abi.encodeWithSignature(
                 "newProduct(bytes32,address,uint256,bytes32)",
-                productHash, purchaser, tokenId, productNameBytes
+                productHash, purchaser, tokenId, productNameBytes32
             )
         );
         dCall(abi.encodeWithSignature("mint(address)", msg.sender));
@@ -68,7 +68,7 @@ contract HandoverImplementation is
             abi.encodeWithSignature(
                 "setName(address,bytes32)",
                 purchaser,
-                purchaserNameBytes
+                purchaserNameBytes32
             )
         );
         lock = true;

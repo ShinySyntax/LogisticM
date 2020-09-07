@@ -33,18 +33,18 @@ contract("Name", async accounts => {
 
 	it("Set name", async () => {
 		let name = "John Doe"
-		let nameBytes = ethersUtils.formatBytes32String(name)
-		await instance.setName(other, nameBytes, { from: owner })
-		await instance.setName(other, nameBytes, { from: owner }) // "rename" but with same name
+		let nameBytes32 = ethersUtils.formatBytes32String(name)
+		await instance.setName(other, nameBytes32, { from: owner })
+		await instance.setName(other, nameBytes32, { from: owner }) // "rename" but with same name
 		assert.equal(await instance.getName(other), name)
-		assert.equal(await instance.getAddress(nameBytes), other)
+		assert.equal(await instance.getAddress(nameBytes32), other)
 
 		await truffleAssert.reverts(
 			instance.setName(other, ethersUtils.formatBytes32String("Jack S."), { from: owner }),
 			"Name: invalid name"
 		)
 		await truffleAssert.reverts(
-			instance.setName(owner, nameBytes, { from: owner }),
+			instance.setName(owner, nameBytes32, { from: owner }),
 			"Name: invalid address"
 		)
 	})

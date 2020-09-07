@@ -22,11 +22,11 @@ contract AccessImplementation is
         ImplementationBase(registry, _version) {}
 
     /**
-    * @dev This function grant supplier role to account and set its name to nameBytes.
+    * @dev This function grant supplier role to account and set its name to nameBytes32.
     * @param account representing the address of the new supplier
-    * @param nameBytes representing the name of the supplier
+    * @param nameBytes32 representing the name of the supplier
     */
-    function addSupplierWithName(address account, bytes32 nameBytes)
+    function addSupplierWithName(address account, bytes32 nameBytes32)
         external
         onlyOwner(owner)
     {
@@ -34,7 +34,7 @@ contract AccessImplementation is
         dCall(abi.encodeWithSignature(
             "setName(address,bytes32)",
             account,
-            nameBytes
+            nameBytes32
         ));
     }
 
@@ -60,11 +60,11 @@ contract AccessImplementation is
     }
 
     /**
-    * @dev This function grant delivery man role to account and set its name to nameBytes.
+    * @dev This function grant delivery man role to account and set its name to nameBytes32.
     * @param account representing the address of the new delivery man
-    * @param nameBytes representing the name of the delivery man
+    * @param nameBytes32 representing the name of the delivery man
     */
-    function addDeliveryManWithName(address account, bytes32 nameBytes)
+    function addDeliveryManWithName(address account, bytes32 nameBytes32)
         external
         onlyOwner(owner)
     {
@@ -72,7 +72,7 @@ contract AccessImplementation is
         dCall(abi.encodeWithSignature(
             "setName(address,bytes32)",
             account,
-            nameBytes
+            nameBytes32
         ));
     }
 

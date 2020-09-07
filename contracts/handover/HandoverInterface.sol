@@ -7,8 +7,8 @@ contract HandoverInterface is HandoverEvents {
     function createProduct(
         address purchaser,
         bytes32 productHash,
-        bytes32 productNameBytes,
-        bytes32 purchaserNameBytes
+        bytes32 productNameBytes32,
+        bytes32 purchaserNameBytes32
     ) external;
 
     function send(address to, bytes32 productHash) external;

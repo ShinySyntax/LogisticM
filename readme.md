@@ -176,7 +176,10 @@ For each product:
  - purchaser: the address of the person who purchased the product
 
 For each account
- - name: a string representing the name of the user
+ - name: a string representing the name of the user.
+
+The name is 32-bytes long because it is passed to the storing function as a `bytes32`.
+
 
 
 ## Client side: front end application

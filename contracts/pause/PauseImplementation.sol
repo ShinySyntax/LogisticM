@@ -11,7 +11,7 @@ import "../commons/Pausable.sol";
 
 /**
  * @title PauseImplementation
- * @dev The Pause logic contract. This allow the owner of Logistic to pause the
+ * @dev The Pause logic contract. This allows the owner of Logistic to pause the
  * Logistic contract. This means that not handover can happen when the contract
  * is paused.
  */
@@ -24,7 +24,7 @@ contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, 
     }
 
     /**
-     * @dev Called by a pauser to pause, triggers stopped state.
+     * @dev Called by the owner to pause, triggers stopped state.
      */
     function pause() public onlyOwner(owner) whenNotPaused(paused) {
         paused = true;
@@ -32,7 +32,7 @@ contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, 
     }
 
     /**
-     * @dev Called by a pauser to unpause, returns to normal state.
+     * @dev Called by the owner to unpause, returns to normal state.
      */
     function unpause() public onlyOwner(owner) whenPaused(paused) {
         require(lock == true, "Pause: contract is unlock");

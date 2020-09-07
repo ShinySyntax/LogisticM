@@ -10,9 +10,9 @@ contract ProductStorage {
         mapping (address => address) received; // from -> by
     }
 
-    // Mapping from productHash to Product
+    /// Mapping from productHash to Product
     mapping (bytes32 => Product) internal _products;
 
-    // Mapping from tokenId to productHash
+    /// Mapping from tokenId to productHash
     mapping (uint256 => bytes32) internal tokenToProductHash;
 }

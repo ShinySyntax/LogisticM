@@ -10,7 +10,7 @@ The smart contract runs on the Ethereum blockchain.
 
 First of all, install npm packages: `npm install`
 
-**Lint**: `solhint "contracts/**/*.sol"`
+**Lint contracts**: `solhint "contracts/**/*.sol"`
 
 **Compile**: `truffle compile`
 
@@ -21,6 +21,10 @@ First of all, install npm packages: `npm install`
 **Test**: `truffle test`
 
 **Test with coverage**: `truffle run coverage --network coverage`
+
+**Lint truffle files** (tests, migrations...): `./truffle-lint.sh`
+
+**Auto-fix tests** (use with caution): `npx standard --fix test/**`
 
 
 ### Upgradeability

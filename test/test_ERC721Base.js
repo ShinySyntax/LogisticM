@@ -1,10 +1,6 @@
 const truffleAssert = require('truffle-assertions')
-var Web3 = require('web3')
 
 const { ZERO_ADDRESS } = require('./utils')
-
-const uri = "http://localhost:8545"
-var web3 = new Web3(uri)
 
 const ERC721Mock = artifacts.require("ERC721Mock")
 

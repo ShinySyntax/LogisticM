@@ -1,7 +1,8 @@
 const ethersUtils = require('ethers').utils
+var Web3 = require('web3')
 
 const getHash = (value) => {
-	return web3.utils.keccak256(value)
+	return Web3.utils.keccak256(value)
 }
 
 const products = [

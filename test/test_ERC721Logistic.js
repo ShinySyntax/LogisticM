@@ -1,10 +1,6 @@
 const truffleAssert = require('truffle-assertions')
-var Web3 = require('web3')
 
 const { version, getHash } = require('./utils')
-
-const uri = "http://localhost:8545"
-var web3 = new Web3(uri)
 
 const OwnedRegistry = artifacts.require("OwnedRegistry")
 const LogisticInterface = artifacts.require("LogisticInterface")

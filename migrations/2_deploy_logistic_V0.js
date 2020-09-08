@@ -18,12 +18,12 @@ module.exports = async (deployer) => {
 
 	await deployer.deploy(OwnerImplementation)
 	await deployer.link(RolesLibrary, AccessImplementation);
-	await deployer.deploy(AccessImplementation, OwnedRegistry.address, version)
+	await deployer.deploy(AccessImplementation)
 	await deployer.deploy(ERC721LogisticImplementation)
 	await deployer.deploy(NameImplementation)
 	await deployer.deploy(PauseImplementation)
 	await deployer.deploy(ProductImplementation)
-	await deployer.deploy(HandoverImplementation, OwnedRegistry.address, version)
+	await deployer.deploy(HandoverImplementation)
 
 	// Register Version 0
 	await ownedRegistry.addVersionFromName(version, 'createProduct(address,bytes32,bytes32,bytes32)', HandoverImplementation.address)

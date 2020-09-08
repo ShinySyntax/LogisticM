@@ -21,10 +21,8 @@ contract LogisticProxy is
     constructor(string memory _version, address sender)
         public
         OwnedUpgradeabilityProxy(_version, sender)
-        ImplementationBase(address(0), _version)
     {
         require(msg.sender == address(registry), "LogisticProxy: bad sender");
-        setRegistry(address(registry));
 
         // We need to initialize these implementations.
         // It will send variables like owner, _symbol...

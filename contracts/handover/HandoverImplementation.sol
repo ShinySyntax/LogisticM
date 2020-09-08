@@ -17,10 +17,6 @@ contract HandoverImplementation is
     Pausable,
     ImplementationBase {
 
-    constructor(address registry, string memory _version)
-        public
-        ImplementationBase(registry, _version) {}
-
     /**
      * @dev Create a product. Mint a token corresponding to this product.
      * @param purchaser The address of the person who purchased to product.

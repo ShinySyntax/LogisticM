@@ -17,10 +17,6 @@ contract AccessImplementation is
     Ownable,
     ImplementationBase {
 
-    constructor(address registry, string memory _version)
-        public
-        ImplementationBase(registry, _version) {}
-
     /**
     * @dev This function grant supplier role to account and set its name to nameBytes32.
     * @param account representing the address of the new supplier

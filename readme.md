@@ -6,6 +6,23 @@ This repository contains a smart contract and a web application in ReactJS.
 
 The smart contract runs on the Ethereum blockchain.
 
+### Getting started
+
+First of all, install npm packages: `npm install`
+
+**Lint**: `solhint "contracts/**/*.sol"`
+
+**Compile**: `truffle compile`
+
+*In a new terminal window, start the local blockchain: `ganache-cli`*
+
+**Deploy**: `truffle migrate --reset --network development`
+
+**Test**: `truffle test`
+
+**Test with coverage**: `truffle run coverage`
+
+
 ### Upgradeability
 
 The smart contract is split into multiple contracts deployed on the Ethereum blockchain to
@@ -145,6 +162,8 @@ To unlock the contract:
  - call unpause()
 
 
+
+
 ## The handover process
 
 ### Roles
@@ -169,7 +188,6 @@ can do is receive the product from the person who sends it to him.
 
 The owner can't manipulate products.
 
-
 ### When a handover happens?
 
 For a handover to happens, the two participants must agree on it.
@@ -191,4 +209,13 @@ The name is 32-bytes long because it is passed to the storing function as a `byt
 
 
 
+
 ## Client side: front end application
+
+### Getting started
+
+Got to the app folder: `cd app`
+
+Run the development server: `npm run start`
+
+Log in to metamask with the same mnemonic as ganache.

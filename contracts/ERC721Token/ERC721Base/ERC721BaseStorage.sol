@@ -5,6 +5,10 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/utils/Address.sol";
 
 
+/**
+ * @title ERC721BaseStorage
+ * @dev Define the storage of the ERC721Base logic contract.
+ */
 contract ERC721BaseStorage {
     using SafeMath for uint256;
     using Address for address;

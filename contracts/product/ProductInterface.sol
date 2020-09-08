@@ -3,6 +3,10 @@ pragma solidity ^0.5.0;
 import "./ProductEvents.sol";
 
 
+/**
+ * @title ProductInterface
+ * @dev Define the interface of the Product logic contract.
+ */
 contract ProductInterface is ProductEvents {
     function newProduct(
         bytes32 productHash,

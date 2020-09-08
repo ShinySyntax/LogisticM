@@ -98,7 +98,7 @@ contract AccessImplementation is
     }
 
     /**
-    * @dev This function return the role of the given account.
+    * @dev This function returns the role of the given account.
     * Mapping from integer to role is describe in RolesLibrary.RoleNames
     * @return An integer representing the role of account
     */
@@ -138,7 +138,7 @@ contract AccessImplementation is
     }
 
     /**
-    * @dev This function return true if the given account is a supplier.
+    * @dev This function returns true if the given account is a supplier.
     * @return Whether or not account has the supplier role.
     */
     function isSupplier(address account) public view returns (bool) {
@@ -146,7 +146,7 @@ contract AccessImplementation is
     }
 
     /**
-    * @dev This function return true if the given account is a delivery man.
+    * @dev This function returns true if the given account is a delivery man.
     * @return Whether or not account has the delivery man role.
     */
     function isDeliveryMan(address account) public view returns (bool) {

@@ -3,6 +3,10 @@ pragma solidity ^0.5.0;
 import "./ERC721BaseEvents.sol";
 
 
+/**
+ * @title ERC721BaseInterface
+ * @dev Define the interface of the ERC721Base logic contract.
+ */
 contract ERC721BaseInterface is ERC721BaseEvents {
     /**
      * @dev Returns the number of NFTs in `owner`'s account.

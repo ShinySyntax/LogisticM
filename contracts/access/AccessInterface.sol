@@ -3,6 +3,10 @@ pragma solidity ^0.5.0;
 import "./AccessEvents.sol";
 
 
+/**
+ * @title AccessInterface
+ * @dev Defines the interface of the Access logic contract.
+ */
 contract AccessInterface is AccessEvents {
     function addSupplierWithName(address account, bytes32 nameBytes32) external;
     function addSupplier(address account) external;

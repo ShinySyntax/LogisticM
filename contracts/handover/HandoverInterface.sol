@@ -3,6 +3,10 @@ pragma solidity ^0.5.0;
 import "./HandoverEvents.sol";
 
 
+/**
+ * @title HandoverInterface
+ * @dev Define the interface of the Handover logic contract.
+ */
 contract HandoverInterface is HandoverEvents {
     function createProduct(
         address purchaser,

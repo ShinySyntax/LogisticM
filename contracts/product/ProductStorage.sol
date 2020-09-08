@@ -1,6 +1,10 @@
 pragma solidity ^0.5.0;
 
 
+/**
+ * @title ProductStorage
+ * @dev Define the storage of the Product logic contract.
+ */
 contract ProductStorage {
     struct Product {
         address purchaser;

@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 
 /**
  * @title ProductEvents
- * @dev Defines the events used in the Product logic contract.
+ * @dev Define the events used in the Product logic contract.
  */
 contract ProductEvents {
     /**

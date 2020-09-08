@@ -20,7 +20,7 @@ First of all, install npm packages: `npm install`
 
 **Test**: `truffle test`
 
-**Test with coverage**: `truffle run coverage`
+**Test with coverage**: `truffle run coverage --network coverage`
 
 
 ### Upgradeability

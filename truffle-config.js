@@ -1,4 +1,5 @@
 const path = require("path");
+const web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 const mnemonic = ""
@@ -12,6 +13,15 @@ module.exports = {
     development: {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
+    },
+    coverage: {
+      // The truffle test coverage plugin use port 8555
+      // A web3 provider is needed in migration files 
+      provider: function() {
+        return new web3.providers.HttpProvider('http://127.0.0.1:8555');
+      },         // Standard Ethereum port (default: none)
+      port: 8555,
       network_id: "*",       // Any network (default: none)
     },
     ropsten: {

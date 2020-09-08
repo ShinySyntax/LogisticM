@@ -8,7 +8,7 @@ import "./PauseEvents.sol";
  * @dev Define the interface of the Pause logic contract.
  */
 contract PauseInterface is PauseEvents {
-    function getPaused() public view returns (bool);
     function pause() public;
     function unpause() public;
+    function getPaused() public view returns (bool);
 }

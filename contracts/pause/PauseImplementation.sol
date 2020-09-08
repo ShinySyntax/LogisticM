@@ -17,13 +17,6 @@ import "../commons/Pausable.sol";
  */
 contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, Lock, Pausable {
     /**
-     * @dev Returns true if the contract is paused, and false otherwise.
-     */
-    function getPaused() public view returns (bool) {
-        return paused;
-    }
-
-    /**
      * @dev Called by the owner to pause, triggers stopped state.
      */
     function pause() public onlyOwner(owner) whenNotPaused(paused) {
@@ -38,5 +31,12 @@ contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, 
         require(lock == true, "Pause: contract is unlock");
         paused = false;
         emit Unpaused(msg.sender);
+    }
+
+    /**
+     * @dev Returns true if the contract is paused, and false otherwise.
+     */
+    function getPaused() public view returns (bool) {
+        return paused;
     }
 }

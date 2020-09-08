@@ -16,14 +16,6 @@ import "../../upgradeability/Upgradeable.sol";
  */
 contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {
     /**
-     * @dev Return the counter
-     * @return The current value of counter
-     */
-    function getCounter() public view returns (uint256) {
-        return counter;
-    }
-
-    /**
      * @dev Initialize the logic contract.
      */
     function initializeERC721() public {
@@ -47,7 +39,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
      */
     function mint(address to) public locked(lock) {
         _mint(to, counter);
-        counter = counter.add(11);
+        counter = counter.add(1);
     }
 
     /**
@@ -96,5 +88,13 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
      */
     function safeTransferFrom(address, address, uint256, bytes memory) public {
         revert("ERC721Logistic: can not transfer");
+    }
+
+    /**
+     * @dev Return the counter
+     * @return The current value of counter
+     */
+    function getCounter() public view returns (uint256) {
+        return counter;
     }
 }

@@ -1,6 +1,7 @@
 {
   "extends": "solhint:recommended",
   "rules": {
-    "func-order": "warn"
+    "ordering": "warn",
+    "reason-string": [ "warn", { "maxLength": 44 } ]
   }
 }

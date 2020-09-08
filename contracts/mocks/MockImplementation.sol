@@ -10,5 +10,7 @@ contract MockImplementationV0 {
         myMethod();
     }
 
-    function myMethod() public pure {}
+    function myMethod() public pure {
+        1 + 1;
+    }
 }

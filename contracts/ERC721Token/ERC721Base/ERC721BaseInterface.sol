@@ -2,6 +2,8 @@ pragma solidity ^0.5.0;
 
 import "./ERC721BaseEvents.sol";
 
+// Disable func ordering because it gathers several parts of the ERC721 token
+/* solhint-disable ordering */
 
 /**
  * @title ERC721BaseInterface
@@ -64,3 +66,4 @@ contract ERC721BaseInterface is ERC721BaseEvents {
     // ERC165
     function supportsInterface(bytes4 interfaceId) external view returns (bool);
 }
+/* solhint-enable ordering */

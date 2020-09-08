@@ -20,11 +20,13 @@ First of all, install npm packages: `npm install`
 
 **Test**: `truffle test`
 
+**Test a sing file**: `truffle test test/test_proxy.js`
+
 **Test with coverage**: `truffle run coverage --network coverage`
 
 **Lint truffle files** (tests, migrations...): `./truffle-lint.sh`
 
-**Auto-fix tests** (use with caution): `npx standard --fix test/**`
+**Lint tests: Auto-Fix** (use with caution): `npx standard --fix test/**`
 
 
 ### Upgradeability

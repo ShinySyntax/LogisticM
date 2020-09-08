@@ -5,6 +5,8 @@ import "./ERC721BaseInterface.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
 
+// Disable func ordering because it gathers several parts of the ERC721 token
+/* solhint-disable ordering */
 
 /**
  * @title ERC721 Non-Fungible Token Standard basic implementation
@@ -541,3 +543,4 @@ contract ERC721BaseImplementation is
         _allTokensIndex[tokenId] = 0;
     }
 }
+/* solhint-enable ordering */

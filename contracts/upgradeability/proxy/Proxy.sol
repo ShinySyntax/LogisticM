@@ -11,9 +11,9 @@ contract Proxy {
     * This function will return whatever the implementation call returns
     */
     function() external {
-        address _impl = implementation(msg.sig);
-        require(_impl != address(0), "Proxy: implementation not found");
-        delegateCallProxy(_impl);
+        address impl = implementation(msg.sig);
+        require(impl != address(0), "Proxy: implementation not found");
+        delegateCallProxy(impl);
     }
 
     /**
@@ -27,11 +27,11 @@ contract Proxy {
     * delegatecall to the given implementation.
     * This function will return whatever the implementation call returns
     */
-    function delegateCallProxy(address _impl) internal {
+    function delegateCallProxy(address impl) internal {
         assembly {
             let ptr := mload(0x40)
             calldatacopy(ptr, 0, calldatasize)
-            let result := delegatecall(gas, _impl, ptr, calldatasize, 0, 0)
+            let result := delegatecall(gas, impl, ptr, calldatasize, 0, 0)
             let size := returndatasize
             returndatacopy(ptr, 0, size)
 

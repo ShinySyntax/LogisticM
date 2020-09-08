@@ -77,7 +77,7 @@ contract Registry is IRegistry {
     )
         internal
     {
-        return addVersion(
+        _addVersion(
             version,
             BytesLib.convertBytesToBytes4(abi.encodeWithSignature(func)),
             implementation
@@ -99,7 +99,8 @@ contract Registry is IRegistry {
     {
         require(
             versions[version][func] == address(0),
-            "Registry: func already defined");
+            "Registry: func already defined"
+        );
         versions[version][func] = implementation;
         funcs[version].push(func);
         emit VersionAdded(version, func, implementation);

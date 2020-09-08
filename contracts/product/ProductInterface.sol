@@ -11,7 +11,6 @@ contract ProductInterface is ProductEvents {
     function newProduct(
         bytes32 productHash,
         address purchaser,
-        uint256 tokenId,
         bytes32 productNameBytes32
     )
         public;

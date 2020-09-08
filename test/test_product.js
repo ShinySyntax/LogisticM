@@ -29,10 +29,14 @@ contract("Product", async accounts => {
 			})
 
 			it("New product", async () => {
-				let result = await instance.newProduct(products[0].hash, purchaser,
-					products[0].tokenId, products[0].nameBytes32, { from: supplier });
+				let result = await instance.newProduct(
+					products[0].hash,
+					purchaser,
+					products[0].nameBytes32,
+					{ from: supplier }
+				);
 
-					truffleAssert.eventEmitted(result, 'NewProduct', ev =>
+				truffleAssert.eventEmitted(result, 'NewProduct', ev =>
 					ev.by === supplier &&
 					ev.purchaser === purchaser &&
 					ev.productHash === products[0].hash &&
@@ -108,7 +112,7 @@ contract("Product", async accounts => {
 		it("Should revert if locked", async () => {
 			await truffleAssert.reverts(
 				instance.newProduct(products[0].hash, purchaser,
-					products[0].tokenId, products[0].nameBytes32, { from: supplier }),
+					products[0].nameBytes32, { from: supplier }),
 				"Lock: locked"
 			)
 			await truffleAssert.reverts(

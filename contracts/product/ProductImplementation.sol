@@ -4,6 +4,7 @@ import "../logistic/LogisticSharedStorage.sol";
 import "./ProductInterface.sol";
 import "../commons/Lock.sol";
 import "../commons/BytesLib.sol";
+import "../upgradeability/ImplementationBase.sol";
 
 
 /**
@@ -11,29 +12,41 @@ import "../commons/BytesLib.sol";
  * @dev The Product logic contract. It is mainly used by the Handover logic
  * contract because it defines some lower level methods to handle product state.
  */
-contract ProductImplementation is ProductInterface, LogisticSharedStorage, Lock {
+contract ProductImplementation is
+    ProductInterface,
+    LogisticSharedStorage,
+    Lock,
+    ImplementationBase {
+
     /**
      * @dev Create a product.
      * This function is locked.
      * @param productHash The product hash: sha3 of the product ID.
      * @param purchaser The address of the person who purchased to product.
-     * @param tokenId The ERC721 token ID corresponding to this new product.
      * @param productNameBytes32 The name of the product in bytes32, converted to string and stored.
      */
     function newProduct(
         bytes32 productHash,
         address purchaser,
-        uint256 tokenId,
         bytes32 productNameBytes32
     )
         public
         locked(lock)
     {
+        require(
+            productExists(productHash) == false,
+            "Logistic: This product already exists"
+        );
+
+        uint256 tokenId = abi.decode(dCall(
+            abi.encodeWithSignature("getCounter()")), (uint256));
         string memory productName = BytesLib.bytes32ToString(
             productNameBytes32
         );
         tokenToProductHash[tokenId] = productHash;
         _products[productHash] = Product(purchaser, tokenId, productName);
+        dCall(abi.encodeWithSignature("mint(address)", msg.sender));
+
         emit NewProduct(msg.sender, purchaser, productHash, productName);
     }
 

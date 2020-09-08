@@ -44,22 +44,13 @@ contract HandoverImplementation is
                 "getRole(address)", purchaser)), (uint)) == 0,
             "Logistic: Invalid purchaser"
         );
-        bool productExists = abi.decode(dCall(abi.encodeWithSignature(
-            "productExists(bytes32)", productHash)), (bool));
-        require(
-            productExists == false,
-            "Logistic: This product already exists"
-        );
 
-        uint256 tokenId = abi.decode(dCall(
-            abi.encodeWithSignature("getCounter()")), (uint256));
         dCall(
             abi.encodeWithSignature(
-                "newProduct(bytes32,address,uint256,bytes32)",
-                productHash, purchaser, tokenId, productNameBytes32
+                "newProduct(bytes32,address,bytes32)",
+                productHash, purchaser, productNameBytes32
             )
         );
-        dCall(abi.encodeWithSignature("mint(address)", msg.sender));
         dCall(
             abi.encodeWithSignature(
                 "setName(address,bytes32)",

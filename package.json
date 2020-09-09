@@ -22,11 +22,11 @@
   "dependencies": {
     "@openzeppelin/contracts": "^2.5.1",
     "@truffle/hdwallet-provider": "^1.0.43",
-    "ethers": "^5.0.9",
+    "ethers": "^5.0.12",
     "openzeppelin-solidity": "^2.5.1"
   },
   "devDependencies": {
-    "@truffle/contract": "^4.2.20",
+    "@truffle/contract": "^4.2.21",
     "eslint": "^7.8.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",

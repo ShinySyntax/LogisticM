@@ -88,7 +88,7 @@ class DeliveryManPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={OwnedProductItem}
+							productItemComponent={OwnedProductItem}
 						/>
 					</Card>
 
@@ -98,7 +98,7 @@ class DeliveryManPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={InDeliveryProductItem}
+							productItemComponent={InDeliveryProductItem}
 							/>
 					</Card>
 

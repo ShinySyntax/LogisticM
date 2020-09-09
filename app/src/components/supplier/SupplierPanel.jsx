@@ -64,7 +64,7 @@ class SupplierPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={OwnedProductItem}
+							productItemComponent={OwnedProductItem}
 						/>
 						<div className="m-2">
 							<p>Add a product</p>
@@ -81,7 +81,7 @@ class SupplierPanel extends React.Component {
 							drizzle={drizzle}
 							drizzleState={drizzleState}
 							balance={balance}
-							tokenItemComponent={InDeliveryProductItem}
+							productItemComponent={InDeliveryProductItem}
 						/>
 					</Card>
 

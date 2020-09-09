@@ -36,9 +36,9 @@ class ProductsOwned extends React.Component {
 	}
 
 	renderRow = (productHash, idx) => {
-		if (this.props.tokenItemComponent) {
+		if (this.props.productItemComponent) {
 			return (
-				<this.props.tokenItemComponent
+				<this.props.productItemComponent
 					key={idx}
 					drizzle={this.props.drizzle}
 					drizzleState={this.props.drizzleState}
@@ -73,7 +73,7 @@ class ProductsOwned extends React.Component {
 
 ProductsOwned.propTypes = {
 	balance: PropTypes.number.isRequired,
-	tokenItemComponent: PropTypes.any
+	productItemComponent: PropTypes.any
 };
 
 export default ProductsOwned;

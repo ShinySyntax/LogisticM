@@ -66,25 +66,28 @@ class OwnedProductItem extends React.Component {
 	}
 
 	render () {
-		let event = getEventsAboutProductHash(
-			this.props.drizzleState.events.events,
-			this.props.productHash
-		).find(event => {
-			return event.event === HANDOVER && event.returnValues.to === this.props.drizzleState.accounts[0]
-		})
-		if (event) {
-			// there is a handover with to is ourself, so just show the product link
-			// because if it show 'send to purchaser', as purchaser is ourself, transaction will fail
-			return (
-				<ListGroup.Item key={this.props.idx}>
-					<ProductLink
-						drizzle={this.props.drizzle}
-						drizzleState={this.props.drizzleState}
-						productHash={this.props.productHash}
-					/>
-				</ListGroup.Item>
-			)
-		}
+		// TODO: fix this, when purchaser becomes delivery man
+		// there is a handover with to is ourself, so just show the product link
+		// because if it shows 'send to purchaser', as purchaser is ourself, transaction will fail
+		// let event = getEventsAboutProductHash(
+		// 	this.props.drizzleState.events.events,
+		// 	this.props.productHash
+		// ).find(event => {
+		// 	return event.event === HANDOVER &&
+		// 		event.returnValues.to === this.props.drizzleState.accounts[0]
+		// })
+		// if (event) {
+		//
+		// 	return (
+		// 		<ProductItem
+		// 			key={this.props.idx}
+		// 			drizzle={this.props.drizzle}
+		// 			drizzleState={this.props.drizzleState}
+		// 			productHash={this.props.productHash}
+		// 			idx={this.props.idx}
+		// 		/>
+		// 	)
+		// }
 
 		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
 			.productSentFrom[this.state.dataKeyProductSentFrom]

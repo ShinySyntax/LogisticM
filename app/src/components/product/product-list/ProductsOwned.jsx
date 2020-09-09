@@ -2,7 +2,7 @@ import React from 'react'
 import { ListGroup, Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import ProductLink from "../product-page/ProductLink"
+import ProductItem from "../product-item/ProductItem"
 
 class ProductsOwned extends React.Component {
 	initialState = {
@@ -48,13 +48,13 @@ class ProductsOwned extends React.Component {
 			)
 		}
 		return (
-			<ListGroup.Item key={idx}>
-				<ProductLink
-					drizzle={this.props.drizzle}
-					drizzleState={this.props.drizzleState}
-					productHash={productHash}
-				/>
-			</ListGroup.Item>
+			<ProductItem
+				key={idx}
+				drizzle={this.props.drizzle}
+				drizzleState={this.props.drizzleState}
+				productHash={productHash}
+				idx={idx}
+			/>
 		)
 	}
 

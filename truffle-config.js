@@ -1,9 +1,7 @@
+require('dotenv').config()
 const path = require("path");
 const web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-
-const mnemonic = ""
-const apiKey = ""
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -17,22 +15,22 @@ module.exports = {
     },
     coverage: {
       // The truffle test coverage plugin use port 8555
-      // A web3 provider is needed in migration files 
+      // A web3 provider is needed in migration files
       provider: function() {
         return new web3.providers.HttpProvider('http://127.0.0.1:8555');
-      },         // Standard Ethereum port (default: none)
+      },
       port: 8555,
       network_id: "*",       // Any network (default: none)
     },
     ropsten: {
       provider: function() {
-        return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/v3/" + apiKey);
+        return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_KEY);
       },
       network_id: 3
     },
     kovan: {
       provider: function() {
-        return new HDWalletProvider(mnemonic, "https://kovan.infura.io/v3/" + apiKey);
+        return new HDWalletProvider(process.env.MNEMONIC, "https://kovan.infura.io/v3/" + process.env.INFURA_KEY);
       },
       network_id: 42
     }

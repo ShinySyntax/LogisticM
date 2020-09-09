@@ -8,7 +8,9 @@ The smart contract runs on the Ethereum blockchain.
 
 ### Getting started
 
-First of all, install npm packages: `npm install`
+First of all, install npm packages: `npm install`.
+
+Then run `cp .env-dist .env`. Fill the `.env` file.
 
 **Lint contracts**: `solhint "contracts/**/*.sol"`
 
@@ -28,6 +30,23 @@ First of all, install npm packages: `npm install`
 
 **Lint tests: Auto-Fix** (use with caution): `npx standard --fix test/**`
 
+
+### Deployment
+
+You can look at the migration file `./migrations/2_deploy_logistic_V0.js`.
+You will see that we deploy the registry and all the logic contracts.
+Then, we register all the functions implemented in the logic contracts.
+Finally, we create the proxy.
+
+### Deploy to Ropsten
+
+First of all, you will need some ethereum. Use this faucet: <https://faucet.metamask.io>.
+
+In the `truffle-config.js` file, set the variables (be careful to not put it on github):
+ - `mnemonic`: of your wallet,
+ - `apiKey`: your infura API key.
+
+Then, run `migrate --network ropsten`
 
 ### Upgradeability
 
@@ -153,16 +172,7 @@ and the address of `LogisticProxy`.
 
 The address of the proxy is accessible in the log event `ProxyCreated` of the registry that created the proxy.
 
-
-## Deployment
-
-You can look at the migration file `./migrations/2_deploy_logistic_V0.js`.
-You will see that we deploy the registry and all the logic contracts.
-Then, we register all the functions implemented in the logic contracts.
-Finally, we create the proxy.
-
-
-## How to use lock and pause?
+#### How to use lock and pause?
 The contract is lock by default. This means some operation can only be done
 in a certain context: transfer a token is only doable through `send` and `receive`
 methods (`HandoverImplementation`).
@@ -219,6 +229,7 @@ For each account
  - name: a string representing the name of the user.
 
 The name is 32-bytes long because it is passed to the storing function as a `bytes32`.
+This may be solve <https://ethereum.stackexchange.com/questions/1081/how-to-concatenate-a-bytes32-array-to-a-string>.
 
 
 

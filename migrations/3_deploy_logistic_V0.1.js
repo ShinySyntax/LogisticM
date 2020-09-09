@@ -15,16 +15,16 @@ const OwnedRegistry = artifacts.require('./OwnedRegistry.sol')
 const LogisticInterface = artifacts.require('./LogisticInterface.sol')
 const LogisticProxy = artifacts.require('./LogisticProxy.sol')
 
+const getAddress = async Contract => {
+	let contract = await Contract.deployed()
+	return contract.address
+}
+
 module.exports = async (deployer, network) => {
 	let ownedRegistry = await OwnedRegistry.deployed()
 
 	// Deploy new implementation
 	let product = await deployer.deploy(ProductImplementation)
-
-	const getAddress = async Contract => {
-		let contract = await Contract.deployed()
-		return contract.address
-	}
 
 	// Register Version
 	await ownedRegistry.addVersionFromName(version, 'createProduct(address,bytes32,bytes32,bytes32)', await getAddress(HandoverImplementation))
@@ -84,7 +84,7 @@ module.exports = async (deployer, network) => {
 	await ownedRegistry.addVersionFromName(version, 'getHashFromTokenId(uint256)', await getAddress(ProductImplementation))
 	await ownedRegistry.addVersionFromName(version, 'productExists(bytes32)', await getAddress(ProductImplementation))
 
-	// Upgrade proxy
+	// Create a web3 instance
 	let provider;
 	if (networks[network].provider) {
 		provider = networks[network].provider()
@@ -93,11 +93,13 @@ module.exports = async (deployer, network) => {
 	}
 	const web3 = new Web3(provider)
 
+	// Get the proxy address
 	let web3Registry = new web3.eth.Contract(OwnedRegistry.abi, OwnedRegistry.address)
 	let event = (await web3Registry.getPastEvents({ fromBlock: 0 })).find(event => {
 		return event.event === "ProxyCreated"
 	})
 
+	// Upgrade the proxy
 	let proxy = await LogisticInterface.at(event.returnValues.proxy)
 	await proxy.upgradeTo(version)
 }

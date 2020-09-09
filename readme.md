@@ -138,6 +138,13 @@ Versions are like `V0.0`, where the first number is incremented each time the re
 
 ##### How to upgrade?
 
+To upgrade to a new version:
+ - change the `version` variable in the file `test/utils.js`
+ - create a new migration file, with layout of `migrations/3_deploy_logistic_V0.1.js`
+ - change the "Deploy new implementation" part: upload the logic contract that need to be upgraded.
+ - if the interface changes, adapt the `addVersionFromName` calls.
+ - run `truffle migrate`
+
 
 ### How to use the smart contract?
 

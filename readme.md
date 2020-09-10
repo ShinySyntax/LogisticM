@@ -48,6 +48,11 @@ In the `truffle-config.js` file, set the variables (be careful to not put it on 
 
 Then, run `migrate --network ropsten`
 
+
+### Contract layout
+
+![contract layout diagram](contract-diagram.png "Contract diagram")
+
 ### Upgradeability
 
 The smart contract is split into multiple contracts deployed on the Ethereum blockchain to

@@ -11,6 +11,7 @@ const MockImplementationV0 = artifacts.require('MockImplementationV0')
 
 contract('Proxy', async accounts => {
   const [owner, other] = accounts
+  const methodSignature = 'myMethod()'
 
   before(async function () {
     // Create proxy
@@ -39,8 +40,6 @@ contract('Proxy', async accounts => {
   })
 
   it('addVersionFromName', async () => {
-    const methodSignature = 'myMethod()'
-
     await truffleAssert.reverts(
       ownedRegistry.addVersionFromName(
         'v0', methodSignature, imp.address, { from: other }),
@@ -71,5 +70,14 @@ contract('Proxy', async accounts => {
       ev.func === web3.eth.abi.encodeFunctionSignature(otherMethod) &&
       ev.implementation === imp.address
     )
+  })
+
+  it('Upgrade functions', async () => {
+    let count = (await ownedRegistry.getFunctionCount('v0')).toNumber()
+    await ownedRegistry.upgradeFunctions('v0', 'v0.0-alpha')
+    assert.equal(count, (await ownedRegistry.getFunctionCount('v0.0-alpha')).toNumber())
+    let func = await ownedRegistry.getFunctionByIndex('v0.0-alpha', 0)
+    assert.equal(func['0'], web3.eth.abi.encodeFunctionSignature(methodSignature))
+    assert.equal(func['1'], imp.address)
   })
 })

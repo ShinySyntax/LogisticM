@@ -37,63 +37,11 @@ module.exports = async (deployer, network) => {
 	// Deploy new implementation
 	let product = await deployer.deploy(ProductImplementation)
 
+	// Upgrade functions
+	await ownedRegistry.upgradeFunctions(versions[0], versions[1])
+
 	// Register Version
-	await registerFunction(ownedRegistry, 'createProduct(address,bytes32,bytes32,bytes32)', await getAddress(HandoverImplementation))
-	await registerFunction(ownedRegistry, 'send(address,bytes32)', await getAddress(HandoverImplementation))
-	await registerFunction(ownedRegistry, 'receive(address,bytes32)', await getAddress(HandoverImplementation))
-
-	await registerFunction(ownedRegistry, 'transferOwnership(address)', await getAddress(OwnerImplementation))
-	await registerFunction(ownedRegistry, 'initializeOwner(address)', await getAddress(OwnerImplementation))
-	await registerFunction(ownedRegistry, 'getOwner()', await getAddress(OwnerImplementation))
-
-	await registerFunction(ownedRegistry, 'addSupplier(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'addSupplierWithName(address,bytes32)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'removeSupplier(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'renounceSupplier()', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'addDeliveryMan(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'addDeliveryManWithName(address,bytes32)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'removeDeliveryMan(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'renounceDeliveryMan()', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'getRole(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'isSupplier(address)', await getAddress(AccessImplementation))
-	await registerFunction(ownedRegistry, 'isDeliveryMan(address)', await getAddress(AccessImplementation))
-
-	await registerFunction(ownedRegistry, 'initializeERC721()', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'mint(address)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'getCounter()', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'balanceOf(address)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'ownerOf(uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'safeTransferFrom(address,address,uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'transferFrom(address,address,uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'approve(address,uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'getApproved(uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'setApprovalForAll(address,bool)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'isApprovedForAll(address,address)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'safeTransferFrom(address,address,uint256,bytes)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'name()', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'symbol()', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'tokenURI(uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'totalSupply()', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'tokenOfOwnerByIndex(address,uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'tokenByIndex(uint256)', await getAddress(ERC721LogisticImplementation))
-	await registerFunction(ownedRegistry, 'supportsInterface(bytes4)', await getAddress(ERC721LogisticImplementation))
-
-	await registerFunction(ownedRegistry, 'setName(address,bytes32)', await getAddress(NameImplementation))
-	await registerFunction(ownedRegistry, 'getName(address)', await getAddress(NameImplementation))
-	await registerFunction(ownedRegistry, 'getAddress(bytes32)', await getAddress(NameImplementation))
-
-	await registerFunction(ownedRegistry, 'getPaused()', await getAddress(PauseImplementation))
-	await registerFunction(ownedRegistry, 'pause()', await getAddress(PauseImplementation))
-	await registerFunction(ownedRegistry, 'unpause()', await getAddress(PauseImplementation))
-
 	await registerFunction(ownedRegistry, 'newProduct(bytes32,address,bytes32)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'setProductSent(bytes32,address,address)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'setProductReceived(bytes32,address,address)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'getProductInfo(bytes32)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'productSentFrom(bytes32,address)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'productReceivedFrom(bytes32,address)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'getHashFromTokenId(uint256)', await getAddress(ProductImplementation))
-	await registerFunction(ownedRegistry, 'productExists(bytes32)', await getAddress(ProductImplementation))
 
 	// Create a web3 instance
 	let provider;

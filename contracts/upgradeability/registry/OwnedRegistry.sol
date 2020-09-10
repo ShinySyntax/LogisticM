@@ -52,6 +52,20 @@ contract OwnedRegistry is Registry, RegistryOwnership {
     }
 
     /**
+     * @dev For each function, set the version to the given `targetVersion`
+     * @param targetVersion representing the version name of the new implementations to be set
+     */
+    function upgradeFunctions(
+        string memory currentVersion,
+        string memory targetVersion
+    )
+        public
+        onlyRegistryOwner
+    {
+        _upgradeFunctions(currentVersion, targetVersion);
+    }
+
+    /**
     * @dev Creates an upgradeable proxy
     * @return address of the new proxy created
     */

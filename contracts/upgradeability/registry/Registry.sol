@@ -118,4 +118,25 @@ contract Registry is IRegistry {
         emit ProxyCreated(address(proxy));
         return proxy;
     }
+
+    /**
+     * @dev For each function, set the version to the given `targetVersion`
+     * @param targetVersion representing the version name of the new implementations to be set
+     */
+    function _upgradeFunctions(
+        string memory currentVersion,
+        string memory targetVersion
+    )
+        internal
+    {
+        bytes4 func;
+        address impl;
+        uint256 i;
+
+        for (i = 0; i < getFunctionCount(currentVersion); i++) {
+            (func, impl) = getFunctionByIndex(currentVersion, i);
+            versions[targetVersion][func] = impl;
+            funcs[targetVersion].push(func);
+        }
+    }
 }

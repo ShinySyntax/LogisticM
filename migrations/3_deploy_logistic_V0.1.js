@@ -1,5 +1,6 @@
 const Web3 = require('web3')
 const { networks } = require('../truffle-config.js')
+const { versions } = require('../versions')
 
 const RolesLibrary = artifacts.require('./RolesLibrary.sol')
 const OwnerImplementation = artifacts.require('./OwnerImplementation.sol')
@@ -21,7 +22,7 @@ const getAddress = async Contract => {
 
 
 module.exports = async (deployer, network) => {
-	const version = "V0.1"
+	const version = versions[1]
 
 	const registerFunction = async (registry, func, imp) => {
 		try {

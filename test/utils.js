@@ -31,7 +31,6 @@ const products = [
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-module.exports.version = 'V0.1' // Set the version you want to test here (most of the cases the current version)
 module.exports.products = products
 module.exports.getHash = getHash
 module.exports.ZERO_ADDRESS = ZERO_ADDRESS

@@ -1,6 +1,6 @@
 const truffleAssert = require('truffle-assertions')
 
-const { version } = require('./utils')
+const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
 const LogisticInterface = artifacts.require('LogisticInterface')

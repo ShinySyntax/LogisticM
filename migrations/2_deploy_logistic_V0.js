@@ -1,3 +1,5 @@
+const { versions } = require('../versions')
+
 const RolesLibrary = artifacts.require('./RolesLibrary.sol')
 const OwnerImplementation = artifacts.require('./OwnerImplementation.sol')
 const AccessImplementation = artifacts.require('./AccessImplementation.sol')
@@ -10,7 +12,7 @@ const HandoverImplementation = artifacts.require('./HandoverImplementation.sol')
 const OwnedRegistry = artifacts.require('./OwnedRegistry.sol')
 
 module.exports = async (deployer) => {
-	const version = "V0"
+	const version = versions[0]
 
 	await deployer.deploy(RolesLibrary)
 

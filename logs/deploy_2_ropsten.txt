@@ -1,0 +1,115 @@
+$ truffle migrate --reset --network ropsten
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+
+Starting migrations...
+======================
+> Network name:    'ropsten'
+> Network id:      3
+> Block gas limit: 8000029 (0x7a121d)
+
+
+1_initial_migration.js
+======================
+
+   > Saving migration to chain.
+   -------------------------------------
+   > Total cost:                   0 ETH
+
+
+2_deploy_logistic_V0.js
+=======================
+
+   Replacing 'OwnedRegistry'
+   -------------------------
+   > transaction hash:    0x14c87565e475185e597da5de0fcef367282107e3fd93fd87ea8e036d3cd41323
+   > Blocks: 3            Seconds: 9
+   > contract address:    0xA50Bfc8354ddB49EcfA69e9AAbBd0261bDe13286
+   > block number:        8654260
+   > block timestamp:     1599724709
+   > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+   > balance:             4.2505644796
+   > gas used:            3350300 (0x331f1c)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.067006 ETH
+
+Need to get deployed instance
+
+   Replacing 'HandoverImplementation'
+   ----------------------------------
+   > transaction hash:    0x27b407bca1aee2543d6fe75cf9e34dca1e173f7323d597eb5d1aaee8bc108c59
+   > Blocks: 1            Seconds: 9
+   > contract address:    0xcB4E9E5876004eC0F6ACA5641af9AC74D09632b7
+   > block number:        8654262
+   > block timestamp:     1599724725
+   > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+   > balance:             4.2155714996
+   > gas used:            1749649 (0x1ab291)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.03499298 ETH
+
+Proxy created at 0x6aCD89f2dA3546f436a1f6096de70bD5bFf7f776
+35
+{ address: '0xA50Bfc8354ddB49EcfA69e9AAbBd0261bDe13286',
+  blockHash:
+   '0xdf8c0af149b53649450b07006a12397bf76e43e137688e79505c5eb7da3675fa',
+  blockNumber: 8654266,
+  logIndex: 0,
+  removed: false,
+  transactionHash:
+   '0x3e12592ad6755976000535259a413c324d89aa40f8ca3d2af653bcf3547f9024',
+  transactionIndex: 1,
+  id: 'log_5d60db29',
+  returnValues:
+   Result {
+     '0': '0x6aCD89f2dA3546f436a1f6096de70bD5bFf7f776',
+     proxy: '0x6aCD89f2dA3546f436a1f6096de70bD5bFf7f776' },
+  event: 'ProxyCreated',
+  signature:
+   '0x00fffc2da0b561cae30d9826d37709e9421c4725faebc226cbbb7ef5fc5e7349',
+  raw:
+   { data:
+      '0x0000000000000000000000006acd89f2da3546f436a1f6096de70bd5bff7f776',
+     topics:
+      [ '0x00fffc2da0b561cae30d9826d37709e9421c4725faebc226cbbb7ef5fc5e7349' ] } }
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.10199898 ETH
+
+
+3_deploy_logistic_V0.1.js
+=========================
+
+   Replacing 'ProductImplementation'
+   ---------------------------------
+   > transaction hash:    0xcd2ef27e592e38a920784434cc0d87a7578ebeb325515cfedc02d3ca3f70956f
+   > Blocks: 2            Seconds: 61
+   > contract address:    0x48a57dCaB041E0ab8c1fD5F25EDBb4db23D8fF9F
+   > block number:        8654270
+   > block timestamp:     1599724838
+   > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+   > balance:             4.1600360596
+   > gas used:            1510356 (0x170bd4)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.03020712 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.03020712 ETH
+
+
+Summary
+=======
+> Total deployments:   3
+> Final cost:          0.1322061 ETH

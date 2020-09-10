@@ -14,7 +14,11 @@ module.exports = async (deployer) => {
 
 	await deployer.deploy(RolesLibrary)
 
-	const ownedRegistry = await deployer.deploy(OwnedRegistry)
+	let ownedRegistry = await deployer.deploy(OwnedRegistry)
+	if (!ownedRegistry) {
+		console.log("Need to get deployed instance");
+		ownedRegistry = await OwnedRegistry.deployed()
+	}
 
 	await deployer.deploy(OwnerImplementation)
 	await deployer.link(RolesLibrary, AccessImplementation);
@@ -84,7 +88,7 @@ module.exports = async (deployer) => {
 	await ownedRegistry.addVersionFromName(version, 'productExists(bytes32)', ProductImplementation.address)
 
 	// Create proxy
-    const { logs } = await ownedRegistry.createProxy(version)
+	const { logs } = await ownedRegistry.createProxy(version)
 	const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
 	console.log(`Proxy created at ${proxy}`);
 }

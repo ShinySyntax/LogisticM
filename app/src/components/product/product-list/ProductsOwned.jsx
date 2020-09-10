@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListGroup, Accordion } from 'react-bootstrap';
+import { Accordion } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 import ProductItem from "../product-item/ProductItem"

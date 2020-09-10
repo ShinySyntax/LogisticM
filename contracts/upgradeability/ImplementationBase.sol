@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import "./UpgradeabilityStorage.sol";
-import "./registry/IRegistry.sol";
 import "../commons/BytesLib.sol";
 
 

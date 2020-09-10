@@ -5,16 +5,16 @@ import { Container,
 	Button,
 	InputGroup,
 	Accordion,
-	Card,
-	ListGroup
+	Card
  } from 'react-bootstrap';
 import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from 'prop-types'
 
 import ProductLink from "../product-page/ProductLink";
-import { ZERO_ADDRESS, HANDOVER } from '../../../store/constants';
+import { ZERO_ADDRESS } from '../../../store/constants';
+// import { HANDOVER } from '../../../store/constants';
 import { send, sendToPurchaser } from '../../../contract-call'
-import { getEventsAboutProductHash } from '../../../store/selectors';
+// import { getEventsAboutProductHash } from '../../../store/selectors';
 import InputAddress from "../../InputAddress"
 
 class OwnedProductItem extends React.Component {

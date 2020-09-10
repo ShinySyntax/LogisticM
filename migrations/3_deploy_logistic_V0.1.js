@@ -33,6 +33,10 @@ module.exports = async (deployer, network) => {
 	}
 
 	let ownedRegistry = await OwnedRegistry.deployed()
+	if (!ownedRegistry) {
+		console.log("Need to get deployed instance");
+		ownedRegistry = await OwnedRegistry.deployed()
+	}
 
 	// Deploy new implementation
 	let product = await deployer.deploy(ProductImplementation)

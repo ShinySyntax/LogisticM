@@ -1,14 +1,11 @@
 import React from 'react'
 import { Alert, Card } from 'react-bootstrap';
-import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
 import RevokeRole from './RevokeRole'
 import TransferOwnership from './TransferOwnership'
 import ProductList from '../product/product-list/ProductList'
 import EventList from '../product/event/EventList';
-
-const { ContractForm } = newContextComponents;
 
 class OwnerPanel extends React.Component {
 	state = { dataKey: null };
@@ -98,13 +95,6 @@ class OwnerPanel extends React.Component {
 							<TransferOwnership
 								drizzle={drizzle}
 								drizzleState={drizzleState}
-							/>
-							<br/>
-							<em>Renounce ownership</em>
-							<ContractForm
-								drizzle={drizzle}
-								contract="Logistic"
-								method="renounceOwnership"
 							/>
 						</Alert>
 					</div>

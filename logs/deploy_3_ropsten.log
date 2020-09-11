@@ -1,0 +1,224 @@
+truffle migrate --reset --network ropsten
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+
+Starting migrations...
+======================
+> Network name:    'ropsten'
+> Network id:      3
+> Block gas limit: 8000000 (0x7a1200)
+
+
+1_initial_migration.js
+======================
+
+  Replacing 'Migrations'
+  ----------------------
+  > transaction hash:    0x8e0584f146cdde577e4638e2b5692d5563416d015e09ba13a7b0b4addb9a08a0
+  > Blocks: 4            Seconds: 89
+  > contract address:    0xD4cf7E494b4d81d48CC6De32863b52dEB72e07bd
+  > block number:        8654461
+  > block timestamp:     1599727121
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             4.0511387996
+  > gas used:            162255 (0x279cf)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.0032451 ETH
+
+
+  > Saving migration to chain.
+  > Saving artifacts
+  -------------------------------------
+  > Total cost:           0.0032451 ETH
+
+
+2_deploy_logistic_V0.js
+=======================
+
+  Replacing 'RolesLibrary'
+  ------------------------
+  > transaction hash:    0x78be9db48776e44ce69cc8803ae19a3e5f272ba2041d4fe98643e9adb74a1fb9
+  > Blocks: 0            Seconds: 25
+  > contract address:    0xE84589C81d38932B99a2c8FD57e9514e2BC28d32
+  > block number:        8654466
+  > block timestamp:     1599727181
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             4.0390544796
+  > gas used:            561875 (0x892d3)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.0112375 ETH
+
+
+  Replacing 'OwnedRegistry'
+  -------------------------
+  > transaction hash:    0x03150010080df27e8fd3613592f1f319537d6fecad7295c4573f597aca632689
+  > Blocks: 8            Seconds: 121
+  > contract address:    0x61A8C34876d9779E1fceF28923444CeF3AE4AC01
+  > block number:        8654474
+  > block timestamp:     1599727305
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.9720487196
+  > gas used:            3350288 (0x331f10)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.06700576 ETH
+
+
+  Replacing 'OwnerImplementation'
+  -------------------------------
+  > transaction hash:    0xb1722829601b6547deadb36111b805af22db1cf54a4f48ebfb6e2d606d5cf617
+  > Blocks: 0            Seconds: 17
+  > contract address:    0xAc593b176f1dC72c2B818A1D388352ab0fe20F7F
+  > block number:        8654479
+  > block timestamp:     1599727340
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.9634056396
+  > gas used:            432154 (0x6981a)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.00864308 ETH
+
+
+  Linking
+  -------
+  * Contract: AccessImplementation <--> Library: RolesLibrary (at address: 0xE84589C81d38932B99a2c8FD57e9514e2BC28d32)
+
+  Replacing 'AccessImplementation'
+  --------------------------------
+  > transaction hash:    0xafc765c6c81c03c386c572f758b0d350ff7706c7114360f77eaed59ca296e35b
+  > Blocks: 2            Seconds: 9
+  > contract address:    0xc3ACae4A00e65C9fb78A7Acd465a07ce9Ca28a1d
+  > block number:        8654483
+  > block timestamp:     1599727375
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.9350313796
+  > gas used:            1418713 (0x15a5d9)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.02837426 ETH
+
+
+  Replacing 'ERC721LogisticImplementation'
+  ----------------------------------------
+  > transaction hash:    0xa20f28314613f0ca1f6f6a52a31ce39f658f2bf2e398aba41548b36961e61f37
+  > Blocks: 2            Seconds: 25
+  > contract address:    0x6A0576DD084BDDB1f9ED5F31605e27E5384aA1dE
+  > block number:        8654486
+  > block timestamp:     1599727405
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.8872688796
+  > gas used:            2388125 (0x24709d)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.0477625 ETH
+
+
+  Replacing 'NameImplementation'
+  ------------------------------
+  > transaction hash:    0x99cdf436852908fe3a0c6758d79b8460cc910f2114756af344ebef73fd004ce6
+  > Blocks: 1            Seconds: 13
+  > contract address:    0x4ad64A44fFB0374eFb08613df09805462fdA1c96
+  > block number:        8654488
+  > block timestamp:     1599727420
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.8748366596
+  > gas used:            621611 (0x97c2b)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.01243222 ETH
+
+^[[C
+  Replacing 'PauseImplementation'
+  -------------------------------
+  > transaction hash:    0xc71960a6325d624bc0ef8f7ae0fbdb89191ab386a731552b7a61a8711b06b631
+  > Blocks: 0            Seconds: 9
+  > contract address:    0x18CFf0654e55652100a6eA398c13856692854629
+  > block number:        8654490
+  > block timestamp:     1599727434
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.8679408196
+  > gas used:            344792 (0x542d8)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.00689584 ETH
+
+
+  Replacing 'ProductImplementation'
+  ---------------------------------
+  > transaction hash:    0xd107ac1c34afa9cb0b1485fa10079ad9e896b319f15387d2fcce56c9a3f66d5b
+  > Blocks: 1            Seconds: 5
+  > contract address:    0x323cCe9f57616635B2E9625e2888e97eF39F948D
+  > block number:        8654492
+  > block timestamp:     1599727454
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.8377334596
+  > gas used:            1510368 (0x170be0)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.03020736 ETH
+
+
+  Replacing 'HandoverImplementation'
+  ----------------------------------
+  > transaction hash:    0x315f7ffdb005738b58b12234c8343deb6815ef4e606ac5c41970e89a0f6b6798
+  > Blocks: 7            Seconds: 120
+  > contract address:    0x65419cb5433C364618642754a77e426aa029c417
+  > block number:        8654501
+  > block timestamp:     1599727581
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.8027404796
+  > gas used:            1749649 (0x1ab291)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.03499298 ETH
+
+Proxy created at 0xb4Da76c957B202b3F04338172bC78dEDF93e2C17
+
+  > Saving migration to chain.
+  > Saving artifacts
+  -------------------------------------
+  > Total cost:           0.2475515 ETH
+
+
+3_deploy_logistic_V0.1.js
+=========================
+
+  Replacing 'ProductImplementation'
+  ---------------------------------
+  > transaction hash:    0x1e887606035500081e534c4e7469d3632511f396c933111f031943ea32a9a6ea
+  > Blocks: 2            Seconds: 23
+  > contract address:    0x4aF647dBae4075FC7ef6a06F9259262104d2A3dC
+  > block number:        8654668
+  > block timestamp:     1599729591
+  > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+  > balance:             3.6441301396
+  > gas used:            1510368 (0x170be0)
+  > gas price:           20 gwei
+  > value sent:          0 ETH
+  > total cost:          0.03020736 ETH
+
+
+/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/request/request.js:816
+		 var e = new Error('ESOCKETTIMEDOUT')
+				 ^
+Error: PollingBlockTracker - encountered an error while attempting to update latest block:
+Error: ESOCKETTIMEDOUT
+   at ClientRequest.<anonymous> (/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/request/request.js:816:19)
+   at Object.onceWrapper (events.js:286:20)
+   at ClientRequest.emit (events.js:198:13)
+   at TLSSocket.emitRequestTimeout (_http_client.js:673:40)
+   at Object.onceWrapper (events.js:286:20)
+   at TLSSocket.emit (events.js:198:13)
+   at TLSSocket.Socket._onTimeout (net.js:443:8)
+   at ontimeout (timers.js:436:11)
+   at tryOnTimeout (timers.js:300:5)
+   at listOnTimeout (timers.js:263:5)
+   at Timer.processTimers (timers.js:223:10)
+   at PollingBlockTracker._performSync (/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/eth-block-tracker/src/polling.js:51:24)
+   at process._tickCallback (internal/process/next_tick.js:68:7)

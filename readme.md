@@ -12,19 +12,24 @@ First of all, install npm packages: `npm install`.
 
 Then run `cp .env-dist .env`. Fill the `.env` file.
 
-**Lint contracts**: `solhint "contracts/**/*.sol"`
+In a new terminal window, start the local blockchain: `ganache-cli`
 
-**Compile**: `truffle compile`
+**Lint contracts**: `npm run lint`
 
-*In a new terminal window, start the local blockchain: `ganache-cli`*
+**Compile**: `truffle compile` or `npm run compile`
 
-**Deploy**: `truffle migrate --reset --network development`
 
-**Test**: `truffle test`
+**Deploy**: `truffle migrate --reset --network development` or `npm run deploy-local`
+
+**Test**: `truffle test` or `npm run test`
+
+*Tests include gas report.*
 
 **Test a sing file**: `truffle test test/test_proxy.js`
 
-**Test with coverage**: `truffle run coverage --network coverage`
+**Test with coverage**: `npm run coverage`
+
+**Doc**: `npm run doc`
 
 **Lint truffle files** (tests, migrations...): `./truffle-lint.sh`
 

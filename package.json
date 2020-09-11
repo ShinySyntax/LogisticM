@@ -6,20 +6,24 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "doc": "solidity-docgen --solc-module solc"
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "coverage": "truffle run coverage --network coverage",
+    "lint": "solhint contracts/**/*.sol",
+    "doc": "solidity-docgen --solc-module solc",
+    "deploy-local": "truffle migrate --reset --network development"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/truffle-box/drizzle-box.git"
+    "url": "git+https://github.com/..."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/truffle-box/drizzle-box/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/truffle-box/drizzle-box#readme",
+  "homepage": "",
   "dependencies": {
     "@openzeppelin/contracts": "^2.5.1",
     "@truffle/hdwallet-provider": "^1.0.43",

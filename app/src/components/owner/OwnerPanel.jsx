@@ -4,6 +4,7 @@ import { newContextComponents } from "@drizzle/react-components";
 
 import GrantAccess from './GrantAccess'
 import RevokeRole from './RevokeRole'
+import TransferOwnership from './TransferOwnership'
 import ProductList from '../product/product-list/ProductList'
 import EventList from '../product/event/EventList';
 
@@ -94,10 +95,9 @@ class OwnerPanel extends React.Component {
 							<h3>Danger zone</h3>
 
 							<em>Transfer ownership</em>
-							<ContractForm
+							<TransferOwnership
 								drizzle={drizzle}
-								contract="Logistic"
-								method="transferOwnership"
+								drizzleState={drizzleState}
 							/>
 							<br/>
 							<em>Renounce ownership</em>

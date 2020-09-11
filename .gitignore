@@ -7,3 +7,4 @@ coverage.json
 .coverage_artifacts/
 .coverage_contracts/
 .env
+docs

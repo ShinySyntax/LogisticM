@@ -47,5 +47,9 @@ module.exports = {
       // }
     },
   },
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    // reporterOptions : { ... } // See options below
+  },
   plugins: ["solidity-coverage"]
 };

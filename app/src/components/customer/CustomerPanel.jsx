@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getEventsAboutUser } from "../../store/selectors"
 import { getPastEvents } from '../../store/events-helpers'
-import Loading from '../Loading';
+import Loading from '../loading/Loading';
 import { PRODUCT_EVENT_NAMES, NEW_PRODUCT } from '../../store/constants'
 import PurchaserPanel from "../purchaser/PurchaserPanel"
 import NoUserPanel from "./NoUserPanel"

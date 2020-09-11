@@ -4,7 +4,7 @@ import OwnerPanel from './owner/OwnerPanel';
 import SupplierPanel from './supplier/SupplierPanel';
 import DeliveryManPanel from './delivery-man/DeliveryManPanel';
 import CustomerPanel from './customer/CustomerPanel';
-import Loading from './Loading';
+import Loading from './loading/Loading';
 
 class Home extends React.Component {
 	state = {

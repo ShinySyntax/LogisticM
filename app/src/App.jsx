@@ -11,8 +11,8 @@ import Web3Modal from "web3modal";
 import Home from "./components/Home";
 import HeaderBar from "./components/HeaderBar";
 import ProductDetail from './components/product/product-page/ProductDetail'
-import LoadingContainer from "./components/LoadingContainer";
-import ContractLoader from "./components/ContractLoader";
+import LoadingContainer from "./components/loading/LoadingContainer";
+import ContractLoader from "./components/loading/ContractLoader";
 import "./App.css";
 import getDrizzleOptions from "./store/drizzleOptions";
 import getStore from "./store/store";

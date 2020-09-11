@@ -2,8 +2,8 @@ import React from 'react'
 
 import Loading from './Loading';
 
-import LogisticInterface from "../contracts/LogisticInterface.json";
-import { EVENT_NAMES } from "../store/constants";
+import LogisticInterface from "../../contracts/LogisticInterface.json";
+import { EVENT_NAMES } from "../../store/constants";
 
 class ContractLoader extends React.Component {
 	state = {

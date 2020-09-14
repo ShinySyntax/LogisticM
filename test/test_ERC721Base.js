@@ -8,145 +8,145 @@ contract('ERC721BaseImplementation', async (accounts) => {
   const [owner, other] = accounts
 
   before(async function () {
-    instance = await ERC721Mock.new()
+    this.instance = await ERC721Mock.new()
   })
 
-  it('totalSupply', async () => {
-    assert.equal(await instance.totalSupply(), 4)
+  it('totalSupply', async function () {
+    assert.equal(await this.instance.totalSupply(), 4)
   })
 
-  it('tokenByIndex', async () => {
-    assert.equal(await instance.tokenByIndex(0), 1)
+  it('tokenByIndex', async function () {
+    assert.equal(await this.instance.tokenByIndex(0), 1)
     await truffleAssert.reverts(
-      instance.tokenByIndex(5),
+      this.instance.tokenByIndex(5),
       'ERC721Enumerable: global index out of bounds'
     )
   })
 
-  it('tokenOfOwnerByIndex', async () => {
-    assert.equal(await instance.tokenOfOwnerByIndex(owner, 0), 1)
+  it('tokenOfOwnerByIndex', async function () {
+    assert.equal(await this.instance.tokenOfOwnerByIndex(owner, 0), 1)
     await truffleAssert.reverts(
-      instance.tokenOfOwnerByIndex(owner, 5),
+      this.instance.tokenOfOwnerByIndex(owner, 5),
       'ERC721Enumerable: owner index out of bounds'
     )
   })
 
-  it('balanceOf', async () => {
-    assert.equal(await instance.balanceOf(owner), 4)
+  it('balanceOf', async function () {
+    assert.equal(await this.instance.balanceOf(owner), 4)
     await truffleAssert.reverts(
-      instance.balanceOf(ZERO_ADDRESS),
+      this.instance.balanceOf(ZERO_ADDRESS),
       'ERC721: balance query for the zero address'
     )
   })
 
-  it('ownerOf', async () => {
-    assert.equal(await instance.ownerOf(1), owner)
+  it('ownerOf', async function () {
+    assert.equal(await this.instance.ownerOf(1), owner)
     await truffleAssert.reverts(
-      instance.ownerOf(5),
+      this.instance.ownerOf(5),
       'ERC721: owner query for nonexistent token'
     )
   })
 
-  it('Name', async () => {
-    assert.equal(await instance.name(), 'MockToken')
+  it('Name', async function () {
+    assert.equal(await this.instance.name(), 'MockToken')
   })
 
-  it('Symbol', async () => {
-    assert.equal(await instance.symbol(), 'MT')
+  it('Symbol', async function () {
+    assert.equal(await this.instance.symbol(), 'MT')
   })
 
-  it('baseURI', async () => {
-    assert.equal(await instance.baseURI(), 'BaseMock')
+  it('baseURI', async function () {
+    assert.equal(await this.instance.baseURI(), 'BaseMock')
   })
 
-  it('tokenURI', async () => {
-    assert.equal(await instance.tokenURI(1), 'BaseMockFirstToken')
-    assert.equal(await instance.tokenURI(2), '')
+  it('tokenURI', async function () {
+    assert.equal(await this.instance.tokenURI(1), 'BaseMockFirstToken')
+    assert.equal(await this.instance.tokenURI(2), '')
     await truffleAssert.reverts(
-      instance.tokenURI(5),
+      this.instance.tokenURI(5),
       'ERC721Metadata: URI query for nonexistent token'
     )
   })
 
-  it('Mint', async () => {
-    await instance.mintToken(owner, 8)
+  it('Mint', async function () {
+    await this.instance.mintToken(owner, 8)
     await truffleAssert.reverts(
-      instance.mintToken(owner, 8),
+      this.instance.mintToken(owner, 8),
       'ERC721: token already minted'
     )
     await truffleAssert.reverts(
-      instance.mintToken(ZERO_ADDRESS, 8),
+      this.instance.mintToken(ZERO_ADDRESS, 8),
       'ERC721: mint to the zero address'
     )
   })
 
-  it('Burn', async () => {
-    await instance.burnToken(3)
+  it('Burn', async function () {
+    await this.instance.burnToken(3)
     await truffleAssert.reverts(
-      instance.burnTokenOwner(other, 8),
+      this.instance.burnTokenOwner(other, 8),
       'ERC721: burn of token that is not own'
     )
-    await instance.burnToken(20)
+    await this.instance.burnToken(20)
   })
 
-  it('Approve', async () => {
+  it('Approve', async function () {
     await truffleAssert.reverts(
-      instance.approve(owner, 1),
+      this.instance.approve(owner, 1),
       'ERC721: approval to current owner'
     )
 
     await truffleAssert.reverts(
-      instance.approve(other, 1, { from: other }),
+      this.instance.approve(other, 1, { from: other }),
       'ERC721: approve caller is not owner nor approved for all'
     )
 
-    await instance.approve(other, 1)
-    assert.equal(await instance.getApproved(1), other)
+    await this.instance.approve(other, 1)
+    assert.equal(await this.instance.getApproved(1), other)
   })
 
-  it('getApproved', async () => {
+  it('getApproved', async function () {
     await truffleAssert.reverts(
-      instance.getApproved(5),
+      this.instance.getApproved(5),
       'ERC721: approved query for nonexistent token'
     )
   })
 
-  it('Transfer', async () => {
+  it('Transfer', async function () {
     await truffleAssert.reverts(
-      instance.transferFrom(other, other, 2, { from: owner }),
+      this.instance.transferFrom(other, other, 2, { from: owner }),
       'ERC721: transfer of token that is not own'
     )
 
     await truffleAssert.reverts(
-      instance.transferFrom(owner, other, 30, { from: other }),
+      this.instance.transferFrom(owner, other, 30, { from: other }),
       'ERC721: operator query for nonexistent token'
     )
 
     await truffleAssert.reverts(
-      instance.transferFrom(owner, ZERO_ADDRESS, 2, { from: owner }),
+      this.instance.transferFrom(owner, ZERO_ADDRESS, 2, { from: owner }),
       'ERC721: transfer to the zero address'
     )
 
     await truffleAssert.reverts(
-      instance.transferFrom(owner, other, 2, { from: other }),
+      this.instance.transferFrom(owner, other, 2, { from: other }),
       'ERC721: transfer caller is not owner nor approved'
     )
     await truffleAssert.reverts(
-      instance.safeTransferFrom(owner, other, 2, { from: other }),
+      this.instance.safeTransferFrom(owner, other, 2, { from: other }),
       'ERC721: transfer caller is not owner nor approved'
     )
 
-    await instance.transferFrom(owner, other, 2)
-    await instance.safeTransferFrom(owner, other, 1) // previously approved
+    await this.instance.transferFrom(owner, other, 2)
+    await this.instance.safeTransferFrom(owner, other, 1) // previously approved
   })
 
-  it('setApprovalForAll', async () => {
+  it('setApprovalForAll', async function () {
     await truffleAssert.reverts(
-      instance.setApprovalForAll(owner, true, { from: owner }),
+      this.instance.setApprovalForAll(owner, true, { from: owner }),
       'ERC721: approve to caller'
     )
 
-    await instance.setApprovalForAll(owner, true, { from: other })
-    assert.isTrue(await instance.isApprovedForAll(other, owner))
+    await this.instance.setApprovalForAll(owner, true, { from: other })
+    assert.isTrue(await this.instance.isApprovedForAll(other, owner))
   })
 })

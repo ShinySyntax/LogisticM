@@ -3,10 +3,8 @@ const Web3 = require('web3')
 
 const { ZERO_ADDRESS } = require('./utils')
 const web3 = new Web3(Web3.givenProvider)
-const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
 const MockImplementationV0 = artifacts.require('MockImplementationV0')
 
 contract('Proxy', async accounts => {
@@ -15,69 +13,65 @@ contract('Proxy', async accounts => {
 
   before(async function () {
     // Create proxy
-    ownedRegistry = await OwnedRegistry.deployed()
-    const { logs } = await ownedRegistry.createProxy(version)
-    const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    instance = await LogisticInterface.at(proxy)
-    imp = await MockImplementationV0.new()
-    mockInstance = await MockImplementationV0.at(proxy)
+    this.ownedRegistry = await OwnedRegistry.deployed()
+    this.imp = await MockImplementationV0.new()
   })
 
-  it('addFallback', async () => {
+  it('addFallback', async function () {
     await truffleAssert.reverts(
-      ownedRegistry.addFallback('v0', ZERO_ADDRESS, { from: other }),
+      this.ownedRegistry.addFallback('v0', ZERO_ADDRESS, { from: other }),
       'RegistryOwnership: Caller is not the registry owner'
     )
-    const result = await ownedRegistry.addFallback('v0', imp.address, { from: owner })
+    const result = await this.ownedRegistry.addFallback('v0', this.imp.address, { from: owner })
     truffleAssert.eventEmitted(result, 'FallbackAdded', ev =>
       ev.version === 'v0' &&
-      ev.implementation === imp.address
+      ev.implementation === this.imp.address
     )
     await truffleAssert.reverts(
-      ownedRegistry.addFallback('v0', ZERO_ADDRESS, { from: owner }),
+      this.ownedRegistry.addFallback('v0', ZERO_ADDRESS, { from: owner }),
       'Registry: fallback already defined'
     )
   })
 
-  it('addVersionFromName', async () => {
+  it('addVersionFromName', async function () {
     await truffleAssert.reverts(
-      ownedRegistry.addVersionFromName(
-        'v0', methodSignature, imp.address, { from: other }),
+      this.ownedRegistry.addVersionFromName(
+        'v0', methodSignature, this.imp.address, { from: other }),
       'RegistryOwnership: Caller is not the registry owner'
     )
-    const result = await ownedRegistry.addVersionFromName(
-      'v0', methodSignature, imp.address, { from: owner })
+    const result = await this.ownedRegistry.addVersionFromName(
+      'v0', methodSignature, this.imp.address, { from: owner })
     truffleAssert.eventEmitted(result, 'VersionAdded', ev =>
       ev.version === 'v0' &&
       ev.func === web3.eth.abi.encodeFunctionSignature(methodSignature) &&
-      ev.implementation === imp.address
+      ev.implementation === this.imp.address
     )
     await truffleAssert.reverts(
-      ownedRegistry.addVersionFromName(
-        'v0', methodSignature, imp.address, { from: owner }),
+      this.ownedRegistry.addVersionFromName(
+        'v0', methodSignature, this.imp.address, { from: owner }),
       'Registry: func already defined'
     )
   })
 
-  it('Add version from signature', async () => {
-    const otherMethod = "otherMethod(address)"
+  it('Add version from signature', async function () {
+    const otherMethod = 'otherMethod(address)'
 
-    const result = await ownedRegistry.addVersion(
+    const result = await this.ownedRegistry.addVersion(
       'v0', web3.eth.abi.encodeFunctionSignature(otherMethod),
-      imp.address, { from: owner })
+      this.imp.address, { from: owner })
     truffleAssert.eventEmitted(result, 'VersionAdded', ev =>
       ev.version === 'v0' &&
       ev.func === web3.eth.abi.encodeFunctionSignature(otherMethod) &&
-      ev.implementation === imp.address
+      ev.implementation === this.imp.address
     )
   })
 
-  it('Upgrade functions', async () => {
-    let count = (await ownedRegistry.getFunctionCount('v0')).toNumber()
-    await ownedRegistry.upgradeFunctions('v0', 'v0.0-alpha')
-    assert.equal(count, (await ownedRegistry.getFunctionCount('v0.0-alpha')).toNumber())
-    let func = await ownedRegistry.getFunctionByIndex('v0.0-alpha', 0)
+  it('Upgrade functions', async function () {
+    const count = (await this.ownedRegistry.getFunctionCount('v0')).toNumber()
+    await this.ownedRegistry.upgradeFunctions('v0', 'v0.0-alpha')
+    assert.equal(count, (await this.ownedRegistry.getFunctionCount('v0.0-alpha')).toNumber())
+    const func = await this.ownedRegistry.getFunctionByIndex('v0.0-alpha', 0)
     assert.equal(func['0'], web3.eth.abi.encodeFunctionSignature(methodSignature))
-    assert.equal(func['1'], imp.address)
+    assert.equal(func['1'], this.imp.address)
   })
 })

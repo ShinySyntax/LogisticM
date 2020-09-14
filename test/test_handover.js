@@ -39,6 +39,12 @@ contract('Handover', async accounts => {
     const result = await instance.createProduct(
       purchaser, products[0].hash, products[0].nameBytes32, products[0].purchaserNameBytes32,
       { from: supplier })
+    truffleAssert.eventEmitted(result, 'NewProduct', ev =>
+      ev.by === supplier &&
+      ev.purchaser === purchaser &&
+      ev.productHash === products[0].hash &&
+      ev.productName === products[0].name
+    )
     assert.equal(await instance.getHashFromTokenId(products[0].tokenId), products[0].hash)
     assert.equal(await instance.ownerOf(products[0].tokenId), supplier)
     const info = await instance.getProductInfo(products[0].hash)
@@ -72,9 +78,9 @@ contract('Handover', async accounts => {
         { from: deliveryMan1 })
       truffleAssert.eventEmitted(result, 'Handover', ev =>
         ev.from === supplier &&
-				ev.to === deliveryMan1 &&
-				ev.productHash === products[0].hash &&
-				ev.productName === products[0].name
+        ev.to === deliveryMan1 &&
+        ev.productHash === products[0].hash &&
+        ev.productName === products[0].name
       )
     })
   })

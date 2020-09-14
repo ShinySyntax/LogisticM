@@ -1,3 +1,3 @@
-npx eslint test/**.js
-npx eslint migrations/**.js
-npx eslint truffle-config.js
+npx eslint test/**.js --fix
+npx eslint migrations/**.js --fix
+npx eslint truffle-config.js --fix

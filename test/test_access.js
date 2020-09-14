@@ -16,173 +16,173 @@ contract('AccessImplementation & OwnerImplementation', async (accounts) => {
     const ownedRegistry = await OwnedRegistry.deployed()
     const { logs } = await ownedRegistry.createProxy(version)
     const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    instance = await LogisticInterface.at(proxy)
+    this.instance = await LogisticInterface.at(proxy)
   })
 
-  it('Owner', async () => {
-    const actualOwner = await instance.getOwner()
+  it('Owner', async function () {
+    const actualOwner = await this.instance.getOwner()
     assert.equal(actualOwner, owner)
 
-    assert.equal(await instance.getRole(owner), 3)
+    assert.equal(await this.instance.getRole(owner), 3)
 
-    // await instance.initializeOwner(owner, { from: OwnedRegistry.address })
+    // await this.instance.initializeOwner(owner, { from: OwnedRegistry.address })
     await truffleAssert.reverts(
-      instance.initializeOwner(owner, { from: owner }),
+      this.instance.initializeOwner(owner, { from: owner }),
       'Upgradeable: bad caller'
     )
   })
 
-  it('transferOwnership', async () => {
-    await instance.transferOwnership(other, { from: owner })
-    assert.equal((await instance.getOwner()), other)
-    await instance.transferOwnership(owner, { from: other })
+  it('transferOwnership', async function () {
+    await this.instance.transferOwnership(other, { from: owner })
+    assert.equal((await this.instance.getOwner()), other)
+    await this.instance.transferOwnership(owner, { from: other })
 
     await truffleAssert.reverts(
-      instance.transferOwnership(owner, { from: other }),
+      this.instance.transferOwnership(owner, { from: other }),
       'Owner: caller is not the owner'
     )
 
     await truffleAssert.reverts(
-      instance.transferOwnership(ZERO_ADDRESS, { from: owner }),
+      this.instance.transferOwnership(ZERO_ADDRESS, { from: owner }),
       'Owner: new owner is the zero address'
     )
   })
 
-  it('Getter', async () => {
+  it('Getter', async function () {
     await truffleAssert.reverts(
-      instance.isSupplier(ZERO_ADDRESS),
+      this.instance.isSupplier(ZERO_ADDRESS),
       'RolesLibrary: account is the zero address'
     )
     await truffleAssert.reverts(
-      instance.isDeliveryMan(ZERO_ADDRESS),
+      this.instance.isDeliveryMan(ZERO_ADDRESS),
       'RolesLibrary: account is the zero address'
     )
   })
 
-  it('Add a supplier with name', async () => {
+  it('Add a supplier with name', async function () {
     const name = 'supplier'
     const nameBytes32 = ethersUtils.formatBytes32String(name)
-    const result = await instance.addSupplierWithName(namedSupplier, nameBytes32, { from: owner })
+    const result = await this.instance.addSupplierWithName(namedSupplier, nameBytes32, { from: owner })
     truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
       ev.account === namedSupplier
     )
-    assert.isTrue((await instance.isSupplier(namedSupplier)))
-    assert.equal(await instance.getName(namedSupplier), name)
-    assert.equal(await instance.getAddress(nameBytes32), namedSupplier)
+    assert.isTrue((await this.instance.isSupplier(namedSupplier)))
+    assert.equal(await this.instance.getName(namedSupplier), name)
+    assert.equal(await this.instance.getAddress(nameBytes32), namedSupplier)
   })
 
-  it('Add a delivery man with name', async () => {
+  it('Add a delivery man with name', async function () {
     const name = 'delivery man'
     const nameBytes32 = ethersUtils.formatBytes32String(name)
-    const result = await instance.addDeliveryManWithName(namedDeliveryMan, nameBytes32, { from: owner })
+    const result = await this.instance.addDeliveryManWithName(namedDeliveryMan, nameBytes32, { from: owner })
     truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
       ev.account === namedDeliveryMan
     )
-    assert.isTrue((await instance.isDeliveryMan(namedDeliveryMan)))
-    assert.equal(await instance.getName(namedDeliveryMan), name)
-    assert.equal(await instance.getAddress(nameBytes32), namedDeliveryMan)
+    assert.isTrue((await this.instance.isDeliveryMan(namedDeliveryMan)))
+    assert.equal(await this.instance.getName(namedDeliveryMan), name)
+    assert.equal(await this.instance.getAddress(nameBytes32), namedDeliveryMan)
   })
 
-  it('Add a supplier', async () => {
+  it('Add a supplier', async function () {
     await truffleAssert.reverts(
-      instance.addSupplier(owner, { from: owner }),
+      this.instance.addSupplier(owner, { from: owner }),
       "Access: Owner can't be supplier"
     )
 
-    assert.isFalse((await instance.isSupplier(supplier)))
-    const result = await instance.addSupplier(supplier, { from: owner })
+    assert.isFalse((await this.instance.isSupplier(supplier)))
+    const result = await this.instance.addSupplier(supplier, { from: owner })
     truffleAssert.eventEmitted(result, 'SupplierAdded', ev =>
       ev.account === supplier
     )
-    assert.isTrue((await instance.isSupplier(supplier)))
+    assert.isTrue((await this.instance.isSupplier(supplier)))
 
     await truffleAssert.reverts(
-      instance.addSupplier(deliveryMan, { from: supplier }),
+      this.instance.addSupplier(deliveryMan, { from: supplier }),
       'Ownable: caller is not the owner'
     )
   })
 
   describe('When other is supplier', function () {
     beforeEach(async function () {
-      await instance.addSupplier(other, { from: owner })
+      await this.instance.addSupplier(other, { from: owner })
     })
-    it('Remove supplier', async () => {
-      await instance.removeSupplier(other, { from: owner })
-      assert.isFalse((await instance.isSupplier(other)))
+    it('Remove supplier', async function () {
+      await this.instance.removeSupplier(other, { from: owner })
+      assert.isFalse((await this.instance.isSupplier(other)))
       await truffleAssert.reverts(
-        instance.removeSupplier(other, { from: owner }),
+        this.instance.removeSupplier(other, { from: owner }),
         'RolesLibrary: account is not supplier'
       )
     })
 
-    it('Renounce supplier', async () => {
-      await instance.renounceSupplier({ from: other })
-      assert.isFalse((await instance.isSupplier(other)))
+    it('Renounce supplier', async function () {
+      await this.instance.renounceSupplier({ from: other })
+      assert.isFalse((await this.instance.isSupplier(other)))
 
       await truffleAssert.reverts(
-        instance.renounceSupplier({ from: other }),
+        this.instance.renounceSupplier({ from: other }),
         'Access: caller is not supplier'
       )
     })
 
-    it("Other can't be delivery man", async () => {
+    it("Other can't be delivery man", async function () {
       await truffleAssert.reverts(
-        instance.addDeliveryMan(other, { from: owner }),
+        this.instance.addDeliveryMan(other, { from: owner }),
         'RolesLibrary: roles already defined'
       )
     })
 
     after(async function () {
-      await instance.renounceSupplier({ from: other })
+      await this.instance.renounceSupplier({ from: other })
     })
   })
 
-  it('Add delivery men', async () => {
+  it('Add delivery men', async function () {
     await truffleAssert.reverts(
-      instance.addDeliveryMan(owner, { from: owner }),
+      this.instance.addDeliveryMan(owner, { from: owner }),
       "Access: Owner can't be delivery man"
     )
 
-    assert.isFalse((await instance.isDeliveryMan(deliveryMan)))
-    const result = await instance.addDeliveryMan(deliveryMan, { from: owner })
-    assert.isTrue((await instance.isDeliveryMan(deliveryMan)))
+    assert.isFalse((await this.instance.isDeliveryMan(deliveryMan)))
+    const result = await this.instance.addDeliveryMan(deliveryMan, { from: owner })
+    assert.isTrue((await this.instance.isDeliveryMan(deliveryMan)))
     truffleAssert.eventEmitted(result, 'DeliveryManAdded', ev =>
       ev.account === deliveryMan
     )
 
     await truffleAssert.reverts(
-      instance.addDeliveryMan(deliveryMan, { from: other }),
+      this.instance.addDeliveryMan(deliveryMan, { from: other }),
       'Ownable: caller is not the owner'
     )
   })
 
   describe('When other is delivery man', function () {
     beforeEach(async function () {
-      await instance.addDeliveryMan(other, { from: owner })
+      await this.instance.addDeliveryMan(other, { from: owner })
     })
 
-    it('Remove delivery man', async () => {
-      await instance.removeDeliveryMan(other, { from: owner })
-      assert.isFalse((await instance.isDeliveryMan(other)))
+    it('Remove delivery man', async function () {
+      await this.instance.removeDeliveryMan(other, { from: owner })
+      assert.isFalse((await this.instance.isDeliveryMan(other)))
       await truffleAssert.reverts(
-        instance.removeDeliveryMan(other, { from: owner }),
+        this.instance.removeDeliveryMan(other, { from: owner }),
         'RolesLibrary: account is not delivery man'
       )
     })
 
-    it('Renounce delivery man', async () => {
-      await instance.renounceDeliveryMan({ from: other })
-      assert.isFalse((await instance.isDeliveryMan(other)))
+    it('Renounce delivery man', async function () {
+      await this.instance.renounceDeliveryMan({ from: other })
+      assert.isFalse((await this.instance.isDeliveryMan(other)))
 
       await truffleAssert.reverts(
-        instance.renounceDeliveryMan({ from: other }),
+        this.instance.renounceDeliveryMan({ from: other }),
         'Access: caller is not delivery man'
       )
     })
 
-    it("Other can't be supplier", async () => {
+    it("Other can't be supplier", async function () {
       await truffleAssert.reverts(
-        instance.addSupplier(other, { from: owner }),
+        this.instance.addSupplier(other, { from: owner }),
         'RolesLibrary: roles already defined'
       )
     })

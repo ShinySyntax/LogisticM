@@ -8,50 +8,50 @@ const LogisticInterface = artifacts.require('LogisticInterface')
 contract('Pause', async accounts => {
   const [owner, other] = accounts
 
-  describe('PauseImplementation', async () => {
+  describe('PauseImplementation', async function () {
     before(async function () {
       // Create proxy
       const ownedRegistry = await OwnedRegistry.deployed()
       const { logs } = await ownedRegistry.createProxy(version)
       const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-      instance = await LogisticInterface.at(proxy)
+      this.instance = await LogisticInterface.at(proxy)
     })
 
-    it('Only Owner', async () => {
+    it('Only Owner', async function () {
       await truffleAssert.reverts(
-        instance.pause({ from: other }),
+        this.instance.pause({ from: other }),
         'Ownable: caller is not the owner'
       )
       await truffleAssert.reverts(
-        instance.unpause({ from: other }),
+        this.instance.unpause({ from: other }),
         'Ownable: caller is not the owner'
       )
     })
 
-    it('Pause', async () => {
-      await instance.pause({ from: owner })
-      assert.isTrue((await instance.getPaused()))
+    it('Pause', async function () {
+      await this.instance.pause({ from: owner })
+      assert.isTrue((await this.instance.getPaused()))
       await truffleAssert.reverts(
-        instance.pause({ from: owner }),
+        this.instance.pause({ from: owner }),
         'Pausable: paused'
       )
     })
 
-    it('UnPause', async () => {
-      await instance.unpause({ from: owner })
-      assert.equal((await instance.getPaused()), false)
+    it('UnPause', async function () {
+      await this.instance.unpause({ from: owner })
+      assert.equal((await this.instance.getPaused()), false)
       await truffleAssert.reverts(
-        instance.unpause({ from: owner }),
+        this.instance.unpause({ from: owner }),
         'Pausable: not paused'
       )
     })
 
-    it('when unlock', async () => {
-      await instance.pause({ from: owner })
-      await instance.setLock(false, { from: owner })
+    it('when unlock', async function () {
+      await this.instance.pause({ from: owner })
+      await this.instance.setLock(false, { from: owner })
 
       await truffleAssert.reverts(
-        instance.unpause({ from: owner }),
+        this.instance.unpause({ from: owner }),
         'Pause: contract is unlock'
       )
     })

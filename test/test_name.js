@@ -14,33 +14,33 @@ contract('Name', async accounts => {
     const ownedRegistry = await OwnedRegistry.deployed()
     const { logs } = await ownedRegistry.createProxy(version)
     const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    instance = await LogisticInterface.at(proxy)
+    this.instance = await LogisticInterface.at(proxy)
   })
 
   beforeEach(async function () {
-    await instance.pause({ from: owner })
-    await instance.setLock(false, { from: owner })
+    await this.instance.pause({ from: owner })
+    await this.instance.setLock(false, { from: owner })
   })
 
   afterEach(async function () {
-    await instance.setLock(true, { from: owner })
-    await instance.unpause({ from: owner })
+    await this.instance.setLock(true, { from: owner })
+    await this.instance.unpause({ from: owner })
   })
 
-  it('Set name', async () => {
+  it('Set name', async function () {
     const name = 'John Doe'
     const nameBytes32 = ethersUtils.formatBytes32String(name)
-    await instance.setName(other, nameBytes32, { from: owner })
-    await instance.setName(other, nameBytes32, { from: owner }) // "rename" but with same name
-    assert.equal(await instance.getName(other), name)
-    assert.equal(await instance.getAddress(nameBytes32), other)
+    await this.instance.setName(other, nameBytes32, { from: owner })
+    await this.instance.setName(other, nameBytes32, { from: owner }) // "rename" but with same name
+    assert.equal(await this.instance.getName(other), name)
+    assert.equal(await this.instance.getAddress(nameBytes32), other)
 
     await truffleAssert.reverts(
-      instance.setName(other, ethersUtils.formatBytes32String('Jack S.'), { from: owner }),
+      this.instance.setName(other, ethersUtils.formatBytes32String('Jack S.'), { from: owner }),
       'Name: invalid name'
     )
     await truffleAssert.reverts(
-      instance.setName(owner, nameBytes32, { from: owner }),
+      this.instance.setName(owner, nameBytes32, { from: owner }),
       'Name: invalid address'
     )
   })

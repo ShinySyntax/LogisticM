@@ -214,3 +214,53 @@ Summary
 =======
 > Total deployments:   11
 > Final cost:          0.2854152 ETH
+
+
+
+
+
+
+
+$ truffle migrate --network ropsten
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+
+Starting migrations...
+======================
+> Network name:    'ropsten'
+> Network id:      3
+> Block gas limit: 8000029 (0x7a121d)
+
+
+4_deploy_logistic_V0.2.js
+=========================
+
+   Replacing 'OwnerImplementation'
+   -------------------------------
+   > transaction hash:    0x56391dbb0cd6b6ae22091e4f69f0cafc0b319e86a5cf117d6f908ecef085e235
+   > Blocks: 1            Seconds: 9
+   > contract address:    0xC26aB324A38AaA17E28641a466666392F70e49A6
+   > block number:        8681487
+   > block timestamp:     1600065154
+   > account:             0xCFd6f5C0320EBceB5fE9672276741EFF510D7c1B
+   > balance:             2.8316527796
+   > gas used:            656281 (0xa0399)
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01312562 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.01312562 ETH
+
+
+Summary
+=======
+> Total deployments:   1
+> Final cost:          0.01312562 ETH

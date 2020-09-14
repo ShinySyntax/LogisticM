@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "../../logistic/LogisticSharedStorage.sol";
 import "./OwnerInterface.sol";
 import "../../upgradeability/Upgradeable.sol";
+import "../../upgradeability/ImplementationBase.sol";
 
 
 /**
@@ -10,7 +11,16 @@ import "../../upgradeability/Upgradeable.sol";
  * @dev The Owner logic contract. The owner of the Logistic contract is the superuser.
  * Only the superuser can perform the user role management.
  */
-contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeable {
+contract OwnerImplementation is
+    OwnerInterface,
+    LogisticSharedStorage,
+    ImplementationBase,
+    Upgradeable {
+
+    /**
+    * @dev Returns the address of the owner.
+    * @return owner of Logistic
+    */
     function getOwner() external view returns (address) {
         return owner;
     }
@@ -31,14 +41,12 @@ contract OwnerImplementation is OwnerInterface, LogisticSharedStorage, Upgradeab
     */
     function transferOwnership(address newOwner) public {
         require(owner == msg.sender, "Owner: caller is not the owner");
-
-        // DEBUG --------------------
-        // if (newOwner == address(0)) {
-        //     paused = true;
-        // }
-        // Comment the following require statement
-        // END DEBUG --------------------
         require(newOwner != address(0), "Owner: new owner is the zero address");
+        require(
+            abi.decode(dCall(abi.encodeWithSignature(
+                "getRole(address)", newOwner)), (uint)) == 0,
+            "Owner: new ower is not RoleNames.Nobody"
+        );
 
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;

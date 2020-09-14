@@ -6,6 +6,8 @@ This repository contains a smart contract and a web application in ReactJS.
 
 The smart contract runs on the Ethereum blockchain.
 
+The source code is under the **AGPL-3.0-or-later** license.
+
 ### Getting started
 
 First of all, install npm packages: `npm install`.

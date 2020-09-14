@@ -2,7 +2,7 @@ pragma solidity 0.5.5;
 
 import "./ERC721BaseEvents.sol";
 
-// Disable func ordering because it gathers several parts of the ERC721 token
+// Disable func ordering because it gathers several parts of the ERC721 token (ERC721, metadata, enumerable, ERC165)
 /* solhint-disable ordering */
 
 /**

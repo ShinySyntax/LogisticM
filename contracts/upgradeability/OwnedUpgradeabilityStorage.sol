@@ -13,7 +13,7 @@ contract OwnedUpgradeabilityStorage is UpgradeabilityStorage {
 
     /**
      * @dev Tells the address of the proxy owner
-     * @return the address of the proxy owner
+     * @return address of the proxy owner
      */
     function upgradeabilityOwner() public view returns (address) {
         return _upgradeabilityOwner;

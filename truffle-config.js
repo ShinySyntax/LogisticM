@@ -49,7 +49,7 @@ module.exports = {
   },
   mocha: {
     reporter: 'eth-gas-reporter'
-    // reporterOptions : { ... } // See options below
+    // reporterOptions : { ... } // See options
   },
   plugins: ['solidity-coverage']
 }

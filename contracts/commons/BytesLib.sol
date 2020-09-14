@@ -10,7 +10,7 @@ library BytesLib {
      * @dev Truncate the given bytes.
      * See https://ethereum.stackexchange.com/questions/37974/convert-bytes-memory-to-bytes8
      * @param inBytes The bytes array
-     * @return A `bytes4`: the first four bytes of `inBytes`
+     * @return bytes4 the first four bytes of `inBytes`
      */
     function convertBytesToBytes4(bytes memory inBytes)
         internal
@@ -33,7 +33,7 @@ library BytesLib {
      * @dev Convert the given bytes to a string.
      * See https://ethereum.stackexchange.com/questions/2519/how-to-convert-a-bytes32-to-string
      * @param inBytes32 The bytes array
-     * @return A `string`
+     * @return string A `string`
      */
     function bytes32ToString(bytes32 inBytes32)
         internal

@@ -107,7 +107,9 @@ contract ProductImplementation is
     /**
      * @dev Get informations abut the product `productHash`.
      * @param productHash The product hash: sha3 of the product ID.
-     * @return The purchaser, the token ID and the product name
+     * @return address The address of thepurchaser
+     * @return uint256 The token ID
+     * @return string The product name
      */
     function getProductInfo(bytes32 productHash)
         public
@@ -126,15 +128,15 @@ contract ProductImplementation is
     }
 
     /**
-     * @dev Return the address that `from` send the product `productHash`.
+     * @dev Return the address that `from` sent the product `productHash`.
      * @param productHash The product hash: sha3 of the product ID.
      * @param from The address of the sender.
-     * @return The address to whom the product was sent.
+     * @return address The address to whom the product was sent.
      */
     function productSentFrom(bytes32 productHash, address from)
         public
         view
-        returns (address)
+        returns (address sentTo)
     {
         return _getProduct(productHash).sent[from];
     }
@@ -143,7 +145,7 @@ contract ProductImplementation is
      * @dev Return address of the account that received the product `productHash` from `from`.
      * @param productHash The product hash: sha3 of the product ID.
      * @param from The address of the sender.
-     * @return The address of the receiver.
+     * @return address The address of the receiver.
      */
     function productReceivedFrom(bytes32 productHash, address from)
         public
@@ -156,7 +158,7 @@ contract ProductImplementation is
     /**
      * @dev Return the product hash of the product corresponding to the given `tokenId`.
      * @param tokenId The ERC721 token ID corresponding to the product.
-     * @return The product hash.
+     * @return bytes32 The product hash.
      */
     function getHashFromTokenId(uint256 tokenId) public view returns (bytes32) {
         return tokenToProductHash[tokenId];
@@ -165,7 +167,7 @@ contract ProductImplementation is
     /**
      * @dev Return true if the product exists.
      * @param productHash The product hash.
-     * @return true or false.
+     * @return bool true or false.
      */
     function productExists(bytes32 productHash) public view returns (bool) {
         return _getProduct(productHash).purchaser != address(0);
@@ -174,7 +176,7 @@ contract ProductImplementation is
     /**
      * @dev Return the `Product` struct instance of the given `productHash`.
      * @param productHash The product hash: sha3 of the product ID.
-     * @return The `Product` struct instance.
+     * @return Product The `Product` struct instance.
      */
     function _getProduct(bytes32 productHash)
         internal

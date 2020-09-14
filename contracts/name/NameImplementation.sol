@@ -39,7 +39,7 @@ contract NameImplementation is NameInterface, LogisticSharedStorage {
     /**
      * @dev Return the name of the given account.
      * @param account The address of the account
-     * @return The name of the account
+     * @return string The name of the account
      */
     function getName(address account) external view returns (string memory) {
         return names[account];
@@ -48,7 +48,7 @@ contract NameImplementation is NameInterface, LogisticSharedStorage {
     /**
      * @dev Return the address of the given name.
      * @param nameBytes32 The name of the account
-     * @return The address of the account
+     * @return address The address of the account
      */
     function getAddress(bytes32 nameBytes32) external view returns (address) {
         string memory name = BytesLib.bytes32ToString(nameBytes32);

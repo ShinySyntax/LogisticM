@@ -13,7 +13,7 @@ contract ImplementationBase is UpgradeabilityStorage {
      * @dev Retreive the implementation address of the logic contract and
      * perform a delegate call to the logic contract.
      * @param encoded The data signature for the delegate call
-     * @return The result of the delegate call
+     * @return bytes The result of the delegate call
      */
     function dCall(bytes memory encoded) internal returns (bytes memory) {
         // Delegate call to the contract implementation of the given encoded
@@ -29,7 +29,7 @@ contract ImplementationBase is UpgradeabilityStorage {
      * Revert with the revert reason given by the logic contract if the call reverts.
      * @param impl The address of the implementation of the logic contract
      * @param signature The data signature for the delegate call
-     * @return The result of the delegate call
+     * @return bytes The result of the delegate call
      */
     function degelateCallWithRevert(address impl, bytes memory signature)
         internal

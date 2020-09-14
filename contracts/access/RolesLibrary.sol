@@ -68,7 +68,7 @@ library RolesLibrary {
 
     /**
     * @dev This function returns true if the given account is a supplier.
-    * @return Whether or not account has the supplier role.
+    * @return bool Whether or not account has the supplier role.
     */
     function isSupplier(Roles storage self, address account)
         public
@@ -84,7 +84,7 @@ library RolesLibrary {
 
     /**
     * @dev This function returns true if the given account is a delivery man.
-    * @return Whether or not account has the delivery man role.
+    * @return bool Whether or not account has the delivery man role.
     */
     function isDeliveryMan(Roles storage self, address account)
         public

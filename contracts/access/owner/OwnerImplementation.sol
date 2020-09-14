@@ -19,7 +19,7 @@ contract OwnerImplementation is
 
     /**
     * @dev Returns the address of the owner.
-    * @return owner of Logistic
+    * @return address owner of Logistic
     */
     function getOwner() external view returns (address) {
         return owner;

@@ -9,7 +9,7 @@
     "compile": "truffle compile",
     "test": "truffle test",
     "coverage": "truffle run coverage --network coverage",
-    "lint": "solhint contracts/**/*.sol",
+    "lint": "solhint contracts/**/*.sol test/**.sol",
     "doc": "solidity-docgen --solc-module solc",
     "deploy-local": "truffle migrate --reset --network development"
   },

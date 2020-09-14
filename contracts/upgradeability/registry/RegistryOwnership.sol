@@ -37,7 +37,7 @@ contract RegistryOwnership {
 
     /**
     * @dev Tells the address of the registry owner
-    * @return the address of the registry owner
+    * @return address of the registry owner
     */
     function registryOwner() public view returns (address) {
         return _registryOwner;

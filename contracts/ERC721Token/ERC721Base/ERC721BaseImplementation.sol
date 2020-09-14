@@ -5,7 +5,7 @@ import "./ERC721BaseInterface.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
 
-// Disable func ordering because it gathers several parts of the ERC721 token
+// Disable func ordering because it gathers several parts of the ERC721 token (ERC721, metadata, enumerable, ERC165)
 /* solhint-disable ordering */
 
 /**

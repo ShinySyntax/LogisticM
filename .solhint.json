@@ -2,7 +2,7 @@
   "extends": "solhint:recommended",
   "rules": {
     "ordering": "warn",
-    "reason-string": [ "warn", { "maxLength": 44 } ]
+    "reason-string": ["warn", { "maxLength": 55 }],
     "compiler-version": ["error", "0.5.5"]
   }
 }

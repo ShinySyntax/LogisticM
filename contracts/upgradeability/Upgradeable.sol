@@ -14,9 +14,8 @@ contract Upgradeable is UpgradeabilityStorage {
     * THIS FUNCTION SHOULD BE OVERRIDDEN CALLING SUPER
     * @param sender representing the address deploying the initial behavior of the contract
     */
-    /* solhint-disable */
+    // solhint-disable-next-line no-unused-vars
     function initialize(address sender) public {
         require(msg.sender == address(registry), "Upgradeable: bad caller");
     }
-    /* solhint-enable */
 }

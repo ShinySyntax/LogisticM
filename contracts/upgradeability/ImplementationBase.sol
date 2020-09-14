@@ -35,8 +35,10 @@ contract ImplementationBase is UpgradeabilityStorage {
         internal
         returns (bytes memory)
     {
+        // solhint-disable-next-line avoid-low-level-calls
         (bool success, bytes memory result) = address(impl).delegatecall(signature);
         if (success == false) {
+            // solhint-disable-next-line no-inline-assembly
             assembly {
                 let ptr := mload(0x40)
                 let size := returndatasize

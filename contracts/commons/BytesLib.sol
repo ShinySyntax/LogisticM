@@ -21,6 +21,7 @@ library BytesLib {
             return 0x0;
         }
 
+        // solhint-disable-next-line no-inline-assembly
         assembly {
             // add 32 to inBytes pointer to skip the length of the bytes array
             outBytes4 := mload(add(inBytes, 32))

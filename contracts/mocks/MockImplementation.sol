@@ -10,5 +10,6 @@ contract MockImplementationV0 {
         myMethod();
     }
 
+    // solhint-disable-next-line no-empty-blocks
     function myMethod() public pure {}
 }

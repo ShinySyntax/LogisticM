@@ -10,7 +10,7 @@
     "test": "truffle test",
     "coverage": "truffle run coverage --network coverage",
     "lint": "solhint contracts/**/*.sol test/**.sol",
-    "doc": "solidity-docgen --solc-module solc",
+    "doc": "solidity-docgen --solc-module solc -t doc-template/",
     "deploy-local": "truffle migrate --reset --network development"
   },
   "repository": {

@@ -3,7 +3,8 @@
         "browser": true,
         "commonjs": true,
         "es2021": true,
-        "mocha": true
+        "mocha": true,
+        "truffle/globals": true
     },
     "extends": [
         "standard"
@@ -12,5 +13,8 @@
         "ecmaVersion": 12
     },
     "rules": {
-    }
+    },
+    "plugins": [
+        "truffle"
+  ]
 }

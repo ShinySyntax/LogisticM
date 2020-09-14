@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.5;
 
 import "../ERC721Token/ERC721Logistic/ERC721LogisticInterface.sol";
 import "../name/NameInterface.sol";

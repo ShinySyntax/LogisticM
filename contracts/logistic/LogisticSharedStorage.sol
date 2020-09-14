@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.5;
 
 import "../access/owner/OwnerStorage.sol";
 import "../access/AccessStorage.sol";

@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.5;
 
 import "openzeppelin-solidity/contracts/drafts/Counters.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";

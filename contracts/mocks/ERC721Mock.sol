@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.5;
 
 import "../ERC721Token/ERC721Base/ERC721BaseImplementation.sol";
 

@@ -33,8 +33,6 @@ In a new terminal window, start the local blockchain: `ganache-cli`
 
 **Lint truffle files** (tests, migrations...): `./truffle-lint.sh`
 
-**Lint tests: Auto-Fix** (use with caution): `npx standard --fix test/**`
-
 
 ### Deployment
 

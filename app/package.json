@@ -2,6 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
+  "author": "thykof@protonmail.ch",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@drizzle/react-components": "^1.5.3",

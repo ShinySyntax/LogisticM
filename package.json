@@ -25,13 +25,12 @@
   },
   "homepage": "",
   "dependencies": {
-    "@openzeppelin/contracts": "^2.5.1",
+    "truffle": "^5.1.44",
     "@truffle/hdwallet-provider": "^1.0.43",
-    "ethers": "^5.0.12",
-    "openzeppelin-solidity": "^2.5.1",
-    "solc": "^0.5.5"
+    "openzeppelin-solidity": "^2.5.1"
   },
   "devDependencies": {
+    "ethers": "^5.0.12",
     "@truffle/contract": "^4.2.21",
     "dotenv": "^8.2.0",
     "eslint": "^7.8.1",

@@ -1,3 +1,10 @@
+/**
+ * This migration deploy the whole contract:
+ * - the registry
+ * - the proxy
+ * - all the logic contracts (Implementation)
+*/
+
 const { versions } = require('../versions')
 
 const RolesLibrary = artifacts.require('./RolesLibrary.sol')

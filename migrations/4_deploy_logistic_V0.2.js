@@ -1,3 +1,8 @@
+/**
+ * This migration updates OwnerImplementation.transferOwnership
+ * The function signature stays the same.
+*/
+
 const Web3 = require('web3')
 const { networks } = require('../truffle-config.js')
 const { versions } = require('../versions')

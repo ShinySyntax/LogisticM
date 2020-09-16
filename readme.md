@@ -253,3 +253,12 @@ Got to the app folder: `cd app`
 Run the development server: `npm run start`
 
 Log in to metamask with the same mnemonic as ganache.
+
+Create a build: `npm run build`.
+
+Serve the build: `npm run serve`.
+
+The source code is on *Gitlab* and *Netlify* is connected to the repo.
+*Netlify* build and deploy the app at each commit.
+
+The command used by *Netlify* is `npm install && npm run compile && cd app && npm install && npm build`.

@@ -16,6 +16,7 @@ import ContractLoader from "./components/loading/ContractLoader";
 import "./App.css";
 import getDrizzleOptions from "./store/drizzleOptions";
 import getStore from "./store/store";
+import Loading from './components/loading/Loading';
 
 
 const getDrizzle = async () => {
@@ -51,8 +52,7 @@ class App extends React.Component {
   }
 
   render() {
-    if (!this.state.drizzle) return "Loading..."
-    console.log(this.state.drizzle);
+    if (!this.state.drizzle) return <Loading />
 
     return (
       <DrizzleContext.Provider drizzle={this.state.drizzle}>
@@ -71,7 +71,6 @@ class App extends React.Component {
         <DrizzleContext.Consumer>
           {drizzleContext => {
             const { drizzle, drizzleState, initialized } = drizzleContext;
-            // console.log(drizzle, drizzleState);
 
             return (
               <LoadingContainer
@@ -94,7 +93,7 @@ class App extends React.Component {
                           <ProductDetail {...props}
                             drizzle={drizzle}
                             drizzleState={drizzleState}
-                            />
+                          />
                         )}
                       }
                       />

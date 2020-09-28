@@ -14,10 +14,10 @@ class ProductsOwned extends React.Component {
 	getProducts(balance) {
 		this.setState(this.initialState)
 		for (var i = 0; i < balance; i++) {
-			this.props.drizzle.contracts.Logistic.methods.tokenOfOwnerByIndex(
+			this.props.drizzle.contracts.LogisticM.methods.tokenOfOwnerByIndex(
 				this.props.drizzleState.accounts[0], i).call()
 			.then(tokenId => {
-				return this.props.drizzle.contracts.Logistic.methods.getHashFromTokenId(tokenId).call()
+				return this.props.drizzle.contracts.LogisticM.methods.getHashFromTokenId(tokenId).call()
 			})
 			.then(productHash => {
 				this.setState({ productHashList: [productHash, ...this.state.productHashList]})

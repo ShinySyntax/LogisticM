@@ -11,7 +11,7 @@ export default function getDrizzleOptions(web3) {
         }
     ],
     events: {
-      Logistic: ["ProxyCreated"]
+      LogisticM: ["ProxyCreated"]
     },
     // web3: {
     //   fallback: {

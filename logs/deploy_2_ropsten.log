@@ -21,7 +21,7 @@ Starting migrations...
    > Total cost:                   0 ETH
 
 
-2_deploy_logistic_V0.js
+2_deploy_logisticM_V0.js
 =======================
 
    Replacing 'OwnedRegistry'
@@ -85,7 +85,7 @@ Proxy created at 0x6aCD89f2dA3546f436a1f6096de70bD5bFf7f776
    > Total cost:          0.10199898 ETH
 
 
-3_deploy_logistic_V0.1.js
+3_deploy_logisticM_V0.1.js
 =========================
 
    Replacing 'ProductImplementation'

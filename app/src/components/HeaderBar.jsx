@@ -12,7 +12,7 @@ export default function({ drizzle, drizzleState }) {
 
 	return (
 		<Navbar bg="light" expand="md">
-			<Navbar.Brand><Link to="/">Logistic</Link></Navbar.Brand>
+			<Navbar.Brand><Link to="/">LogisticM</Link></Navbar.Brand>
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Form inline>

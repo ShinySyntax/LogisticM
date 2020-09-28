@@ -7,6 +7,6 @@ pragma solidity 0.5.5;
  * @dev Define the storage of the Owner logic contract.
  */
 contract OwnerStorage {
-    /// representing the owner of Logistic.
+    /// representing the owner of LogisticM.
     address internal owner;
 }

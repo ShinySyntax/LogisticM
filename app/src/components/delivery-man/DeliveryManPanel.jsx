@@ -24,7 +24,7 @@ class DeliveryManPanel extends React.Component {
 
 	componentDidMount() {
 		const { drizzle, drizzleState } = this.props
-		const contract = drizzle.contracts.Logistic;
+		const contract = drizzle.contracts.LogisticM;
 
 		this.setState({
 			dataKey: contract.methods.balanceOf.cacheCall(
@@ -40,7 +40,7 @@ class DeliveryManPanel extends React.Component {
 	render () {
 		const { drizzle, drizzleState } = this.props
 
-		const balanceObject = drizzleState.contracts.Logistic.balanceOf[
+		const balanceObject = drizzleState.contracts.LogisticM.balanceOf[
 			this.state.dataKey
 		]
 		if (!balanceObject) return null
@@ -116,7 +116,7 @@ class DeliveryManPanel extends React.Component {
 						<em>Renounce Delivery man</em>
 						<ContractForm
 							drizzle={drizzle}
-							contract="Logistic"
+							contract="LogisticM"
 							method="renounceDeliveryMan"
 						/>
 					</Alert>

@@ -13,7 +13,7 @@ class OwnerPanel extends React.Component {
 	componentDidMount() {
 		const { drizzle } = this.props;
 
-		const contract = drizzle.contracts.Logistic;
+		const contract = drizzle.contracts.LogisticM;
 
 		// let drizzle know we want to watch the `myString` method
 		const dataKey = contract.methods.totalSupply.cacheCall();
@@ -25,7 +25,7 @@ class OwnerPanel extends React.Component {
 	render () {
 		const { drizzle, drizzleState } = this.props;
 
-		let totalSupply = drizzleState.contracts.Logistic.totalSupply[
+		let totalSupply = drizzleState.contracts.LogisticM.totalSupply[
 			this.state.dataKey
 		]
 		if (!totalSupply) return null

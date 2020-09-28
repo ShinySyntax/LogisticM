@@ -18,25 +18,25 @@ class Home extends React.Component {
 
 		const { drizzle, drizzleState } = this.props;
 
-		const dataKeyOwner = drizzle.contracts.Logistic.methods.getOwner.cacheCall();
+		const dataKeyOwner = drizzle.contracts.LogisticM.methods.getOwner.cacheCall();
 		this.setState({ dataKeyOwner });
 
-		const dataKeySupplier = drizzle.contracts.Logistic.methods.isSupplier
+		const dataKeySupplier = drizzle.contracts.LogisticM.methods.isSupplier
 		.cacheCall(drizzleState.accounts[0]);
 		this.setState({ dataKeySupplier });
 
-		const dataKeyDeliveryMan = drizzle.contracts.Logistic.methods.isDeliveryMan
+		const dataKeyDeliveryMan = drizzle.contracts.LogisticM.methods.isDeliveryMan
 		.cacheCall(drizzleState.accounts[0]);
 		this.setState({ dataKeyDeliveryMan });
 	}
 
   render () {
     const { drizzle, drizzleState } = this.props;
-    const { Logistic } = drizzleState.contracts;
+    const { LogisticM } = drizzleState.contracts;
 
-    const owner = Logistic.getOwner[this.state.dataKeyOwner];
-    const isSupplier = Logistic.isSupplier[this.state.dataKeySupplier];
-    const isDeliveryMan = Logistic.isDeliveryMan[this.state.dataKeyDeliveryMan];
+    const owner = LogisticM.getOwner[this.state.dataKeyOwner];
+    const isSupplier = LogisticM.isSupplier[this.state.dataKeySupplier];
+    const isDeliveryMan = LogisticM.isDeliveryMan[this.state.dataKeyDeliveryMan];
 
     if (!owner || !isSupplier || !isDeliveryMan) {
       return <Loading/>

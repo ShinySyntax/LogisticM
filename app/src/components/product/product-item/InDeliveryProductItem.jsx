@@ -17,7 +17,7 @@ class InDeliveryProductItem extends React.Component {
 	}
 
 	getProductsSentFrom() {
-		const dataKeyProductsSentFrom = this.props.drizzle.contracts.Logistic.methods
+		const dataKeyProductsSentFrom = this.props.drizzle.contracts.LogisticM.methods
 		.productSentFrom.cacheCall(
 			this.props.productHash,
 			this.props.drizzleState.accounts[0]
@@ -27,7 +27,7 @@ class InDeliveryProductItem extends React.Component {
 
 	getProductInfo() {
 		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
-			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
+			.LogisticM.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount() {
@@ -43,14 +43,14 @@ class InDeliveryProductItem extends React.Component {
 	}
 
 	render () {
-		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
+		const tokenInDeliveryObject = this.props.drizzleState.contracts.LogisticM
 			.productSentFrom[this.state.dataKeyProductsSentFrom]
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
 
 		if (tokenInDelivery === ZERO_ADDRESS) return null
 
-		const productInfoObject = this.props.drizzleState.contracts.Logistic
+		const productInfoObject = this.props.drizzleState.contracts.LogisticM
 			.getProductInfo[this.state.dataKeyProductInfo]
 		if (!productInfoObject) return null
 		const productName = productInfoObject.value.productName

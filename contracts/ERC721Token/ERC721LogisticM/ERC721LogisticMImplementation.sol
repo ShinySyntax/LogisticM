@@ -2,20 +2,20 @@
 pragma solidity 0.5.5;
 
 import "../ERC721Base/ERC721BaseImplementation.sol";
-import "./ERC721LogisticInterface.sol";
+import "./ERC721LogisticMInterface.sol";
 import "../../commons/Lock.sol";
 import "../../upgradeability/Upgradeable.sol";
 
 
 /**
- * @title ERC721LogisticImplementation
- * @dev The ERC721Logistic logic contract. It changes the behaviour of the ERC721
+ * @title ERC721LogisticMImplementation
+ * @dev The ERC721LogisticM logic contract. It changes the behaviour of the ERC721
  * Token defined in ERC721BaseImplementation: some functions are locked because
  * users need to go through the handover process defined in the Handover logic
  * contract.
  * ERC721 tokens are minted incrementally.
  */
-contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721LogisticInterface, Upgradeable, Lock {
+contract ERC721LogisticMImplementation is ERC721BaseImplementation, ERC721LogisticMInterface, Upgradeable, Lock {
     /**
      * @dev Initialize the logic contract.
      */
@@ -58,7 +58,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
      * This function always reverts.
      */
     function setApprovalForAll(address, bool) public {
-        revert("ERC721Logistic: can not approve for all");
+        revert("ERC721LogisticM: can not approve for all");
     }
 
     /**
@@ -80,7 +80,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
      * This function always reverts.
      */
     function safeTransferFrom(address, address, uint256) public {
-        revert("ERC721Logistic: can not transfer");
+        revert("ERC721LogisticM: can not transfer");
     }
 
     /**
@@ -88,7 +88,7 @@ contract ERC721LogisticImplementation is ERC721BaseImplementation, ERC721Logisti
      * This function always reverts.
      */
     function safeTransferFrom(address, address, uint256, bytes memory) public {
-        revert("ERC721Logistic: can not transfer");
+        revert("ERC721LogisticM: can not transfer");
     }
 
     /**

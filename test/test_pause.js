@@ -3,7 +3,7 @@ const truffleAssert = require('truffle-assertions')
 const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
+const LogisticMInterface = artifacts.require('LogisticMInterface')
 
 contract('Pause', async accounts => {
   const [owner, other] = accounts
@@ -14,7 +14,7 @@ contract('Pause', async accounts => {
       const ownedRegistry = await OwnedRegistry.deployed()
       const { logs } = await ownedRegistry.createProxy(version)
       const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-      this.instance = await LogisticInterface.at(proxy)
+      this.instance = await LogisticMInterface.at(proxy)
     })
 
     it('Only Owner', async function () {

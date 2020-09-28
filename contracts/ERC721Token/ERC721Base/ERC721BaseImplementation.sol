@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.5.5;
 
-import "../../logistic/LogisticSharedStorage.sol";
+import "../../logisticM/LogisticMSharedStorage.sol";
 import "./ERC721BaseInterface.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
@@ -15,7 +15,7 @@ import "openzeppelin-solidity/contracts/GSN/Context.sol";
  */
 contract ERC721BaseImplementation is
     ERC721BaseInterface,
-    LogisticSharedStorage,
+    LogisticMSharedStorage,
     Context {
 
     /**

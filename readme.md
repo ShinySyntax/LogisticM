@@ -1,4 +1,4 @@
-# Logistic
+# LogisticM
 
 This repository contains a smart contract and a web application in ReactJS.
 
@@ -38,7 +38,7 @@ In a new terminal window, start the local blockchain: `ganache-cli`
 
 ### Deployment
 
-You can look at the migration file `./migrations/2_deploy_logistic_V0.js`.
+You can look at the migration file `./migrations/2_deploy_logisticM_V0.js`.
 You will see that we deploy the registry and all the logic contracts.
 Then, we register all the functions implemented in the logic contracts.
 Finally, we create the proxy.
@@ -69,12 +69,12 @@ The implemented pattern is inspired by <https://github.com/OpenZeppelin/openzepp
 
 There or three main contracts:
  - **OwnedRegistry**: this is where you register your function and create the proxy
- - **LogisticProxy**: this is the proxy. The web3 contract calls are sent to this contract
- - **LogisticInterface**: this defines the ABI used to interact with the whole contract through web3
+ - **LogisticMProxy**: this is the proxy. The web3 contract calls are sent to this contract
+ - **LogisticMInterface**: this defines the ABI used to interact with the whole contract through web3
 
 And other important contracts:
  - **several logic contracts**: for example `HandoverImplementation`, `ProductImplementation`, `NameImplementation`, `PauseImplementation`...
- - **LogisticSharedStorage**: gather all the storage of the LogisticProxy contract
+ - **LogisticMSharedStorage**: gather all the storage of the LogisticMProxy contract
 
 #### The registry: OwnedRegistry
 
@@ -86,7 +86,7 @@ Like this: `OwnedRegistry.addVersionFromName('V1', 'createProduct', 0x...)`
 
 The creator of the `OwnedRegistry` contract is the owner and can transfer the ownership.
 
-#### The proxy: LogisticProxy
+#### The proxy: LogisticMProxy
 
 The proxy contract defines a fallback function that performs a delegate call to the logic contract.
 For this, it first needs to know the address of the logic contract. When loading a version, is call  `OwnedRegistry` to get these addresses.
@@ -94,7 +94,7 @@ For this, it first needs to know the address of the logic contract. When loading
 The creator of the contract is a `OwnedRegistry` instance, and the owner is the creator of this `OwnedRegistry` instance.
 The owner of the proxy can `upgradeTo` a new version and transfer the ownership.
 
-#### The interface: LogisticInterface
+#### The interface: LogisticMInterface
 
 This contract gathers all the logic contract interfaces. It does not implement any function.
 
@@ -104,7 +104,7 @@ This contract gathers all the logic contract interfaces. It does not implement a
 Each contract where its name ends with `Implementation` is a logic contract.
 
 For each logic contract, we need to define:
- - its storage: `LogisticSharedStorage` must inherit each storage logic contract.
+ - its storage: `LogisticMSharedStorage` must inherit each storage logic contract.
  - then events it emits
  - its interface: the interface derives from the contract that defines the events logic contract.
 
@@ -125,7 +125,7 @@ The `NameInterface.sol` contract derives from `NameEvents.sol` and defines the
 interface of `NameImplementation` contract.
 
 `NameImplementation` implements the functions that perform part of the logic of
-the Logistic contract.
+the LogisticM contract.
 
 ##### Delegate call between logic contracts
 
@@ -140,13 +140,13 @@ why, for example, `HandoverImplementation.createProduct` receives the name of th
 product in bytes. Indeed, the function sends the name to `ProductImplementation.newProduct`.
 So, on the client side, the string is converted in bytes to reduce gas usage.
 
-#### LogisticSharedStorage
+#### LogisticMSharedStorage
 
-`LogisticSharedStorage` is the contract that gathers all the storage of the
+`LogisticMSharedStorage` is the contract that gathers all the storage of the
 logic contracts. Because the upgradeability pattern use delegate call to logic
 contracts, the storage of all the logic contracts and the proxy contract must
 be the same. This is why all logic contract Implementation derive from
-`LogisticSharedStorage`. And this is also why `LogisticSharedStorage` derives
+`LogisticMSharedStorage`. And this is also why `LogisticMSharedStorage` derives
 from all the storage logic contract.
 
 #### How does the proxy work?
@@ -169,7 +169,7 @@ Versions are like `V0.0`, where the first number is incremented each time the re
 
 To upgrade to a new version:
  - change the `version` variable in the file `test/utils.js`
- - create a new migration file, with layout of `migrations/3_deploy_logistic_V0.1.js`
+ - create a new migration file, with layout of `migrations/3_deploy_logisticM_V0.1.js`
  - change the "Deploy new implementation" part: upload the logic contract that need to be upgraded.
  - if the interface changes, adapt the `addVersionFromName` calls.
  - run `truffle migrate`
@@ -177,8 +177,8 @@ To upgrade to a new version:
 
 ### How to use the smart contract?
 
-To use the smart contract, you need to create a web3 Contract with the ABI of `LogisticInterface`
-and the address of `LogisticProxy`.
+To use the smart contract, you need to create a web3 Contract with the ABI of `LogisticMInterface`
+and the address of `LogisticMProxy`.
 
 The address of the proxy is accessible in the log event `ProxyCreated` of the registry that created the proxy.
 

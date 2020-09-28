@@ -4,7 +4,7 @@ const { products } = require('./utils')
 const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
+const LogisticMInterface = artifacts.require('LogisticMInterface')
 
 contract('Handover', async accounts => {
   const [owner, supplier, deliveryMan1, deliveryMan2, purchaser, other] = accounts
@@ -15,7 +15,7 @@ contract('Handover', async accounts => {
     const ownedRegistry = await OwnedRegistry.deployed()
     const { logs } = await ownedRegistry.createProxy(version)
     const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    instance = await LogisticInterface.at(proxy)
+    instance = await LogisticMInterface.at(proxy)
 
     await instance.addSupplier(supplier, { from: owner })
     await instance.addDeliveryMan(deliveryMan1, { from: owner })
@@ -27,13 +27,13 @@ contract('Handover', async accounts => {
       instance.createProduct(purchaser, products[1].hash,
         products[1].nameBytes32, products[1].purchaserNameBytes32,
         { from: other }),
-      'Logistic: Caller is not Supplier'
+      'LogisticM: Caller is not Supplier'
     )
     await truffleAssert.reverts(
       instance.createProduct(deliveryMan1, products[1].hash,
         products[1].nameBytes32, products[1].purchaserNameBytes32,
         { from: supplier }),
-      'Logistic: Invalid purchaser'
+      'LogisticM: Invalid purchaser'
     )
 
     const result = await instance.createProduct(
@@ -57,7 +57,7 @@ contract('Handover', async accounts => {
       instance.createProduct(
         purchaser, products[0].hash, products[0].nameBytes32, products[0].purchaserNameBytes32,
         { from: supplier }),
-      'Logistic: This product already exists'
+      'LogisticM: This product already exists'
     )
   })
 
@@ -98,7 +98,7 @@ contract('Handover', async accounts => {
       await truffleAssert.reverts(
         instance.receive(deliveryMan1, products[0].hash,
           { from: deliveryMan2 }),
-        'Logistic: Already received'
+        'LogisticM: Already received'
       )
     })
     it('Send product', async () => {
@@ -113,7 +113,7 @@ contract('Handover', async accounts => {
       await truffleAssert.reverts(
         instance.send(deliveryMan2, products[0].hash,
           { from: deliveryMan1 }),
-        "Logistic: Can't send a product in pending delivery"
+        "LogisticM: Can't send a product in pending delivery"
       )
     })
   })
@@ -123,7 +123,7 @@ contract('Handover', async accounts => {
       await truffleAssert.reverts(
         instance.send(other, products[0].hash,
           { from: deliveryMan2 }),
-        'Logistic: This purchaser has not ordered this product'
+        'LogisticM: This purchaser has not ordered this product'
       )
 
       const result = await instance.send(purchaser, products[0].hash,
@@ -139,7 +139,7 @@ contract('Handover', async accounts => {
       await truffleAssert.reverts(
         instance.receive(deliveryMan2, products[0].hash,
           { from: other }),
-        'Logistic: This purchaser has not ordered this product'
+        'LogisticM: This purchaser has not ordered this product'
       )
 
       const result = await instance.receive(deliveryMan2, products[0].hash,
@@ -158,34 +158,34 @@ contract('Handover', async accounts => {
       await truffleAssert.reverts(
         instance.send(deliveryMan2, products[0].hash,
           { from: owner }),
-        "Logistic: Caller can't send product"
+        "LogisticM: Caller can't send product"
       )
       await truffleAssert.reverts(
         instance.send(deliveryMan2, products[0].hash,
           { from: other }),
-        "Logistic: Caller can't send product"
+        "LogisticM: Caller can't send product"
       )
       await truffleAssert.reverts(
         instance.receive(deliveryMan1, products[0].hash,
           { from: owner }),
-        "Logistic: Caller can't receive product"
+        "LogisticM: Caller can't receive product"
       )
       await truffleAssert.reverts(
         instance.receive(deliveryMan1, products[0].hash,
           { from: supplier }),
-        "Logistic: Caller can't receive product"
+        "LogisticM: Caller can't receive product"
       )
     })
     it('...argument', async () => {
       await truffleAssert.reverts(
         instance.send(supplier, products[0].hash,
           { from: deliveryMan1 }),
-        "Logistic: Can't send to supplier nor owner"
+        "LogisticM: Can't send to supplier nor owner"
       )
       await truffleAssert.reverts(
         instance.send(owner, products[0].hash,
           { from: deliveryMan1 }),
-        "Logistic: Can't send to supplier nor owner"
+        "LogisticM: Can't send to supplier nor owner"
       )
     })
   })

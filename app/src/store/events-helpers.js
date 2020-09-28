@@ -11,8 +11,8 @@ export const getPastEvents = (drizzle, eventNames, filters) => {
 	const web3 = drizzle.web3;
 
 	const contract = new web3.eth.Contract(
-		drizzle.contracts.Logistic.abi,
-		drizzle.contracts.Logistic.address
+		drizzle.contracts.LogisticM.abi,
+		drizzle.contracts.LogisticM.address
 	)
 
 	eventNames.forEach((eventName, i) => {

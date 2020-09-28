@@ -3,7 +3,7 @@ pragma solidity 0.5.5;
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v2.5.0/contracts/lifecycle/Pausable.sol
 
-import "../logistic/LogisticSharedStorage.sol";
+import "../logisticM/LogisticMSharedStorage.sol";
 import "./PauseInterface.sol";
 import "../commons/Ownable.sol";
 import "../commons/Lock.sol";
@@ -12,11 +12,11 @@ import "../commons/Pausable.sol";
 
 /**
  * @title PauseImplementation
- * @dev The Pause logic contract. This allows the owner of Logistic to pause the
- * Logistic contract. This means that not handover can happen when the contract
+ * @dev The Pause logic contract. This allows the owner of LogisticM to pause the
+ * LogisticM contract. This means that not handover can happen when the contract
  * is paused.
  */
-contract PauseImplementation is PauseInterface, LogisticSharedStorage, Ownable, Lock, Pausable {
+contract PauseImplementation is PauseInterface, LogisticMSharedStorage, Ownable, Lock, Pausable {
     /**
      * @dev Called by the owner to pause, triggers stopped state.
      */

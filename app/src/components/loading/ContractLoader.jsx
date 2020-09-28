@@ -2,7 +2,7 @@ import React from 'react'
 
 import Loading from './Loading';
 
-import LogisticInterface from "../../contracts/LogisticInterface.json";
+import LogisticMInterface from "../../contracts/LogisticMInterface.json";
 import { EVENT_NAMES } from "../../store/constants";
 
 class ContractLoader extends React.Component {
@@ -19,9 +19,9 @@ class ContractLoader extends React.Component {
 		.then(events => {
 			let proxyAddress = events[0].returnValues.proxy
 			var contractConfig = {
-				contractName: "Logistic",
+				contractName: "LogisticM",
 				web3Contract: new this.props.drizzle.web3.eth.Contract(
-					LogisticInterface.abi,
+					LogisticMInterface.abi,
 					proxyAddress
 				)
 			}

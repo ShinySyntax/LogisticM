@@ -3,7 +3,7 @@ pragma solidity 0.5.5;
 
 
 /**
- * @title BytesLib for Logistic
+ * @title BytesLib for LogisticM
  * @dev Deinfes internal function for bytes conversion.
  */
 library BytesLib {

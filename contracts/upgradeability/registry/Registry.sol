@@ -2,7 +2,7 @@
 pragma solidity 0.5.5;
 
 import "./IRegistry.sol";
-import "../../logistic/LogisticProxy.sol";
+import "../../logisticM/LogisticMProxy.sol";
 import "../../commons/BytesLib.sol";
 
 
@@ -113,9 +113,9 @@ contract Registry is IRegistry {
     */
     function _createProxy(string memory version)
         internal
-        returns (LogisticProxy)
+        returns (LogisticMProxy)
     {
-        LogisticProxy proxy = new LogisticProxy(version, msg.sender);
+        LogisticMProxy proxy = new LogisticMProxy(version, msg.sender);
         emit ProxyCreated(address(proxy));
         return proxy;
     }

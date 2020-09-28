@@ -4,9 +4,9 @@ const { ZERO_ADDRESS, getHash } = require('./utils')
 const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
+const LogisticMInterface = artifacts.require('LogisticMInterface')
 
-contract('ERC721LogisticImplementation', async (accounts) => {
+contract('ERC721LogisticMImplementation', async (accounts) => {
   const [owner, other] = accounts
 
   before(async function () {
@@ -14,7 +14,7 @@ contract('ERC721LogisticImplementation', async (accounts) => {
     const ownedRegistry = await OwnedRegistry.deployed()
     const { logs } = await ownedRegistry.createProxy(version)
     const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    this.instance = await LogisticInterface.at(proxy)
+    this.instance = await LogisticMInterface.at(proxy)
   })
 
   beforeEach(async function () {
@@ -75,18 +75,18 @@ contract('ERC721LogisticImplementation', async (accounts) => {
   it('setApprovalForAll', async function () {
     await truffleAssert.reverts(
       this.instance.setApprovalForAll(owner, true, { from: other }),
-      'ERC721Logistic: can not approve for all'
+      'ERC721LogisticM: can not approve for all'
     )
   })
 
   it('safeTransferFrom', async function () {
     await truffleAssert.reverts(
       this.instance.safeTransferFrom(owner, other, 0),
-      'ERC721Logistic: can not transfer'
+      'ERC721LogisticM: can not transfer'
     )
     await truffleAssert.reverts(
       this.instance.safeTransferFrom(owner, other, 0, getHash('0')),
-      'ERC721Logistic: can not transfer'
+      'ERC721LogisticM: can not transfer'
     )
   })
 })

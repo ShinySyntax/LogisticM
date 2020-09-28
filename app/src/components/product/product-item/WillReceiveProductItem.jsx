@@ -19,7 +19,7 @@ class WillReceiveProductItem extends React.Component {
 
 	getProductInfo() {
 		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
-			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
+			.LogisticM.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount () {
@@ -69,7 +69,7 @@ class WillReceiveProductItem extends React.Component {
 
 		if (!eventShip || eventReceive) return null
 
-		const productInfoObject = this.props.drizzleState.contracts.Logistic
+		const productInfoObject = this.props.drizzleState.contracts.LogisticM
 			.getProductInfo[this.state.dataKeyProductInfo]
 		if (!productInfoObject) return null
 		const productName = productInfoObject.value.productName

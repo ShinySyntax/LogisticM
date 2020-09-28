@@ -3,20 +3,20 @@ pragma solidity 0.5.5;
 
 import "../access/owner/OwnerStorage.sol";
 import "../access/AccessStorage.sol";
-import "../ERC721Token/ERC721Logistic/ERC721LogisticStorage.sol";
+import "../ERC721Token/ERC721LogisticM/ERC721LogisticMStorage.sol";
 import "../name/NameStorage.sol";
 import "../pause/PauseStorage.sol";
 import "../product/ProductStorage.sol";
 
 
 /**
- * @title LogisticSharedStorage
+ * @title LogisticMSharedStorage
  * @dev This contract defines the storage layout of the proxy contract and all the logic contracts.
  */
-contract LogisticSharedStorage is
+contract LogisticMSharedStorage is
     OwnerStorage,
     AccessStorage,
-    ERC721LogisticStorage,
+    ERC721LogisticMStorage,
     NameStorage,
     PauseStorage,
     ProductStorage {

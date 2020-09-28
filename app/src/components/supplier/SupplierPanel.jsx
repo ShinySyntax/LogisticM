@@ -23,7 +23,7 @@ class SupplierPanel extends React.Component {
 	componentDidMount() {
 		const { drizzle, drizzleState } = this.props;
 
-		const contract = drizzle.contracts.Logistic;
+		const contract = drizzle.contracts.LogisticM;
 
 		const dataKey = contract.methods.balanceOf.cacheCall(
 			drizzleState.accounts[0]
@@ -36,7 +36,7 @@ class SupplierPanel extends React.Component {
 	render () {
 		const { drizzle, drizzleState } = this.props
 
-		const balanceObject = drizzleState.contracts.Logistic.balanceOf[
+		const balanceObject = drizzleState.contracts.LogisticM.balanceOf[
 			this.state.dataKey
 		]
 
@@ -99,7 +99,7 @@ class SupplierPanel extends React.Component {
 						<em>Renounce Supplier</em>
 						<ContractForm
 							drizzle={drizzle}
-							contract="Logistic"
+							contract="LogisticM"
 							method="renounceSupplier"
 						/>
 					</Alert>

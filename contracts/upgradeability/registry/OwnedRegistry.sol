@@ -73,7 +73,7 @@ contract OwnedRegistry is Registry, RegistryOwnership {
     function createProxy(string memory version)
         public
         onlyRegistryOwner
-        returns (LogisticProxy)
+        returns (LogisticMProxy)
     {
         return _createProxy(version);
     }

@@ -14,13 +14,13 @@ class ProductList extends React.Component {
 	getProducts(totalSupply) {
 		this.setState(this.initialState)
 		for (var i = 0; i < totalSupply; i++) {
-			this.props.drizzle.contracts.Logistic.methods.tokenByIndex(i)
+			this.props.drizzle.contracts.LogisticM.methods.tokenByIndex(i)
 			.call()
 			.then(tokenId => {
-				return this.props.drizzle.contracts.Logistic.methods.getHashFromTokenId(tokenId).call()
+				return this.props.drizzle.contracts.LogisticM.methods.getHashFromTokenId(tokenId).call()
 			})
 			.then(productHash => {
-				return this.props.drizzle.contracts.Logistic.methods.getProductInfo(productHash).call()
+				return this.props.drizzle.contracts.LogisticM.methods.getProductInfo(productHash).call()
 			})
 			.then(productInfo => {
 				return productInfo.productName

@@ -37,7 +37,7 @@ Starting migrations...
   > Total cost:           0.0032451 ETH
 
 
-2_deploy_logistic_V0.js
+2_deploy_logisticM_V0.js
 =======================
 
   Replacing 'RolesLibrary'
@@ -104,7 +104,7 @@ Starting migrations...
   > total cost:          0.02837426 ETH
 
 
-  Replacing 'ERC721LogisticImplementation'
+  Replacing 'ERC721LogisticMImplementation'
   ----------------------------------------
   > transaction hash:    0xa20f28314613f0ca1f6f6a52a31ce39f658f2bf2e398aba41548b36961e61f37
   > Blocks: 2            Seconds: 25
@@ -186,7 +186,7 @@ Proxy created at 0xb4Da76c957B202b3F04338172bC78dEDF93e2C17
   > Total cost:           0.2475515 ETH
 
 
-3_deploy_logistic_V0.1.js
+3_deploy_logisticM_V0.1.js
 =========================
 
   Replacing 'ProductImplementation'
@@ -204,12 +204,12 @@ Proxy created at 0xb4Da76c957B202b3F04338172bC78dEDF93e2C17
   > total cost:          0.03020736 ETH
 
 
-/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/request/request.js:816
+/home/thykof/Documents/stage 4A/logisticM-react-drizzle/node_modules/request/request.js:816
 		 var e = new Error('ESOCKETTIMEDOUT')
 				 ^
 Error: PollingBlockTracker - encountered an error while attempting to update latest block:
 Error: ESOCKETTIMEDOUT
-   at ClientRequest.<anonymous> (/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/request/request.js:816:19)
+   at ClientRequest.<anonymous> (/home/thykof/Documents/stage 4A/logisticM-react-drizzle/node_modules/request/request.js:816:19)
    at Object.onceWrapper (events.js:286:20)
    at ClientRequest.emit (events.js:198:13)
    at TLSSocket.emitRequestTimeout (_http_client.js:673:40)
@@ -220,5 +220,5 @@ Error: ESOCKETTIMEDOUT
    at tryOnTimeout (timers.js:300:5)
    at listOnTimeout (timers.js:263:5)
    at Timer.processTimers (timers.js:223:10)
-   at PollingBlockTracker._performSync (/home/thykof/Documents/stage 4A/logistic-react-drizzle/node_modules/eth-block-tracker/src/polling.js:51:24)
+   at PollingBlockTracker._performSync (/home/thykof/Documents/stage 4A/logisticM-react-drizzle/node_modules/eth-block-tracker/src/polling.js:51:24)
    at process._tickCallback (internal/process/next_tick.js:68:7)

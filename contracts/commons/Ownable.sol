@@ -8,7 +8,7 @@ pragma solidity 0.5.5;
  */
 contract Ownable {
     /**
-     * @dev This modifier restricts access only to the owner of Logistic.
+     * @dev This modifier restricts access only to the owner of LogisticM.
      * @param owner_ The owner variable of the proxy storage
      */
     modifier onlyOwner(address owner_) {

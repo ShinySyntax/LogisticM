@@ -25,7 +25,7 @@ class OwnedProductItem extends React.Component {
 	}
 
 	getPendingDelivery() {
-		const dataKeyProductSentFrom = this.props.drizzle.contracts.Logistic.methods
+		const dataKeyProductSentFrom = this.props.drizzle.contracts.LogisticM.methods
 		.productSentFrom.cacheCall(
 			this.props.productHash,
 			this.props.drizzleState.accounts[0]
@@ -35,7 +35,7 @@ class OwnedProductItem extends React.Component {
 
 	getProductInfo() {
 		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
-			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
+			.LogisticM.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount() {
@@ -89,7 +89,7 @@ class OwnedProductItem extends React.Component {
 		// 	)
 		// }
 
-		const tokenInDeliveryObject = this.props.drizzleState.contracts.Logistic
+		const tokenInDeliveryObject = this.props.drizzleState.contracts.LogisticM
 			.productSentFrom[this.state.dataKeyProductSentFrom]
 		if (!tokenInDeliveryObject) return null
 		const tokenInDelivery = tokenInDeliveryObject.value
@@ -98,7 +98,7 @@ class OwnedProductItem extends React.Component {
 			return null
 		}
 
-		const productInfoObject = this.props.drizzleState.contracts.Logistic
+		const productInfoObject = this.props.drizzleState.contracts.LogisticM
 			.getProductInfo[this.state.dataKeyProductInfo]
 		if (!productInfoObject) return null
 		const productName = productInfoObject.value.productName

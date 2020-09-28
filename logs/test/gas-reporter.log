@@ -7,13 +7,13 @@ Compiling your contracts...
 > Compiling ./test/TestBytesLib.sol
 > Compilation warnings encountered:
 
-    /home/thykof/Documents/stage 4A/logistic-react-drizzle/contracts/upgradeability/Upgradeable.sol:18:25: Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+    /home/thykof/Documents/stage 4A/logisticM-react-drizzle/contracts/upgradeability/Upgradeable.sol:18:25: Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
     function initialize(address sender) public {
                         ^------------^
-,/home/thykof/Documents/stage 4A/logistic-react-drizzle/contracts/upgradeability/Upgradeable.sol:18:5: Warning: Function state mutability can be restricted to view
+,/home/thykof/Documents/stage 4A/logisticM-react-drizzle/contracts/upgradeability/Upgradeable.sol:18:5: Warning: Function state mutability can be restricted to view
     function initialize(address sender) public {
     ^ (Relevant source part starts here and spans across multiple lines).
-,/home/thykof/Documents/stage 4A/logistic-react-drizzle/test/TestBytesLib.sol:7:5: Warning: Function state mutability can be restricted to pure
+,/home/thykof/Documents/stage 4A/logisticM-react-drizzle/test/TestBytesLib.sol:7:5: Warning: Function state mutability can be restricted to pure
     function testConvertBytesToBytes4() public {
     ^ (Relevant source part starts here and spans across multiple lines).
 
@@ -60,7 +60,7 @@ Proxy created at 0xBeDDB344cD126ba206e60A5fEb6CfC26f62D8f6F
     ✓ Transfer (318161 gas)
     ✓ setApprovalForAll (66997 gas)
 
-  Contract: ERC721LogisticImplementation
+  Contract: ERC721LogisticMImplementation
     ✓ Initialize (24507 gas)
     ✓ Name
     ✓ Get counter
@@ -88,7 +88,7 @@ Proxy created at 0xBeDDB344cD126ba206e60A5fEb6CfC26f62D8f6F
       ✓ Create product (25767 gas)
       ✓ Send product (25320 gas)
 
-  Contract: Logistic
+  Contract: LogisticM
     ✓ Set lock (146342 gas)
 
   Contract: Name
@@ -149,7 +149,7 @@ Proxy created at 0xBeDDB344cD126ba206e60A5fEb6CfC26f62D8f6F
 ·································|·····························|··············|·············|·············|··············|··············
 |  ERC721BaseImplementation      ·  transferFrom               ·           -  ·          -  ·      61116  ·           1  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
-|  ERC721LogisticImplementation  ·  mint                       ·           -  ·          -  ·     138442  ·           1  ·          -  │
+|  ERC721LogisticMImplementation  ·  mint                       ·           -  ·          -  ·     138442  ·           1  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
 |  ERC721Mock                    ·  approve                    ·           -  ·          -  ·      45956  ·           3  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
@@ -169,11 +169,11 @@ Proxy created at 0xBeDDB344cD126ba206e60A5fEb6CfC26f62D8f6F
 ·································|·····························|··············|·············|·············|··············|··············
 |  HandoverImplementation        ·  send                       ·      165454  ·     190604  ·     171730  ·           5  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
-|  LogisticProxy                 ·  setLock                    ·       29060  ·      29072  ·      29061  ·          15  ·          -  │
+|  LogisticMProxy                 ·  setLock                    ·       29060  ·      29072  ·      29061  ·          15  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
-|  LogisticProxy                 ·  transferProxyOwnership     ·           -  ·          -  ·      30916  ·           1  ·          -  │
+|  LogisticMProxy                 ·  transferProxyOwnership     ·           -  ·          -  ·      30916  ·           1  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
-|  LogisticProxy                 ·  upgradeTo                  ·           -  ·          -  ·     646856  ·           1  ·          -  │
+|  LogisticMProxy                 ·  upgradeTo                  ·           -  ·          -  ·     646856  ·           1  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
 |  NameImplementation            ·  setName                    ·       35414  ·      79233  ·      57324  ·           2  ·          -  │
 ·································|·····························|··············|·············|·············|··············|··············
@@ -205,7 +205,7 @@ Proxy created at 0xBeDDB344cD126ba206e60A5fEb6CfC26f62D8f6F
 ·······························································|··············|·············|·············|··············|··············
 |  AccessImplementation                                        ·           -  ·          -  ·    1418713  ·      21.1 %  ·          -  │
 ·······························································|··············|·············|·············|··············|··············
-|  ERC721LogisticImplementation                                ·           -  ·          -  ·    2388125  ·      35.5 %  ·          -  │
+|  ERC721LogisticMImplementation                                ·           -  ·          -  ·    2388125  ·      35.5 %  ·          -  │
 ·······························································|··············|·············|·············|··············|··············
 |  ERC721Mock                                                  ·           -  ·          -  ·    3184694  ·      47.4 %  ·          -  │
 ·······························································|··············|·············|·············|··············|··············

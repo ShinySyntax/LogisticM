@@ -2,7 +2,7 @@
 pragma solidity 0.5.5;
 
 import "./HandoverInterface.sol";
-import "../logistic/LogisticSharedStorage.sol";
+import "../logisticM/LogisticMSharedStorage.sol";
 import "../upgradeability/ImplementationBase.sol";
 import "../commons/Pausable.sol";
 
@@ -14,7 +14,7 @@ import "../commons/Pausable.sol";
  */
 contract HandoverImplementation is
     HandoverInterface,
-    LogisticSharedStorage,
+    LogisticMSharedStorage,
     Pausable,
     ImplementationBase {
 
@@ -38,12 +38,12 @@ contract HandoverImplementation is
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "isSupplier(address)", msg.sender)), (bool)),
-            "Logistic: Caller is not Supplier"
+            "LogisticM: Caller is not Supplier"
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "getRole(address)", purchaser)), (uint)) == 0,
-            "Logistic: Invalid purchaser"
+            "LogisticM: Invalid purchaser"
         );
 
         dCall(
@@ -77,19 +77,19 @@ contract HandoverImplementation is
             "getRole(address)", msg.sender)), (uint));
         require(
             senderRole == 1 || senderRole == 2,
-            "Logistic: Caller can't send product"
+            "LogisticM: Caller can't send product"
         );
         uint256 receiverRole = abi.decode(dCall(abi.encodeWithSignature(
             "getRole(address)", to)), (uint));
         require(
             receiverRole != 1 && receiverRole != 3,
-            "Logistic: Can't send to supplier nor owner"
+            "LogisticM: Can't send to supplier nor owner"
         );
         require(
             abi.decode(dCall(abi.encodeWithSignature(
                 "productSentFrom(bytes32,address)", productHash, msg.sender)
             ), (address)) == address(0),
-            "Logistic: Can't send a product in pending delivery"
+            "LogisticM: Can't send a product in pending delivery"
         );
 
         (address purchaser, uint256 tokenId, string memory productName) =
@@ -106,7 +106,7 @@ contract HandoverImplementation is
         if (receiverRole == 0) {
             // the receiver is a purchaser (RolesLibrary.RoleNames.Nobody)
             require(purchaser == to,
-                "Logistic: This purchaser has not ordered this product");
+                "LogisticM: This purchaser has not ordered this product");
         }
 
         address sender = abi.decode(
@@ -152,7 +152,7 @@ contract HandoverImplementation is
             "getRole(address)", msg.sender)), (uint));
         require(
             msgSenderRole != 1 && msgSenderRole != 3,
-            "Logistic: Caller can't receive product"
+            "LogisticM: Caller can't receive product"
         );
         require(
             abi.decode(
@@ -162,7 +162,7 @@ contract HandoverImplementation is
                     from)),
                 (address)
             ) == address(0),
-            "Logistic: Already received"
+            "LogisticM: Already received"
         );
         // Comment these lines because if a supplier or a delivery man has his
         // role revoked, nobody would be able to receive product that he sent.
@@ -170,7 +170,7 @@ contract HandoverImplementation is
         //     "getRole(address)", from)), (uint));
         // require(
         //     senderRole == 1 || senderRole == 2,
-        //     "Logistic: Sender is not delivery man nor supplier"
+        //     "LogisticM: Sender is not delivery man nor supplier"
         // );
 
         (address purchaser, uint256 tokenId, string memory productName) =
@@ -184,7 +184,7 @@ contract HandoverImplementation is
         if (msgSenderRole == 0) {
             // the caller is a purchaser
             require(purchaser == msg.sender,
-                "Logistic: This purchaser has not ordered this product");
+                "LogisticM: This purchaser has not ordered this product");
         }
 
         address receiver = abi.decode(dCall(abi.encodeWithSignature(

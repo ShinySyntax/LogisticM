@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.5.5;
 
-import "./LogisticSharedStorage.sol";
+import "./LogisticMSharedStorage.sol";
 import "../upgradeability/proxy/OwnedUpgradeabilityProxy.sol";
 import "../commons/Ownable.sol";
 import "../commons/Pausable.sol";
@@ -9,11 +9,11 @@ import "../upgradeability/ImplementationBase.sol";
 
 
 /**
- * @title LogisticProxy
+ * @title LogisticMProxy
  * @dev The proxy deployed by the registry.
  */
-contract LogisticProxy is
-    LogisticSharedStorage,
+contract LogisticMProxy is
+    LogisticMSharedStorage,
     OwnedUpgradeabilityProxy,
     ImplementationBase,
     Ownable,
@@ -23,7 +23,7 @@ contract LogisticProxy is
         public
         OwnedUpgradeabilityProxy(_version, sender)
     {
-        require(msg.sender == address(registry), "LogisticProxy: bad sender");
+        require(msg.sender == address(registry), "LogisticMProxy: bad sender");
 
         // We need to initialize these implementations.
         // It will send variables like owner, _symbol...

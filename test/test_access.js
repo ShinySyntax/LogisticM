@@ -6,7 +6,7 @@ const { ZERO_ADDRESS } = require('./utils')
 const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
+const LogisticMInterface = artifacts.require('LogisticMInterface')
 
 contract('AccessImplementation & OwnerImplementation', async (accounts) => {
   const [owner, supplier, deliveryMan, other, namedSupplier, namedDeliveryMan] = accounts
@@ -16,7 +16,7 @@ contract('AccessImplementation & OwnerImplementation', async (accounts) => {
     const ownedRegistry = await OwnedRegistry.deployed()
     const { logs } = await ownedRegistry.createProxy(version)
     const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-    this.instance = await LogisticInterface.at(proxy)
+    this.instance = await LogisticMInterface.at(proxy)
   })
 
   it('Owner', async function () {

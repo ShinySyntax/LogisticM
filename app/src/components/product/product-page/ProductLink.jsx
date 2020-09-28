@@ -9,7 +9,7 @@ class ProductLink extends React.Component {
 
 	getProductInfo() {
 		this.setState({ dataKeyProductInfo: this.props.drizzle.contracts
-			.Logistic.methods.getProductInfo.cacheCall(this.props.productHash) })
+			.LogisticM.methods.getProductInfo.cacheCall(this.props.productHash) })
 	}
 
 	componentDidMount() {
@@ -27,7 +27,7 @@ class ProductLink extends React.Component {
 	render () {
 		let productName;
 		if (!this.props.productName) {
-			const productInfoObject = this.props.drizzleState.contracts.Logistic
+			const productInfoObject = this.props.drizzleState.contracts.LogisticM
 			.getProductInfo[this.state.dataKeyProductInfo]
 			if (!productInfoObject) return null
 			productName = productInfoObject.value.productName

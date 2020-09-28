@@ -13,7 +13,7 @@ class PurchaserProductDetail extends React.Component {
 	}
 
 	getProductName() {
-		this.props.drizzle.contracts.Logistic.methods
+		this.props.drizzle.contracts.LogisticM.methods
 		.getProductInfo(this.props.productHash)
 		.call()
 		.then(productInfo => {

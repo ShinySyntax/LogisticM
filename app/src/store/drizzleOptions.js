@@ -6,7 +6,7 @@ export default function getDrizzleOptions(web3) {
   return {
     contracts: [OwnedRegistry],
     events: {
-      Logistic: ["ProxyCreated"]
+      LogisticM: ["ProxyCreated"]
     },
     // web3: {
     //   fallback: {

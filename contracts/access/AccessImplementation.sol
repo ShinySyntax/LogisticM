@@ -1,6 +1,6 @@
 pragma solidity ^0.5.5;
 
-import "../logistic/LogisticSharedStorage.sol";
+import "../logisticM/LogisticMSharedStorage.sol";
 import "./AccessInterface.sol";
 import "../commons/Ownable.sol";
 import "../upgradeability/ImplementationBase.sol";
@@ -13,7 +13,7 @@ import "../upgradeability/ImplementationBase.sol";
  */
 contract AccessImplementation is
     AccessInterface,
-    LogisticSharedStorage,
+    LogisticMSharedStorage,
     Ownable,
     ImplementationBase {
 
@@ -39,7 +39,7 @@ contract AccessImplementation is
     * @param account representing the address of the supplier
     */
     function removeSupplier(address account) external onlyOwner(owner) {
-        logisticRoles.removeSupplier(account);
+        logisticMRoles.removeSupplier(account);
         emit SupplierRemoved(account);
     }
 
@@ -51,7 +51,7 @@ contract AccessImplementation is
             isSupplier(msg.sender),
             "Access: caller is not supplier"
         );
-        logisticRoles.removeSupplier(msg.sender);
+        logisticMRoles.removeSupplier(msg.sender);
         emit SupplierRemoved(msg.sender);
     }
 
@@ -77,7 +77,7 @@ contract AccessImplementation is
     * @param account representing the address of the delivery man
     */
     function removeDeliveryMan(address account) external onlyOwner(owner) {
-        logisticRoles.removeDeliveryMan(account);
+        logisticMRoles.removeDeliveryMan(account);
         emit DeliveryManRemoved(account);
     }
 
@@ -89,7 +89,7 @@ contract AccessImplementation is
             isDeliveryMan(msg.sender),
             "Access: caller is not delivery man"
         );
-        logisticRoles.removeDeliveryMan(msg.sender);
+        logisticMRoles.removeDeliveryMan(msg.sender);
         emit DeliveryManRemoved(msg.sender);
     }
 
@@ -120,7 +120,7 @@ contract AccessImplementation is
     */
     function addSupplier(address account) public onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be supplier");
-        logisticRoles.addSupplier(account);
+        logisticMRoles.addSupplier(account);
         emit SupplierAdded(account);
     }
 
@@ -129,7 +129,7 @@ contract AccessImplementation is
     */
     function addDeliveryMan(address account) public onlyOwner(owner) {
         require(account != owner, "Access: Owner can't be delivery man");
-        logisticRoles.addDeliveryMan(account);
+        logisticMRoles.addDeliveryMan(account);
         emit DeliveryManAdded(account);
     }
 
@@ -138,7 +138,7 @@ contract AccessImplementation is
     * @return bool Whether or not account has the supplier role.
     */
     function isSupplier(address account) public view returns (bool) {
-        return logisticRoles.isSupplier(account);
+        return logisticMRoles.isSupplier(account);
     }
 
     /**
@@ -146,6 +146,6 @@ contract AccessImplementation is
     * @return bool Whether or not account has the delivery man role.
     */
     function isDeliveryMan(address account) public view returns (bool) {
-        return logisticRoles.isDeliveryMan(account);
+        return logisticMRoles.isDeliveryMan(account);
     }
 }

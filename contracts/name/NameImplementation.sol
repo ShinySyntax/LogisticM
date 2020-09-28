@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 pragma solidity 0.5.5;
 
-import "../logistic/LogisticSharedStorage.sol";
+import "../logisticM/LogisticMSharedStorage.sol";
 import "./NameInterface.sol";
 import "../commons/BytesLib.sol";
 
@@ -12,7 +12,7 @@ import "../commons/BytesLib.sol";
  * more user-friendly than using address when interacting with the contract.
  * All names are unique.
  */
-contract NameImplementation is NameInterface, LogisticSharedStorage {
+contract NameImplementation is NameInterface, LogisticMSharedStorage {
     string internal constant EMPTY = "";
 
     /**

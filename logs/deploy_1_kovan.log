@@ -31,7 +31,7 @@ Migrations dry-run (simulation)
    > Total cost:         0.000294486 ETH
 
 
-2_deploy_logistic.js
+2_deploy_logisticM.js
 ====================
 
    Deploying 'RolesLibrary'
@@ -74,7 +74,7 @@ Migrations dry-run (simulation)
    > total cost:          0.001920256 ETH
 
 
-   Deploying 'ERC721LogisticImplementation'
+   Deploying 'ERC721LogisticMImplementation'
    ----------------------------------------
    > block number:        20605415
    > block timestamp:     1598860234
@@ -177,7 +177,7 @@ Starting migrations...
    > Total cost:          0.00324486 ETH
 
 
-2_deploy_logistic.js
+2_deploy_logisticM.js
 ====================
 
    Deploying 'RolesLibrary'
@@ -229,7 +229,7 @@ Starting migrations...
    > total cost:          0.01950256 ETH
 
 
-   Deploying 'ERC721LogisticImplementation'
+   Deploying 'ERC721LogisticMImplementation'
    ----------------------------------------
    > transaction hash:    0xcc9bea6ec0f59efeb2b4dd342ab87a837b5e7620985b2ed2fa330352fdfed8e9
    > Blocks: 0            Seconds: 0

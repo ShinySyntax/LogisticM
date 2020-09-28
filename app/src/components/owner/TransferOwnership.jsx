@@ -12,7 +12,7 @@ export default function TransferOwnership({ drizzle, drizzleState }) {
 	}
 
 	const handleSubmit = () => {
-		drizzle.contracts.Logistic.methods.transferOwnership.cacheSend(
+		drizzle.contracts.LogisticM.methods.transferOwnership.cacheSend(
 			address,
 			{ from: drizzleState.accounts[0] }
 		)

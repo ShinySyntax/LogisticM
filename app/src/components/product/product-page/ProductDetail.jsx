@@ -41,7 +41,7 @@ class ProductDetail extends React.Component {
 
 		return (
 			<div className="section">
-				<h2>Logistic - Product Details</h2>
+				<h2>LogisticM - Product Details</h2>
 				<p>Product id: <strong>
 					<ProductLink productName={productName} /></strong></p>
 

@@ -37,7 +37,7 @@ Starting migrations...
    > Total cost:           0.0032451 ETH
 
 
-2_deploy_logistic_V0.js
+2_deploy_logisticM_V0.js
 =======================
 
    Replacing 'RolesLibrary'
@@ -104,7 +104,7 @@ Starting migrations...
    > total cost:          0.02837426 ETH
 
 
-   Replacing 'ERC721LogisticImplementation'
+   Replacing 'ERC721LogisticMImplementation'
    ----------------------------------------
    > transaction hash:    0xa9bda6359f5d7dbd4eac477ff20168b5c60cdf4e54c365f543d6173a0e10ed53
    > Blocks: 3            Seconds: 33
@@ -186,7 +186,7 @@ Proxy created at 0x5Ad879B3E4AFC56378Ea9badaE56bA8d726DE903
    > Total cost:          0.25196274 ETH
 
 
-3_deploy_logistic_V0.1.js
+3_deploy_logisticM_V0.1.js
 =========================
 
    Replacing 'ProductImplementation'
@@ -236,7 +236,7 @@ Starting migrations...
 > Block gas limit: 8000029 (0x7a121d)
 
 
-4_deploy_logistic_V0.2.js
+4_deploy_logisticM_V0.2.js
 =========================
 
    Replacing 'OwnerImplementation'

@@ -4,7 +4,7 @@ const { products, getHash, ZERO_ADDRESS } = require('./utils')
 const version = require('../versions').latest
 
 const OwnedRegistry = artifacts.require('OwnedRegistry')
-const LogisticInterface = artifacts.require('LogisticInterface')
+const LogisticMInterface = artifacts.require('LogisticMInterface')
 
 contract('Product', async accounts => {
   const [owner, supplier, deliveryMan, purchaser] = accounts
@@ -15,7 +15,7 @@ contract('Product', async accounts => {
       const ownedRegistry = await OwnedRegistry.deployed()
       const { logs } = await ownedRegistry.createProxy(version)
       const { proxy } = logs.find(l => l.event === 'ProxyCreated').args
-      this.instance = await LogisticInterface.at(proxy)
+      this.instance = await LogisticMInterface.at(proxy)
     })
 
     describe('When unlocked (i.e. called by the proxy)', async function () {

@@ -11,7 +11,7 @@ export default function RevokeRole({ drizzle, drizzleState, methodName }) {
 	}
 
 	const handleSubmit = () => {
-		drizzle.contracts.Logistic.methods[methodName].cacheSend(
+		drizzle.contracts.LogisticM.methods[methodName].cacheSend(
 			address,
 			{ from: drizzleState.accounts[0] }
 		)

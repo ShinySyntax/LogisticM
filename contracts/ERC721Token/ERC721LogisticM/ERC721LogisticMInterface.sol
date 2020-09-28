@@ -6,10 +6,10 @@ import "../ERC721Base/ERC721BaseEvents.sol";
 
 
 /**
- * @title ERC721LogisticInterface
- * @dev Define the interface of the ERC721Logistic logic contract.
+ * @title ERC721LogisticMInterface
+ * @dev Define the interface of the ERC721LogisticM logic contract.
  */
-contract ERC721LogisticInterface is ERC721BaseInterface {
+contract ERC721LogisticMInterface is ERC721BaseInterface {
     function initializeERC721() public;
     function mint(address to) public;
     function getCounter() public view returns (uint256);

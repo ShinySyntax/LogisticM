@@ -21,7 +21,7 @@ class GrantAccess extends React.Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
 		const { drizzle } = this.props;
-		const contract = drizzle.contracts.Logistic;
+		const contract = drizzle.contracts.LogisticM;
 
 		let nameBytes32 =  utils.formatBytes32String(this.state.name)
 		contract.methods[this.props.grandAccessMethod].cacheSend(

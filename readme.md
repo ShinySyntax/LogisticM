@@ -36,6 +36,13 @@ In a new terminal window, start the local blockchain: `ganache-cli`
 **Lint truffle files** (tests, migrations...): `./truffle-lint.sh`
 
 
+### Branch master
+
+Branch master won't work in a local development environment because it binds the
+address of the contract deployed on Ropsten testnet.
+
+**Don't merge master into develop.**
+
 ### Deployment
 
 You can look at the migration file `./migrations/2_deploy_logisticM_V0.js`.

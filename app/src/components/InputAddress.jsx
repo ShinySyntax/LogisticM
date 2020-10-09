@@ -3,12 +3,16 @@ import QrReader from 'react-qr-reader'
 import { BsCamera } from "react-icons/bs";
 import { InputGroup, FormControl, Button, Modal } from 'react-bootstrap'
 
-export default function InputAddress({ setAddress, onChange }) {
+export default function InputAddress({ setAddress, onChange, placeholder }) {
 	const [show, setShow] = useState();
 	const [scannedAddress, setScannedAddress] = useState('');
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	if (!placeholder) {
+		placeholder = "Account"
+	}
 
 	const handleScan = data => {
 		if (data) {
@@ -30,9 +34,9 @@ export default function InputAddress({ setAddress, onChange }) {
 	return (
 		<>
 			<FormControl
-				placeholder="Account"
-				aria-label="Account"
-				aria-describedby="Account"
+				placeholder={placeholder}
+				aria-label={placeholder}
+				aria-describedby={placeholder}
 				onChange={handleChange}
 				value={scannedAddress}
 			/>

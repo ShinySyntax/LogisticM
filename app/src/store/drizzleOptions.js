@@ -4,7 +4,12 @@ import OwnedRegistry from "../contracts/OwnedRegistry.json";
 
 export default function getDrizzleOptions(web3) {
   return {
-    contracts: [OwnedRegistry],
+    contracts: [
+        {
+            contractName: 'OwnedRegistry',
+            web3Contract: new web3.eth.Contract(OwnedRegistry.abi, '0x8328a01304Cd7EC9A124E60609E8d032A1bD40A1')
+        }
+    ],
     events: {
       LogisticM: ["ProxyCreated"]
     },

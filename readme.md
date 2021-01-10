@@ -77,7 +77,7 @@ This also solves the problem of a big contract that can't stand in a block when 
 The implemented pattern is inspired by <https://github.com/OpenZeppelin/openzeppelin-labs/tree/master/upgradeability_with_vtable> and <https://github.com/OpenZeppelin/openzeppelin-labs/tree/master/upgradeability_ownership>.
 
 There or three main contracts:
- - **OwnedRegistry**: this is where you register your function and create the proxy
+ - **OwnedRegistry**: this is where you register your functions and create the proxy
  - **LogisticMProxy**: this is the proxy. The web3 contract calls are sent to this contract
  - **LogisticMInterface**: this defines the ABI used to interact with the whole contract through web3
 
@@ -91,14 +91,14 @@ With this contract, the owner can register functions implemented in logic contra
 
 To register a function, call `OwnedRegistry.addVersionFromName(string memory version, string memory func, address implementation)`.
 
-Like this: `OwnedRegistry.addVersionFromName('V1', 'createProduct', 0x...)`
+Like this: `OwnedRegistry.addVersionFromName('V1', 'createProduct(uint256,...)', 0x...)`
 
 The creator of the `OwnedRegistry` contract is the owner and can transfer the ownership.
 
 #### The proxy: LogisticMProxy
 
 The proxy contract defines a fallback function that performs a delegate call to the logic contract.
-For this, it first needs to know the address of the logic contract. When loading a version, is call  `OwnedRegistry` to get these addresses.
+For this, it first needs to know the address of the logic contract. When loading a version, it calls  `OwnedRegistry` to get these addresses.
 
 The creator of the contract is a `OwnedRegistry` instance, and the owner is the creator of this `OwnedRegistry` instance.
 The owner of the proxy can `upgradeTo` a new version and transfer the ownership.
